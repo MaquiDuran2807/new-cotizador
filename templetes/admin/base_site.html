@@ -1,0 +1,15 @@
+﻿{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | CodenSolar{% endblock %}
+
+{% block branding %}
+<div id="branding">
+    <a href="{% url 'admin:index' %}" id="site-name">
+        <img src="{% static 'products/img/LOGO PNG 1.png' %}" alt="CodenSolar" class="admin-logo" height="100">
+        <span class="admin-brand-text">Coden<span class="brand-solar">Solar</span></span>
+    </a>
+</div>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

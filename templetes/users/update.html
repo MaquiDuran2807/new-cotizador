@@ -1,0 +1,68 @@
+?{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+	<link rel="stylesheet" type="text/css" href=" {% static 'products/css/main.css' %} ">
+	<link rel="stylesheet" type="text/css" href="{% static 'products/css/Vlogin.css' %}">
+    <title>Actualizar contraseña</title>
+</head>
+
+<body class="body" >
+
+<div class=volver>
+    <div class="volver1">
+        <a href="{% url 'users_app:user-login' %}#">Volver</a>
+    </div>
+</div>
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<div class="login">
+    <div class="container">
+        <div class="login page">
+            <div class="heading"><a href="https://codensolar.com/" class="navbar-brand "> Coden<b style="color: rgb(4, 253, 4);">S</b>olar </a>  </div>
+            {% if validlink is False %}
+            <div id="message-container" style="text-align:center; color:red;">
+                <p>El enlace es inválido o ya expiró. Solicita un nuevo cambio de contraseña.</p>
+            </div>
+            <div class="imagen">
+                <br>
+                <div class="volver1" style="display:inline-block;"><a href="{% url 'users_app:user-forgotpassword' %}">Solicitar nuevo enlace</a></div>
+            </div>
+            {% else %}
+            <form method="post">
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="entryarea">
+                    {{field}}
+                    {% if field.errors %}
+                    <div class="labelline" style="color: red;">{{ field.errors.0 }}</div>
+                    {% else %}
+                    <div class="labelline">{{ field.label }}</div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                <br>
+                <input type="submit" value="Enviar" id="btn">
+                <br>
+                <br>
+                <div class="imagen">
+                    <img class="imagen1" src="{% static 'products/img/logo-coden1.png' %}" alt="">
+                </div>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<script src="{% static 'products/js/register.js' %}"></script>
+
+</body>
+</html>

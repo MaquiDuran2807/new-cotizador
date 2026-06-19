@@ -1,0 +1,525 @@
+?{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codensolar · Cotizador Inteligente</title>
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    
+    <style>
+        :root {
+            --dark: #0F172A;
+            --green: #40C92A;
+            --green-hover: #36b823;
+            --light: #f8fafc;
+            --card-bg: #ffffff;
+            --border: #e2e8f0;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+            --shadow-lg: 0 12px 28px rgba(0,0,0,0.12);
+            --radius: 1rem;
+            --transition: 0.2s ease;
+        }
+        body {
+            background: #f1f5f9;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            color: #1e293b;
+        }
+        /* ===== ANUNCIOS Y NAVBAR (igual que tu versión) ===== */
+        .anun1, .anun2 {
+            background: var(--dark);
+            color: white;
+            font-size: 0.85rem;
+            padding: 0.5rem 0;
+            text-align: center;
+        }
+        .anun2 { background: #1a2332; font-weight: 300; }
+        .navbar {
+            background: var(--dark) !important;
+            padding: 0.75rem 0;
+            box-shadow: var(--shadow-md);
+        }
+        .navbar-brand { font-weight: 700; font-size: 1.5rem; color: white !important; letter-spacing: -0.02em; }
+        .navbar-brand b { color: var(--green); }
+        .nav-link { color: rgba(255,255,255,0.85) !important; font-weight: 500; }
+        .nav-link:hover { color: var(--green) !important; }
+        .btn-outline-success {
+            border-color: var(--green); color: var(--green); background: transparent; font-weight: 600;
+            border-radius: 2rem; padding: 0.4rem 1.5rem;
+        }
+        .btn-outline-success:hover { background: var(--green); color: var(--dark); }
+        .btn-success {
+            background: var(--green); border-color: var(--green); font-weight: 600; border-radius: 2rem;
+            padding: 0.5rem 1.5rem; transition: all var(--transition);
+        }
+        .btn-success:hover { background: var(--green-hover); transform: translateY(-1px); box-shadow: var(--shadow-md); }
+
+        /* ===== CARRUSEL ===== */
+        .carousel-item img {
+            max-height: 28em; border-radius: var(--radius); border: 2px solid var(--green);
+            object-fit: cover; filter: brightness(0.85);
+        }
+        .carousel-caption {
+            background: linear-gradient(to top, rgba(15,23,42,0.8), transparent);
+            border-radius: var(--radius); padding: 1.5rem; bottom: 0; left: 0; right: 0;
+        }
+        .carousel-caption h5 { color: var(--green); font-weight: 700; font-size: 1.8rem; }
+        .carousel-caption p { color: rgba(255,255,255,0.9); }
+
+        /* ===== CONTENEDOR PRINCIPAL ===== */
+        .main-layout {
+            display: flex; gap: 1.5rem; padding: 2rem 1.5rem; max-width: 1400px; margin: 0 auto;
+        }
+        @media (max-width: 992px) { .main-layout { flex-direction: column; } }
+
+        /* ===== TARJETAS DE PRODUCTO ===== */
+        .productos-grid {
+            flex: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem;
+        }
+        .producto-card {
+            background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border); overflow: hidden; transition: all var(--transition);
+            display: flex; flex-direction: column;
+        }
+        .producto-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); border-color: var(--green); }
+        .producto-img {
+            width: 100%; height: 200px; object-fit: contain; background: #f8fafc; padding: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .producto-body { padding: 1.25rem; flex: 1; display: flex; flex-direction: column; }
+        .producto-titulo { font-weight: 700; font-size: 1.1rem; color: var(--dark); }
+        .producto-precio { font-size: 1.5rem; font-weight: 800; color: var(--green); margin-bottom: 0.5rem; }
+        .producto-descripcion { font-size: 0.85rem; color: #64748b; flex: 1; }
+        .horas-sol-producto { margin: 0.75rem 0; }
+        .horas-sol-producto h4 {
+            background: rgba(64,201,42,0.1); border-radius: 0.5rem; padding: 0.25rem 0.75rem;
+            font-size: 0.95rem; font-weight: 600; color: var(--dark);
+        }
+        .input-range { accent-color: var(--green); width: 100%; }
+        .card-footer { display: flex; gap: 0.5rem; margin-top: 0.75rem; }
+        .btn-accion {
+            flex: 1; border: none; border-radius: 2rem; padding: 0.5rem; font-weight: 600; cursor: pointer;
+            transition: all var(--transition);
+        }
+        .btn-eliminar { background: #fee2e2; color: #dc2626; }
+        .btn-eliminar:hover { background: #fecaca; }
+        .btn-agregar { background: var(--green); color: white; box-shadow: 0 2px 6px rgba(64,201,42,0.3); }
+        .btn-agregar:hover { background: var(--green-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(64,201,42,0.4); }
+
+        /* ===== PANEL DE COTIZACI�?N ===== */
+        .cotizador1 {
+            width: 420px; background: white; border-radius: var(--radius); box-shadow: var(--shadow-md);
+            border: 1px solid var(--border); padding: 1.5rem; position: sticky; top: 1rem;
+            max-height: calc(100vh - 2rem); overflow-y: auto;
+        }
+        @media (max-width: 992px) { .cotizador1 { width: 100%; position: static; } }
+        .innovacion h5 { font-weight: 700; color: var(--dark); }
+        .innovacion h2 { font-size: 1.2rem; color: #475569; }
+        .totales-row { display: flex; justify-content: space-between; margin: 1rem 0; }
+        .precio-normal, .precio-premium { text-align: center; flex: 1; }
+        .acumulador-precio-id, .consumo-total-id { font-size: 2rem; font-weight: 800; }
+        .acumulador-precio-id { color: var(--green); }
+        .consumo-total-id { color: #ecc440; }
+        .svg-interrogante { width: 20px; opacity: 0.7; }
+
+        /* Acordeón */
+        .accordion-button:not(.collapsed) {
+            background: rgba(64,201,42,0.08); color: var(--dark); font-weight: 600;
+        }
+        .accordion-button:focus { box-shadow: 0 0 0 0.2rem rgba(64,201,42,0.25); border-color: var(--green); }
+        .requerimiento-individualmente-productos {
+            background: #f8fafc; border-radius: 0.5rem; padding: 0.5rem; margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        /* Footer */
+        .footer { background: var(--dark); color: white; margin-top: 3rem; }
+        .footer a { color: rgba(255,255,255,0.7); text-decoration: none; }
+        .footer a:hover { color: var(--green); }
+    </style>
+</head>
+<body>
+    <div class="container-fluid p-0">
+        <!-- ANUNCIOS -->
+        <div class="anun1"><p class="mb-0">�?� Descuentos del 20% en Paneles solares | 15% en Neveras | 5% en Kits</p></div>
+        <div class="anun2"><p class="mb-0">�??� Por registrarte obtienes un 5% adicional en Paneles Policristalinos</p></div>
+
+        <!-- NAVBAR -->
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+                <a href="#" class="navbar-brand"><i class="bi bi-sun-fill" style="color: var(--green);"></i> Coden<b>S</b>olar</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="menu">
+                    <form class="d-flex mx-auto">
+                        <input type="search" class="form-control me-2 rounded-pill" placeholder="Buscar productos...">
+                        <button class="btn btn-outline-success" type="button"><i class="bi bi-search"></i></button>
+                    </form>
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item"><a href="#" class="nav-link">Inicio</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link">Servicios</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link">Blog</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link">Contacto</a></li>
+                        <li class="nav-item ms-2">
+                            <a href="{% url 'users_app:user-logout' %}" class="btn btn-outline-success btn-sm">Salir</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- CARRUSEL -->
+        <section class="container mt-4">
+            <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    <button data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"></button>
+                    <button data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1"></button>
+                    <button data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"></button>
+                </div>
+                <div class="carousel-inner rounded-4 shadow">
+                    <div class="carousel-item active">
+                        <img src="{% static 'products/img/bg.jpg' %}" class="d-block w-100">
+                        <div class="carousel-caption d-none d-md-block text-start">
+                            <h5>Energía solar para tu hogar</h5>
+                            <p>Cotiza en tiempo real con datos de radiación solar de Colombia.</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{% static 'products/img/bg.jpg' %}" class="d-block w-100">
+                        <div class="carousel-caption d-none d-md-block text-start">
+                            <h5>Kits completos</h5>
+                            <p>Todo lo que necesitas para empezar a ahorrar.</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{% static 'products/img/bg3.jpg' %}" class="d-block w-100">
+                        <div class="carousel-caption d-none d-md-block text-start">
+                            <h5>Electrodomésticos eficientes</h5>
+                            <p>Neveras, congeladores y más con energía limpia.</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span></button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next"><span class="carousel-control-next-icon"></span></button>
+            </div>
+        </section>
+
+        <!-- CONTENIDO PRINCIPAL -->
+        <div class="main-layout">
+            <!-- GRILLA DE PRODUCTOS -->
+            <div class="productos-grid">
+                {% for h6 in products %}
+                <div class="producto-card" id="product°{{h6.id}}">
+                    <img src="/media/{{h6.image}}" alt="{{h6.name}}" class="producto-img">
+                    <div class="producto-body">
+                        <div class="producto-titulo">{{h6.name}}</div>
+                        <div class="producto-precio">$ {{h6.price}}</div>
+                        <div class="producto-descripcion">{{h6.description|truncatechars:80}}</div>
+                        <!-- Bloque que usa el JS -->
+                        <div class="horas-sol-producto">
+                            <h4>Horas a usar: <strong class="hours-to-use"></strong></h4>
+                            <label class="form-label">Mueve la barra para verificar las horas</label>
+                            <input type="range" class="input-range" min="1" max="24" id="range-{{h6.category_id}}">
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn-accion btn-eliminar" onclick="delToQuote('{{h6.id}}','{{h6.name}}','{{h6.price}}')">Eliminar</button>
+                            <button class="btn-accion btn-agregar" onclick="addToQuote('{{h6.id}}','{{h6.name}}','{{h6.price}}')">Agregar</button>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- PANEL DE COTIZACI�?N (estructura original conservada) -->
+            <div class="cotizador1" id="cotizador1">
+                <div class="row totales">
+                    <div class="row innovacion justify-content-center mb-3">
+                        <div class="col-12 text-center">
+                            <h5>Cotizador de ahorro</h5>
+                            <h2>Tecnología desarrollada por</h2>
+                            <span class="navbar-brand">Coden<b style="color: rgb(4,253,4);">S</b>olar</span>
+                        </div>
+                    </div>
+
+                    <!-- Totales Normal y Premium -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="totales-row">
+                                <div class="precio-normal">
+                                    <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-trigger="focus"
+                                       title="¿Por qué precio normal?" data-bs-content="Es porque solo contiene módulo centralizado">
+                                        <img class="svg-interrogante" src="{% static 'products/carrusel/interrogante.svg' %}" alt="">
+                                    </a>
+                                    <div class="acumulador-precio"><h6 class="titulo-normal">Precio total</h6></div>
+                                    <div class="acumulador-precio-id" id="totales">$0</div>
+                                </div>
+                                <div class="precio-premium">
+                                    <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-trigger="focus"
+                                       title="¿Por qué premium?" data-bs-content="Es porque este trae unidad de potencia">
+                                        <img class="svg-interrogante" src="{% static 'products/carrusel/interrogante2.svg' %}" alt="">
+                                    </a>
+                                    <div class="consumo-total"><h6 class="titulo-premium">Precio Premium</h6></div>
+                                    <div class="consumo-total-id" id="premiun">$0</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Selector y reinicio -->
+                    <div class="row mb-3">
+                        <div class="col-8">
+                            <select class="form-select lugar-residencia">
+                                <option selected>¿En qué parte del país te encuentras?</option>
+                                <option value="1">Cundinamarca</option>
+                                <option value="2">Boyacá</option>
+                                <option value="3">Resto del país</option>
+                            </select>
+                        </div>
+                        <div class="col-4">
+                            <button class="btn btn-success w-100" onclick="borrar()">Reiniciar cotización</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Acumulador de cotizaciones (JS añade aquí los items) -->
+                <div class="acumulador-cotizador">
+                    <template id="quote-template">
+                        <div class="quote d-grid gap-3">
+                            <div class="row primary-cotizador">
+                                <div class="col-md-1 eliminar-cotizador text-danger pt-1" title="Eliminar">�?</div>
+                                <div class="col-md-5"><h6>Producto</h6><div class="col-12 titulo-producto-cotizador"></div></div>
+                                <div class="col-md-4"><h6>Precio</h6><div class="col-12 precio-unitario"></div></div>
+                                <div class="col-md-2"><h6>Cantidad</h6><div class="col-12 cantidad-cotizador"></div></div>
+                            </div>
+                            <div class="row secundary-cotizador">
+                                <div class="col-6"><h6>horas uso</h6><div class="horas-uso-cotizador"></div></div>
+                                <div class="col-6"><h6>consumo hora</h6><div class="consumo-hora-cotizador"></div></div>
+                            </div>
+                            <div class="row tertiary-cotizador">
+                                <div class="col-4"><h6>consumo día</h6><div class="consumo-dia-cotizador"></div></div>
+                                <div class="col-4"><h6>% pérdidas</h6><div class="porcentaje-perdidas-cotizador"></div></div>
+                                <div class="col-4"><h6>consumo</h6><div class="total-consumo-cotizador"></div></div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- Acordeón de requerimientos (copia exacta del original) -->
+                <div class="row requerimientos-productos mt-3">
+                    <div class="accordion" id="accordionPanelsStayOpenExample">
+                        <!-- Reguladores -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header"><button class="accordion-button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne">�??? Reguladores</button></h2>
+                            <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show">
+                                <div class="accordion-body">
+                                    <div class="row requerimiento-individualmente-productos">
+                                        <div class="col-3 reguladores-requeridos"><h6>Reguladores</h6><div class="reguladores-requeridos1"></div></div>
+                                        <div class="col-3 reguladores-tipo-requeridos"><h6>Tipo</h6><div class="reguladores-tipo-requeridos1"></div></div>
+                                        <div class="col-3 reguladores-precio-requeridos"><h6>P/total</h6><div class="reguladores-precio-requeridos1"></div></div>
+                                        <div class="col-3 text-danger reguladores-eliminar-requeridos" onclick="eliminar_requerimientos('regulator_needed')">�?</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Paneles -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo">�??️ Paneles</button></h2>
+                            <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
+                                <div class="accordion-body">
+                                    <div class="row requerimiento-individualmente-productos">
+                                        <div class="col-3 paneles-requeridos"><h6>Paneles</h6><div class="paneles-requeridos1"></div></div>
+                                        <div class="col-3 paneles-tipo-requeridos"><h6>Tipo</h6><div class="paneles-tipo-requeridos1"></div></div>
+                                        <div class="col-2 paneles-precio-unitario-requeridos"><h6>P/Unitario</h6><div class="paneles-precio-requeridos1"></div></div>
+                                        <div class="col-2 paneles-precio-requeridos"><h6>P/Total</h6><div class="paneles-precio-requeridos2"></div></div>
+                                        <div class="col-2 text-danger paneles-eliminar-requeridos" onclick="eliminar_requerimientos('panel_needed')">�?</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Baterías -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree">�??? Baterías</button></h2>
+                            <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse">
+                                <div class="accordion-body">
+                                    <div class="row requerimiento-individualmente-productos">
+                                        <div class="col-3 baterias-requeridos"><h6>Baterías</h6><div class="baterias-requeridos1"></div></div>
+                                        <div class="col-3 baterias-tipo-requeridos"><h6>Tipo</h6><div class="baterias-tipo-requeridos1"></div></div>
+                                        <div class="col-2 baterias-unitario-precio-requeridos"><h6>P/Unitario</h6><div class="baterias-precio-requeridos1"></div></div>
+                                        <div class="col-2 baterias-precio-requeridos"><h6>P/Total</h6><div class="baterias-precio-requeridos2"></div></div>
+                                        <div class="col-2 text-danger baterias-eliminar-requeridos" onclick="eliminar_requerimientos('battery_needed')">�?</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Breakers -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapsefour">�?� Breakers</button></h2>
+                            <div id="panelsStayOpen-collapsefour" class="accordion-collapse collapse">
+                                <div class="accordion-body">
+                                    <div class="row requerimiento-individualmente-productos">
+                                        <div class="col-3 breakers-requeridos"><h6>Breakers</h6><div class="breakers-requeridos1"></div></div>
+                                        <div class="col-3 breakers-tipo-requeridos"><h6>Tipo</h6><div class="breakers-tipo-requeridos1"></div></div>
+                                        <div class="col-2 breakers-precio-unitario-total-requeridos"><h6>U/Total</h6><div class="breakers-precio-unitario-total-requeridos1"></div></div>
+                                        <div class="col-2 breakers-precio-requeridos"><h6>P/Total</h6><div class="breakers-precio-requeridos1"></div></div>
+                                        <div class="col-2 text-danger breakers-eliminar-requeridos" onclick="eliminar_requerimientos('breaker_needed')">�?</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Otros requerimientos (todos los materiales) -->
+                        <div class="accordion-item">
+                            <h2 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapsefive">�??�️ Otros requerimientos</button></h2>
+                            <div id="panelsStayOpen-collapsefive" class="accordion-collapse collapse">
+                                <div class="accordion-body">
+                                    <!-- Cables -->
+                                    <div class="row requerimiento-individualmente-productos">
+                                        <div class="col-3 cables-requeridos"><h6>Cables</h6><div class="cables-requeridos1"></div></div>
+                                        <div class="col-3 cables-tipo-requeridos"><h6>Tipo</h6><div class="cables-tipo-requeridos1"></div></div>
+                                        <div class="col-2 cables-precio-requeridos"><h6>U/Precio</h6><div class="cables-precio-requeridos1"></div></div>
+                                        <div class="col-2 cables-precio-total-requeridos"><h6>P/Total</h6><div class="cables-precio-total-requeridos1"></div></div>
+                                        <div class="col-2 text-danger cables-eliminar-requeridos" onclick="eliminar_requerimientos('rubberized_cable_needed')">�?</div>
+                                    </div>
+                                    <!-- Soporte techo -->
+                                    <div class="row requerimiento-individualmente-productos">
+                                        <div class="col-3 soportes-sobre-techo-requeridos"><h6>Soporte</h6><div class="soportes-sobre-techo-requeridos1"></div></div>
+                                        <div class="col-3 soportes-sobre-techo-tipo-requeridos"><h6>Tipo</h6><div class="soportes-sobre-techo-tipo-requeridos1"></div></div>
+                                        <div class="col-2 soportes-sobre-techo-precio-requeridos"><h6>U/Precio</h6><div class="soportes-sobre-techo-precio-requeridos1"></div></div>
+                                        <div class="col-2 soportes-sobre-techo-precio-total-requeridos"><h6>P/Total</h6><div class="soportes-sobre-techo-precio-total-requeridos1"></div></div>
+                                        <div class="col-2 text-danger soporte-eliminar-requeridos" onclick="eliminar_requerimientos('panel_support_needed')">�?</div>
+                                    </div>
+                                    <!-- Módulo centralizado (básico) -->
+                                    <div class="row requerimiento-individualmente-productos">
+                                        <div class="col-3 modulos-centralizados-requeridos"><h6>Módulo Centralizado</h6><div class="modulos-centralizados-requeridos1"></div></div>
+                                        <div class="col-3 modulos-centralizados-tipo-requeridos"><h6>Tipo</h6><div class="modulos-centralizados-tipo-requeridos1"></div></div>
+                                        <div class="col-2 modulos-centralizados-precio-requeridos"><h6>U/Precio</h6><div class="modulos-centralizados-precio-requeridos1"></div></div>
+                                        <div class="col-2 modulos-centralizados-precio-total-requeridos"><h6>P/Total</h6><div class="modulos-centralizados-precio-total-requeridos1"></div></div>
+                                        <div class="col-2 text-danger modulos-eliminar-requeridos" onclick="eliminar_requerimientos('centralized_modules_needed')">�?</div>
+                                    </div>
+                                    <!-- Unidad de potencia (premium) -->
+                                    <div class="row requerimiento-individualmente-productos">
+                                        <div class="col-3 unidad-de-potencia-requeridos"><h6>Unidad de Potencia</h6><div class="unidad-de-potencia-requeridos1"></div></div>
+                                        <div class="col-3 unidad-de-potencia-tipo-requeridos"><h6>Tipo</h6><div class="unidad-de-potencia-tipo-requeridos1"></div></div>
+                                        <div class="col-2 unidad-de-potencia-precio-requeridos"><h6>U/Precio</h6><div class="unidad-de-potencia-precio-requeridos1"></div></div>
+                                        <div class="col-2 unidad-de-potencia-precio-total-requeridos"><h6>P/Total</h6><div class="unidad-de-potencia-precio-total-requeridos1"></div></div>
+                                        <div class="col-2 text-danger unidad-de-potencia-eliminar-requeridos" onclick="eliminar_requerimientos('power_units_needed')">�?</div>
+                                    </div>
+                                    <!-- Terminales -->
+                                    <div class="row requerimiento-individualmente-productos">
+                                        <div class="col-3 terminales-MC4-requeridos"><h6>Terminales MC4</h6><div class="terminales-MC4-requeridos1"></div></div>
+                                        <div class="col-3 terminales-MC4-tipo-requeridos"><h6>Tipo</h6><div class="terminales-MC4-tipo-requeridos1"></div></div>
+                                        <div class="col-2 terminales-MC4-precio-requeridos"><h6>U/Precio</h6><div class="terminales-MC4-precio-requeridos1"></div></div>
+                                        <div class="col-2 terminales-MC4-precio-total-requeridos"><h6>P/total</h6><div class="terminales-MC4-precio-total-requeridos1"></div></div>
+                                        <div class="col-2 text-danger terminales-MC4-eliminar-requeridos" onclick="eliminar_requerimientos('terminals_needed')">�?</div>
+                                    </div>
+                                    <!-- Conectores en Y -->
+                                    <div class="row requerimiento-individualmente-productos">
+                                        <div class="col-3 conectores-en-y-requeridos"><h6>Conectores Y</h6><div class="conectores-en-y-requeridos1"></div></div>
+                                        <div class="col-3 conectores-en-y-tipo-requeridos"><h6>Tipo</h6><div class="conectores-en-y-tipo-requeridos1"></div></div>
+                                        <div class="col-2 conectores-en-y-precio-requeridos"><h6>U/Precio</h6><div class="conectores-en-y-precio-requeridos1"></div></div>
+                                        <div class="col-2 conectores-en-y-precio-total-requeridos"><h6>P/Total</h6><div class="conectores-en-y-precio-total-requeridos1"></div></div>
+                                        <div class="col-2 text-danger conectores-en-y-eliminar-requeridos" onclick="eliminar_requerimientos('connector_needed')">�?</div>
+                                    </div>
+                                    <!-- Cable vehicular -->
+                                    <div class="row requerimiento-individualmente-productos">
+                                        <div class="col-3 cable-vehicular-requeridos"><h6>Cable Vehicular</h6><div class="cable-vehicular-requeridos1"></div></div>
+                                        <div class="col-3 cable-vehicular-tipo-requeridos"><h6>Tipo</h6><div class="cable-vehicular-tipo-requeridos1"></div></div>
+                                        <div class="col-2 cable-vehicular-precio-requeridos"><h6>U/Precio</h6><div class="cable-vehicular-precio-requeridos1"></div></div>
+                                        <div class="col-2 cable-vehicular-precio-total-requeridos"><h6>P/Total</h6><div class="cable-vehicular-precio-total-requeridos1"></div></div>
+                                        <div class="col-2 text-danger cable-vehicular-eliminar-requeridos" onclick="eliminar_requerimientos('vehicle_cable_needed')">�?</div>
+                                    </div>
+                                    <!-- Materiales eléctricos -->
+                                    <div class="row requerimiento-individualmente-productos">
+                                        <div class="col-3 materiales-electricos-requeridos"><h6>Mat. Eléctricos</h6><div class="materiales-electricos-requeridos1"></div></div>
+                                        <div class="col-3 materiales-electricos-tipo-requeridos"><h6>Tipo</h6><div class="materiales-electricos-tipo-requeridos1"></div></div>
+                                        <div class="col-2 materiales-electricos-precio-requeridos"><h6>U/Precio</h6><div class="materiales-electricos-precio-requeridos1"></div></div>
+                                        <div class="col-2 materiales-electricos-precio-total-requeridos"><h6>P/Total</h6><div class="materiales-electricos-precio-total-requeridos1"></div></div>
+                                        <div class="col-2 text-danger materiales-electricos-eliminar-requeridos" onclick="eliminar_requerimientos('electric_materials_needed')">�?</div>
+                                    </div>
+                                    <!-- Kit puesta a tierra -->
+                                    <div class="row requerimiento-individualmente-productos">
+                                        <div class="col-3 kit-puesta-a-tierra-requeridos"><h6>Kit Tierra</h6><div class="kit-puesta-a-tierra-requeridos1"></div></div>
+                                        <div class="col-3 kit-puesta-a-tierra-tipo-requeridos"><h6>Tipo</h6><div class="kit-puesta-a-tierra-tipo-requeridos1"></div></div>
+                                        <div class="col-2 kit-puesta-a-tierra-precio-requeridos"><h6>U/Precio</h6><div class="kit-puesta-a-tierra-precio-requeridos1"></div></div>
+                                        <div class="col-2 kit-puesta-a-tierra-precio-total-requeridos"><h6>P/Total</h6><div class="kit-puesta-a-tierra-precio-total-requeridos1"></div></div>
+                                        <div class="col-2 text-danger kit-puesta-a-tierra-eliminar-requeridos" onclick="eliminar_requerimientos('ground_security_kit_needed')">�?</div>
+                                    </div>
+                                    <!-- Rack baterías -->
+                                    <div class="row requerimiento-individualmente-productos">
+                                        <div class="col-3 rack-soporte-baterias-requeridos"><h6>Rack Baterías</h6><div class="rack-soporte-baterias-requeridos1"></div></div>
+                                        <div class="col-3 rack-soporte-baterias-tipo-requeridos"><h6>Tipo</h6><div class="rack-soporte-baterias-tipo-requeridos1"></div></div>
+                                        <div class="col-2 rack-soporte-baterias-precio-requeridos"><h6>U/Precio</h6><div class="rack-soporte-baterias-precio-requeridos1"></div></div>
+                                        <div class="col-2 rack-soporte-baterias-precio-total-requeridos"><h6>P/Total</h6><div class="rack-soporte-baterias-precio-total-requeridos1"></div></div>
+                                        <div class="col-2 text-danger rack-soporte-eliminar-requeridos" onclick="eliminar_requerimientos('rack_bateria')">�?</div>
+                                    </div>
+                                    <!-- Inversores -->
+                                    <div class="row requerimiento-individualmente-productos">
+                                        <div class="col-3 inversores-requeridos"><h6>Inversores</h6><div class="Inversor-requeridos1"></div></div>
+                                        <div class="col-3 inversores-tipo-requeridos"><h6>Tipo</h6><div class="Inversor-tipo-requeridos1"></div></div>
+                                        <div class="col-2 inversores-precio-requeridos"><h6>U/Precio</h6><div class="Inversor-precio-requeridos1"></div></div>
+                                        <div class="col-2 inversores-precio-total-requeridos"><h6>P/Total</h6><div class="Inversor-precio-total-requeridos1"></div></div>
+                                        <div class="col-2 text-danger inversiores-eliminar-requeridos" onclick="eliminar_requerimientos('inversor')">�?</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Descargar PDF -->
+                    <div class="col-12 mt-3">
+                        {% if usuario %}
+                        <button class="btn btn-success w-100" onclick="createandsendpdf('{{usuario.name}}','{{usuario.email}}','{{usuario.lastname}}')">
+                            <i class="bi bi-file-earmark-pdf"></i> Descargar PDF
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <div class="container py-5">
+                <div class="row gy-4">
+                    <div class="col-lg-4">
+                        <h5 class="text-white fw-bold"><i class="bi bi-sun-fill" style="color: var(--green);"></i> CODENSOLAR</h5>
+                        <p class="small text-muted">Comprometidos con el medio ambiente y la innovación en energía solar.</p>
+                    </div>
+                    <div class="col-lg-2">
+                        <h6 class="text-white">Enlaces</h6>
+                        <ul class="list-unstyled small">
+                            <li><a href="#">Inicio</a></li><li><a href="#">Servicios</a></li><li><a href="#">Productos</a></li><li><a href="#">Contacto</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-2">
+                        <h6 class="text-white">Redes</h6>
+                        <ul class="list-unstyled small">
+                            <li><a href="#">Facebook</a></li><li><a href="#">YouTube</a></li><li><a href="#">Instagram</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-4">
+                        <h6 class="text-white">Recibe ofertas</h6>
+                        <div class="input-group">
+                            <input type="email" class="form-control rounded-pill" placeholder="Tu correo">
+                            <button class="btn btn-success rounded-pill ms-2">Enviar</button>
+                        </div>
+                    </div>
+                </div>
+                <hr class="my-4" style="border-color: rgba(255,255,255,0.1);">
+                <p class="text-center small text-muted mb-0">&copy; 2025 Codensolar. Todos los derechos reservados.</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="{% static 'products/js/Newjs/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'products/js/Newjs/NVProducts.js' %}"></script>
+</body>
+</html>

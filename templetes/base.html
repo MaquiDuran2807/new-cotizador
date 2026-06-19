@@ -1,0 +1,157 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Coden Solar{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'products/css/NVProducts.css' %}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <div class="container-fluid" id="general">
+        <nav class="row">
+            <nav class="navbar navbar-expand-lg navbar-light fixed-10" style="background-color:#0F172A;">
+                <div class="container-fluid">
+                    <div class="imagen">
+                        <img class="imagen1" src="{% static 'products/img/logo-coden1.png' %}" alt="">
+                    </div>
+                    <a href="#" class="navbar-brand"> Coden<b style="color: rgb(4, 253, 4);">S</b>olar </a>
+                    <button class="navbar-toggler bg-white" type="button" data-bs-toggle="collapse" data-bs-target="#menu"
+                        aria-controls="menu" aria-expanded="false" aria-label="Mostrar / Ocultar Menu">
+                        <span class="navbar-toggler-icon text-white"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="menu">
+                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 ml-5">
+                            <li class="nav-item"><a href="#" class="nav-link">Inicio</a></li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false" id="dropdown-menu">Servicios</a>
+                                <ul class="dropdown-menu" aria-labelledby="dropdown-menu" style="background-color: #1E293B;">
+                                    <li><a href="https://codensolar.com/paneles-solares/" target="_blank" class="dropdown-item">Paneles</a></li>
+                                    <li><a href="https://codensolar.com/kits/" target="_blank" class="dropdown-item">kits</a></li>
+                                    <li><a href="https://codensolar.com/electrodomesticos/" target="_blank" class="dropdown-item">Electrodomesticos</a></li>
+                                </ul>
+                            </li>
+                            <li class="nav-item"><a href="https://codensolar.com/" class="nav-link">Blog</a></li>
+                            <li class="nav-item"><a href="https://codensolar.com/contacto/" class="nav-link">Contacto</a></li>
+                        </ul>
+                        <div class="btn btn-outline-success btn1">
+                            <a href="{% url 'users_app:user-logout' %}">salir</a>
+                        </div>
+                        <div class="btn btn-outline-success btn2 registrarse">Registrarse</div>
+                    </div>
+                </div>
+            </nav>
+        </nav>
+
+        {% block carousel %}
+        <section class="row carrusel">
+            <div class="col-12">
+                <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-indicators">
+                        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                    </div>
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <div class="row justify-content-around">
+                                <img class="c1 imgcarru" src="{% static 'products/carrusel/carrusel1.jpeg' %}" alt="Kit Hogar">
+                                <img class="c2 imgcarru" src="{% static 'products/carrusel/carrusel2.jpg' %}" alt="">
+                                <img class="c3 imgcarru" src="{% static 'products/carrusel/carrusel4.jpeg' %}" alt="">
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <div class="row justify-content-around">
+                                <img class="c4 imgcarru" src="{% static 'products/carrusel/carrusel3.jpeg' %}" alt="">
+                                <img class="c5 imgcarru" src="{% static 'products/carrusel/carrusel5.jpeg' %}" alt="">
+                                <img class="c6 imgcarru" src="{% static 'products/carrusel/carrusel7.jpg' %}" alt="">
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <div class="row justify-content-around">
+                                <img class="c7 imgcarru" src="{% static 'products/carrusel/carrusel6.jpeg' %}" alt="">
+                                <img class="c8 imgcarru" src="{% static 'products/carrusel/carrusel8.jpg' %}" alt="">
+                                <img class="c9 imgcarru" src="{% static 'products/carrusel/carrusel9.jpg' %}" alt="">
+                            </div>
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+                <div class="row">
+                    <div class="col d-flex justify-content-center pb-1">
+                        <a href="https://codensolar.com/kits/" class="ver-kits" target="_blank">
+                            <h4 title="Da click para ver todos los paneles">Ver todos los kits</h4>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        {% endblock %}
+
+        {% block content %}{% endblock %}
+
+        <footer class="row">
+            <div class="col-12 footer">
+                <div class="d-flex flex-column h-100">
+                    <footer class="w-100 py-4 flex-shrink-0">
+                        <div class="container py-4">
+                            <div class="row gy-4 gx-5">
+                                <div class="col-lg-4 col-md-6">
+                                    <p class="footer-tittle"><a href="#"> Coden<b style="color: rgb(4, 253, 4);">S</b>olar </a></p>
+                                    <h6 class="small text-muted">Somos una empresa comprometida con el media ambiente.</h6>
+                                    <h6 class="small text-muted mb-0">&copy; Copyrights. All rights reserved. <a class="text-primary" href="#">ELIT IT</a></h6>
+                                </div>
+                                <div class="col-lg-2 col-md-6">
+                                    <h5 class="text-white mb-3">Enlaces</h5>
+                                    <ul class="list-unstyled text-muted">
+                                        <li><a href="#">Inicio</a></li>
+                                        <li><a href="#">Servicios</a></li>
+                                        <li><a href="#">Productos</a></li>
+                                        <li><a href="#">Contactar</a></li>
+                                    </ul>
+                                </div>
+                                <div class="col-lg-2 col-md-12">
+                                    <h5 class="text-white mb-3">Redes Sociales</h5>
+                                    <ul class="list-unstyled text-muted">
+                                        <li><a href="#">Facebook</a></li>
+                                        <li><a href="#">Youtube</a></li>
+                                        <li><a href="#">Instagram</a></li>
+                                        <li><a href="#">Otros</a></li>
+                                    </ul>
+                                </div>
+                                <div class="col-lg-2 col-md-12">
+                                    <h6 class="text-white mb-3">COMPROMETIDOS CON EL MEDIO AMBIENTE</h6>
+                                    <ul class="list-unstyled text-muted">
+                                        <li><a href="#">Responsabilidad</a></li>
+                                        <li><a href="#">Equidad</a></li>
+                                        <li><a href="#">Compromiso</a></li>
+                                        <li><a href="#">Corazon</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'products/js/Newjs/bootstrap.bundle.js' %}"></script>
+    <script src="{% static 'products/js/Newjs/bootstrap.bundle.min.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

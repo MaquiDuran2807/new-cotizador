@@ -1,0 +1,27 @@
+
+
+.Cotizador-pdf{
+    text-align: center;
+    background-color: lightgoldenrodyellow;
+    border: 2px solid black;
+    padding: 0%;
+    margin: 10px 2px;
+    color: azure;
+    font-weight: bold;
+}
+
+.secundary-pdf{
+    color: azure;
+    background-color:  #0a5071;
+}
+
+.primary-pdf{
+    background-color: azure;
+    color: #0F172A;
+}
+
+.logo-pdf{
+    max-width: 150px;
+    max-height: 150px;
+    padding: 15px 15px;
+}

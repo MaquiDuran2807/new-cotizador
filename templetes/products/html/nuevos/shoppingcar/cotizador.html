@@ -1,0 +1,324 @@
+﻿{% load static %}
+<div class="totales">
+    <div class="row innovacion justify-content-center">
+        <div class="row">
+            <div class="col-md-12">
+                <h5 style="color:azure;">Cotizador de ahorro</h5>
+                <h2 style="color:azure;">Tecnologia desarrollada por</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 d-flex justify-content-center">
+                <a href="#" class="navbar-brand">Coden<b style="color: rgb(4, 253, 4);">S</b>olar</a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row">
+                        <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-trigger="focus" title="Â¿Porque precio normal?" data-bs-content="es debido solo contiene modulo centralizado">
+                            <img class="svg-interrogante" title="Â¿Porque precio normal?" src="{% static 'products/carrusel/interrogante.svg' %}" alt="">
+                        </a>
+                        <div class="col-md-12 acumulador-precio"><h6 class="titulo-normal">Precio total</h6></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 acumulador-precio-id" id="totales">$0</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <a tabindex="0" role="button" data-bs-toggle="popover" data-bs-trigger="focus" title="Â¿Porque premium?" data-bs-content="Es porque este trae unidad de potencia">
+                            <img class="svg-interrogante" title="Â¿Porque premium?" src="{% static 'products/carrusel/interrogante2.svg' %}" alt="">
+                        </a>
+                        <div class="col-md-12 consumo-total"><h6 class="titulo-premium">Precio Premium</h6></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 consumo-total-id" id="premiun">$0</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-8">
+                    <select class="form-select text-center mt-2 mb-2 lugar-residencia" aria-label="Default select example" id="ubicacion-select">
+                        <option value="" selected>Â¿En que parte del pais te encuentras?</option>
+                        <option value="1">Cundinamarca</option>
+                        <option value="2">Boyaca</option>
+                        <option value="3">Resto del pais</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <a onclick="borrar()"><div class="row btn btn-success reiniciar-cotizacion" title="Reiniciar Cotizador">Reiniciar cotizacion</div></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row acumulador-cotizador" id="cotizador-lista">
+    <template id="quote-template">
+        <div class="quote d-grid gap-3">
+            <div class="row primary-cotizador">
+                <div class="col-md-1 eliminar-cotizador text-danger pt-1" title="Eliminar">&#10060;</div>
+                <div class="col-md-5"><h6>Producto</h6><div class="col-12 titulo-producto-cotizador"></div></div>
+                <div class="col-md-4"><h6>Precio</h6><div class="col-12 precio-unitario"></div></div>
+                <div class="col-md-2"><h6>Cantidad</h6><div class="col-12 cantidad-cotizador"></div></div>
+            </div>
+            <div class="row secundary-cotizador">
+                <div class="row">
+                    <div class="col-md-6"><h6>horas uso</h6><div class="col-md-12 horas-uso-cotizador"></div></div>
+                    <div class="col-md-6"><h6>consumo hora</h6><div class="col-md-12 consumo-hora-cotizador"></div></div>
+                </div>
+            </div>
+            <div class="row tertiary-cotizador">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-4"><h6>consumo dia</h6><div class="col-12 consumo-dia-cotizador"></div></div>
+                        <div class="col-md-4"><h6>% perdidas</h6><div class="col-md-12 porcentaje-perdidas-cotizador"></div></div>
+                        <div class="col-md-4"><h6>consumo</h6><div class="col-md-12 total-consumo-cotizador"></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+</div>
+
+<div class="row requerimientos-productos justify-content-center">
+    <div class="accordion accordion-general justify-content-center" id="accordionPanelsStayOpenExample">
+        <div class="accordion-item justify-content-center">
+            <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                    <h4>Reguladores</h4>
+                </button>
+            </h2>
+            <div id="panelsStayOpen-collapseOne" aria-labelledby="panelsStayOpen-headingOne">
+                <div class="accordion-body">
+                    <div class="row requerimiento-individualmente-productos">
+                        <div class="col-xl-3 reguladores-requeridos"><h6>Reguladores</h6><div class="reguladores-requeridos1"></div></div>
+                        <div class="col-xl-3 reguladores-tipo-requeridos"><h6>Tipo</h6><div class="reguladores-tipo-requeridos1"></div></div>
+                        <div class="col-xl-4 reguladores-precio-requeridos"><h6>P/total</h6><div class="reguladores-precio-requeridos1"></div></div>
+                        <div class="col-xl-1 reguladores-eliminar-requeridos"><div class="col-xl-2 reguladores-cotizador text-danger" onclick="eliminar_requerimientos('regulator_needed')" title="Eliminar el requerimiento">&#10060;</div></div>
+                        <div class="col-xl-1 reguladores-reiniciar-requeridos" onclick="reagregar_requerimientos('regulator_needed')">
+                            <button type="button" class="btn btn-success btn-sm" title="Volver a agregar el producto">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z"/><path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                    <h4>Paneles</h4>
+                </button>
+            </h2>
+            <div id="panelsStayOpen-collapseTwo" aria-labelledby="panelsStayOpen-headingTwo">
+                <div class="accordion-body">
+                    <div class="row requerimiento-individualmente-productos">
+                        <div class="col-xl-3 paneles-requeridos"><h6>Paneles</h6><div class="paneles-requeridos1"></div></div>
+                        <div class="col-xl-3 paneles-tipo-requeridos"><h6>Tipo</h6><div class="paneles-tipo-requeridos1"></div></div>
+                        <div class="col-xl-2 paneles-precio-unitario-requeridos"><h6>P/Unitario</h6><div class="paneles-precio-requeridos1"></div></div>
+                        <div class="col-xl-2 paneles-precio-requeridos"><h6>P/Total</h6><div class="paneles-precio-requeridos2"></div></div>
+                        <div class="col-xl-1 paneles-eliminar-requeridos"><div class="col-xl-2 eliminar-cotizador text-danger" onclick="eliminar_requerimientos('panel_needed')">&#10060;</div></div>
+                        <div class="col-xl-1 paneles-reiniciar-requeridos" onclick="reagregar_requerimientos('panel_needed')">
+                            <button type="button" class="btn btn-success btn-sm" title="Volver a agregar el producto"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z"/><path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z"/></svg></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+                    <h4>Baterias</h4>
+                </button>
+            </h2>
+            <div id="panelsStayOpen-collapseThree" aria-labelledby="panelsStayOpen-headingThree">
+                <div class="accordion-body">
+                    <div class="row requerimiento-individualmente-productos">
+                        <div class="col-xl-3 baterias-requeridos"><h6>Baterias</h6><div class="baterias-requeridos1"></div></div>
+                        <div class="col-xl-3 baterias-tipo-requeridos"><h6>Tipo</h6><div class="baterias-tipo-requeridos1"></div></div>
+                        <div class="col-xl-2 baterias-unitario-precio-requeridos"><h6>P/Unitario</h6><div class="baterias-precio-requeridos1"></div></div>
+                        <div class="col-xl-2 baterias-precio-requeridos"><h6>P/Total</h6><div class="baterias-precio-requeridos2"></div></div>
+                        <div class="col-xl-1 baterias-eliminar-requeridos"><div class="col-xl-2 baterias-cotizador text-danger" onclick="eliminar_requerimientos('battery_needed')">&#10060;</div></div>
+                        <div class="col-xl-1 baterias-eliminar-requeridos" onclick="reagregar_requerimientos('battery_needed')">
+                            <button type="button" class="btn btn-success btn-sm" title="Volver a agregar el producto"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z"/><path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z"/></svg></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="panelsStayOpen-headingfour">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapsefour" aria-expanded="false" aria-controls="panelsStayOpen-collapsefour">
+                    <h4>Breakers</h4>
+                </button>
+            </h2>
+            <div id="panelsStayOpen-collapsefour" aria-labelledby="panelsStayOpen-headingfour">
+                <div class="accordion-body">
+                    <div class="row requerimiento-individualmente-productos">
+                        <div class="col-xl-3 breakers-requeridos"><h6>Breakers</h6><div class="breakers-requeridos1"></div></div>
+                        <div class="col-xl-3 breakers-tipo-requeridos"><h6>Tipo</h6><div class="breakers-tipo-requeridos1"></div></div>
+                        <div class="col-xl-2 breakers-precio-unitario-total-requeridos"><h6>P/Unitarios</h6><div class="breakers-precio-unitario-total-requeridos1"></div></div>
+                        <div class="col-xl-2 breakers-precio-requeridos"><h6>P/Total</h6><div class="breakers-precio-requeridos1"></div></div>
+                        <div class="col-xl-1 breakers-eliminar-requeridos"><div class="col-xl-2 breakers-cotizador text-danger" onclick="eliminar_requerimientos('breaker_needed')">&#10060;</div></div>
+                        <div class="col-xl-1 breakers-eliminar-requeridos" onclick="reagregar_requerimientos('breaker_needed')">
+                            <button type="button" class="btn btn-success btn-sm" title="Volver a agregar el producto"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z"/><path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z"/></svg></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="panelsStayOpen-headingfive">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapsefive" aria-expanded="false" aria-controls="panelsStayOpen-collapsefive">
+                    <h4>Otros requerimientos</h4>
+                </button>
+            </h2>
+            <div id="panelsStayOpen-collapsefive" aria-labelledby="panelsStayOpen-headingfive">
+                <div class="accordion-body">
+                    <div class="row requerimiento-individualmente-productos">
+                        <div style="font-size:13px;" class="col-xl-3 cables-requeridos1"><h6>cables</h6><div class="cables-requeridos1"></div></div>
+                        <div style="font-size:13px;" class="col-xl-3 cables-tipo-requeridos1"><h6>Tipo</h6><div class="cables-tipo-requeridos1"></div></div>
+                        <div style="font-size:13px;" class="col-xl-2 cables-precio-requeridos1"><h6>U/Precio</h6><div class="cables-precio-requeridos1"></div></div>
+                        <div style="font-size:13px;" class="col-xl-2 cables-precio-total-requeridos1"><h6>P/Total</h6><div class="cables-precio-total-requeridos1"></div></div>
+                        <div class="col-xl-1 cables-eliminar-requeridos"><div class="col-xl-2 cables-eliminar-cotizador text-danger text-center" onclick="eliminar_requerimientos('rubberized_cable_needed')">&#10060;</div></div>
+                        <div class="col-xl-1 cables-eliminar-requeridos" onclick="reagregar_requerimientos('rubberized_cable_needed')">
+                            <button type="button" class="btn btn-success btn-sm" title="Volver a agregar el producto"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z"/><path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z"/></svg></button>
+                        </div>
+                    </div>
+                    <hr size="2px" color="green"/>
+                    <div class="row requerimiento-individualmente-productos">
+                        <div style="font-size:13px;" class="col-xl-3 soportes-sobre-techo-requeridos"><h6>Soporte</h6><div class="soportes-sobre-techo-requeridos1"></div></div>
+                        <div style="font-size:13px;" class="col-xl-3 soportes-sobre-techo-tipo-requeridos"><h6>Tipo</h6><div class="soportes-sobre-techo-tipo-requeridos1"></div></div>
+                        <div style="font-size:13px;" class="col-xl-2 soportes-sobre-techo-precio-requeridos"><h6>U/Precio</h6><div class="soportes-sobre-techo-precio-requeridos1"></div></div>
+                        <div style="font-size:13px;" class="col-xl-2 soportes-sobre-techo-precio-total-requeridos"><h6>P/Total</h6><div class="soportes-sobre-techo-precio-total-requeridos1"></div></div>
+                        <div class="col-xl-1 soporte-eliminar-requeridos"><div class="col-xl-2 soporte-eliminar-cotizador text-danger" onclick="eliminar_requerimientos('panel_support_needed')">&#10060;</div></div>
+                        <div class="col-xl-1 soporte-sobre-techo-eliminar-requeridos" onclick="reagregar_requerimientos('panel_support_needed')">
+                            <button type="button" class="btn btn-success btn-sm" title="Volver a agregar el producto"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z"/><path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z"/></svg></button>
+                        </div>
+                    </div>
+                    <hr size="2px" color="green"/>
+                    <div class="row requerimiento-individualmente-productos">
+                        <div style="font-weight:bold;font-size:15px;color:rgb(60,179,113);" class="col-xl-3 modulos-centralizados-requeridos">
+                            <p style="color:rgb(60,179,113);font-size:12px;">Basico</p>
+                            <h6 style="font-weight:bold;color:rgb(60,179,113);">Modulo Centralizado</h6>
+                            <div class="modulos-centralizados-requeridos1"></div>
+                        </div>
+                        <div style="font-size:13px;" class="col-xl-3 modulos-centralizados-tipo-requeridos"><h6>Tipo</h6><div class="modulos-centralizados-tipo-requeridos1"></div></div>
+                        <div style="font-size:13px;" class="col-xl-2 modulos-centralizados-precio-requeridos"><h6>U/Precio</h6><div class="modulos-centralizados-precio-requeridos1"></div></div>
+                        <div style="font-size:13px;" class="col-xl-2 modulos-centralizados-precio-total-requeridos"><h6>P/Total</h6><div class="modulos-centralizados-precio-total-requeridos1"></div></div>
+                        <div class="col-xl-1 modulos-eliminar-requeridos"><div class="col-xl-2 modulos-eliminar-cotizador text-danger" onclick="eliminar_requerimientos('centralized_modules_needed')">&#10060;</div></div>
+                        <div class="col-xl-1 modulos-centralizados-eliminar-requeridos" onclick="reagregar_requerimientos('centralized_modules_needed')">
+                            <button type="button" class="btn btn-success btn-sm" title="Volver a agregar el producto"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z"/><path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z"/></svg></button>
+                        </div>
+                    </div>
+                    <hr size="2px" color="green"/>
+                    <div class="row requerimiento-individualmente-productos">
+                        <div style="font-weight:bold;font-size:13px;color:rgb(236,196,64);" class="col-xl-3 unidad-de-potencia-requeridos">
+                            <p style="color:rgb(236,196,64);font-size:12px;">premium</p>
+                            <h6 style="font-weight:bold;color:rgb(236,196,64);">Unidad de potencia</h6>
+                            <div class="unidad-de-potencia-requeridos1"></div>
+                        </div>
+                        <div style="font-size:13px;" class="col-xl-3 unidad-de-potencia-tipo-requeridos"><h6>Tipo</h6><div class="unidad-de-potencia-tipo-requeridos1"></div></div>
+                        <div style="font-size:13px;" class="col-xl-2 unidad-de-potencia-precio-requeridos"><h6>U/Precio</h6><div class="unidad-de-potencia-precio-requeridos1"></div></div>
+                        <div style="font-size:13px;" class="col-xl-2 unidad-de-potencia-precio-total-requeridos"><h6>P/Total</h6><div class="unidad-de-potencia-precio-total-requeridos1"></div></div>
+                        <div class="col-xl-1 unidad-de-potencia-eliminar-requeridos"><div class="col-xl-2 unidad-de-potencia-eliminar-cotizador text-danger" onclick="eliminar_requerimientos('power_units_needed')">&#10060;</div></div>
+                        <div class="col-xl-1 unidad-de-potencia-reiniciar-requeridos" onclick="reagregar_requerimientos('power_units_needed')">
+                            <button type="button" class="btn btn-success btn-sm" title="Volver a agregar el producto"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z"/><path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z"/></svg></button>
+                        </div>
+                    </div>
+                    <hr size="2px" color="green"/>
+                    <div class="row requerimiento-individualmente-productos">
+                        <div style="font-size:13px;" class="col-xl-3 terminales-MC4-requeridos"><h6>Terminales-MC4</h6><div class="terminales-MC4-requeridos1"></div></div>
+                        <div style="font-size:13px;" class="col-xl-3 terminales-MC4-tipo-requeridos"><h6>Tipo</h6><div class="terminales-MC4-tipo-requeridos1"></div></div>
+                        <div style="font-size:13px;" class="col-xl-2 terminales-MC4-precio-requeridos"><h6>U/Precio</h6><div class="terminales-MC4-precio-requeridos1"></div></div>
+                        <div style="font-size:13px;" class="col-xl-2 terminales-MC4-precio-total-requeridos"><h6>P/total</h6><div class="terminales-MC4-precio-total-requeridos1"></div></div>
+                        <div class="col-xl-1 terminales-MC4-eliminar-requeridos"><div class="col-xl-2 terminales-MC4-eliminar-cotizador text-danger" onclick="eliminar_requerimientos('terminals_needed')">&#10060;</div></div>
+                        <div class="col-xl-1 terminales-MC4-reiniciar-requeridos" onclick="reagregar_requerimientos('terminals_needed')">
+                            <button type="button" class="btn btn-success btn-sm" title="Volver a agregar el producto"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z"/><path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z"/></svg></button>
+                        </div>
+                    </div>
+                    <hr size="2px" color="green"/>
+                    <div class="row requerimiento-individualmente-productos">
+                        <div style="font-size:13px;" class="col-xl-3 conectores-en-y-requeridos"><h6>Conectores En Y</h6><div class="conectores-en-y-requeridos1"></div></div>
+                        <div style="font-size:13px;" class="col-xl-3 conectores-en-y-tipo-requeridos"><h6>Tipo</h6><div class="conectores-en-y-tipo-requeridos1"></div></div>
+                        <div style="font-size:13px;" class="col-xl-2 conectores-en-y-precio-requeridos"><h6>U/Precio</h6><div class="conectores-en-y-precio-requeridos1"></div></div>
+                        <div style="font-size:13px;" class="col-xl-2 conectores-en-y-precio-total-requeridos"><h6>P/Total</h6><div class="conectores-en-y-precio-total-requeridos1"></div></div>
+                        <div class="col-xl-1 conectores-en-y-eliminar-requeridos"><div class="col-xl-2 conectores-en-y-eliminar-cotizador text-danger" onclick="eliminar_requerimientos('connector_needed')">&#10060;</div></div>
+                        <div class="col-xl-1 conectores-en-y-reiniciar-requeridos" onclick="reagregar_requerimientos('connector_needed')">
+                            <button type="button" class="btn btn-success btn-sm" title="Volver a agregar el producto"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z"/><path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z"/></svg></button>
+                        </div>
+                    </div>
+                    <hr size="2px" color="green"/>
+                    <div class="row requerimiento-individualmente-productos">
+                        <div style="font-size:13px;" class="col-xl-3 cable-vehicular-requeridos"><h6>Cable-Vehicular</h6><div class="cable-vehicular-requeridos1"></div></div>
+                        <div style="font-size:13px;" class="col-xl-3 cable-vehicular-tipo-requeridos"><h6>Tipo</h6><div class="cable-vehicular-tipo-requeridos1"></div></div>
+                        <div style="font-size:13px;" class="col-xl-2 cable-vehicular-precio-requeridos"><h6>U/Precio</h6><div class="cable-vehicular-precio-requeridos1"></div></div>
+                        <div style="font-size:13px;" class="col-xl-2 cable-vehicular-precio-total-requeridos"><h6>P/Total</h6><div class="cable-vehicular-precio-total-requeridos1"></div></div>
+                        <div class="col-xl-1 cable-vehicular-eliminar-requeridos"><div class="col-xl-2 cable-vehicular-eliminar-cotizador text-danger" onclick="eliminar_requerimientos('vehicle_cable_needed')">&#10060;</div></div>
+                        <div class="col-xl-1 cable-vehicular-reiniciar-requeridos" onclick="reagregar_requerimientos('vehicle_cable_needed')">
+                            <button type="button" class="btn btn-success btn-sm" title="Volver a agregar el producto"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z"/><path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z"/></svg></button>
+                        </div>
+                    </div>
+                    <hr size="2px" color="green"/>
+                    <div class="row requerimiento-individualmente-productos">
+                        <div style="font-size:13px;" class="col-xl-3 materiales-electricos-requeridos"><h6>Materiales Electricos</h6><div class="materiales-electricos-requeridos1"></div></div>
+                        <div style="font-size:13px;" class="col-xl-3 materiales-electricos-tipo-requeridos"><h6>Tipo</h6><div class="materiales-electricos-tipo-requeridos1"></div></div>
+                        <div style="font-size:13px;" class="col-xl-2 materiales-electricos-precio-requeridos"><h6>U/Precio</h6><div class="materiales-electricos-precio-requeridos1"></div></div>
+                        <div style="font-size:13px;" class="col-xl-2 materiales-electricos-precio-total-requeridos"><h6>P/Total</h6><div class="materiales-electricos-precio-total-requeridos1"></div></div>
+                        <div class="col-xl-1 materiales-electricos-eliminar-requeridos"><div class="col-xl-2 materiales-electricos-eliminar-cotizador text-danger" onclick="eliminar_requerimientos('electric_materials_needed')">&#10060;</div></div>
+                        <div class="col-xl-1 materiales-electricos-reiniciar" onclick="reagregar_requerimientos('electric_materials_needed')">
+                            <button type="button" class="btn btn-success btn-sm" title="Volver a agregar el producto"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z"/><path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z"/></svg></button>
+                        </div>
+                    </div>
+                    <hr size="2px" color="green"/>
+                    <div class="row requerimiento-individualmente-productos">
+                        <div style="font-size:13px;" class="col-xl-3 kit-puesta-a-tierra-requeridos"><h6>Kit Puesta A Tierra</h6><div class="kit-puesta-a-tierra-requeridos1"></div></div>
+                        <div style="font-size:13px;" class="col-xl-3 kit-puesta-a-tierra-tipo-requeridos"><h6>Tipo</h6><div class="kit-puesta-a-tierra-tipo-requeridos1"></div></div>
+                        <div style="font-size:13px;" class="col-xl-2 kit-puesta-a-tierra-precio-requeridos"><h6>U/Precio</h6><div class="kit-puesta-a-tierra-precio-requeridos1"></div></div>
+                        <div style="font-size:13px;" class="col-xl-2 kit-puesta-a-tierra-precio-total-requeridos"><h6>P/Total</h6><div class="kit-puesta-a-tierra-precio-total-requeridos1"></div></div>
+                        <div class="col-xl-1 kit-puesta-a-tierra-eliminar-requeridos"><div class="col-xl-1 kit-puesta-a-tierra-eliminar-cotizador text-danger" onclick="eliminar_requerimientos('ground_security_kit_needed')">&#10060;</div></div>
+                        <div class="col-xl-1 kit-puesta-a-tierra-reiniciar-requeridos" onclick="reagregar_requerimientos('ground_security_kit_needed')">
+                            <button type="button" class="btn btn-success btn-sm" title="Volver a agregar el producto"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z"/><path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z"/></svg></button>
+                        </div>
+                    </div>
+                    <hr size="2px" color="green"/>
+                    <div class="row requerimiento-individualmente-productos">
+                        <div style="font-size:13px;" class="col-xl-3 rack-soporte-baterias-requeridos"><h6>Rack Soporte Baterias</h6><div class="rack-soporte-baterias-requeridos1"></div></div>
+                        <div style="font-size:13px;" class="col-xl-3 rack-soporte-baterias-tipo-requeridos"><h6>Tipo</h6><div class="rack-soporte-baterias-tipo-requeridos1"></div></div>
+                        <div style="font-size:13px;" class="col-xl-2 rack-soporte-baterias-precio-requeridos"><h6>U/Precio</h6><div class="rack-soporte-baterias-precio-requeridos1"></div></div>
+                        <div style="font-size:13px;" class="col-xl-2 rack-soporte-baterias-precio-total-requeridos"><h6>P/Total</h6><div class="rack-soporte-baterias-precio-total-requeridos1"></div></div>
+                        <div class="col-xl-1 rack-soporte-eliminar-requeridos"><div class="col-xl-2 reguladores-cotizador text-danger" onclick="eliminar_requerimientos('rack_bateria')">&#10060;</div></div>
+                        <div class="col-xl-1 rack-soporte-reiniciar-requeridos" onclick="reagregar_requerimientos('rack_bateria')">
+                            <button type="button" class="btn btn-success btn-sm" title="Volver a agregar el producto"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z"/><path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z"/></svg></button>
+                        </div>
+                    </div>
+                    <hr size="2px" color="green"/>
+                    <div class="row requerimiento-individualmente-productos">
+                        <div style="font-size:13px;" class="col-xl-3 inversores-requeridos"><h6>Inversores</h6><div class="inversores-requeridos1"></div></div>
+                        <div style="font-size:13px;" class="col-xl-3 inversores-tipo-requeridos"><h6>Tipo</h6><div class="inversores-tipo-requeridos1"></div></div>
+                        <div style="font-size:13px;" class="col-xl-2 inversores-precio-requeridos"><h6>U/Precio</h6><div class="inversores-precio-requeridos1"></div></div>
+                        <div style="font-size:13px;" class="col-xl-2 inversores-precio-total-requeridos"><h6>P/Total</h6><div class="inversores-precio-total-requeridos1"></div></div>
+                        <div class="col-xl-1 inversiores-eliminar-requeridos"><div class="col-xl-2 inversores-cotizador text-danger" onclick="eliminar_requerimientos('inversor')">&#10060;</div></div>
+                        <div class="col-xl-1 inversores-reiniciar-requeridos" onclick="reagregar_requerimientos('inversor')">
+                            <button type="button" class="btn btn-success btn-sm" title="Volver a agregar el producto"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z"/><path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z"/></svg></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row descargar pdf">
+    {% if usuario %}
+    <a class="btn btn-success rounded-pill d-block mx-auto mt-2 mb-2" onclick="createandsendpdf('{{usuario.name}}','{{usuario.email}}','{{usuario.lastname}}')">descargar pdf</a>
+    {% endif %}
+</div>

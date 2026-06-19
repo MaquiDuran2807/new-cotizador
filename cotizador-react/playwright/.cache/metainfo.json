@@ -1,0 +1,124 @@
+{
+  "version": "1.60.0",
+  "viteVersion": "6.4.3",
+  "registerSourceHash": "ea233d95b980072c81eb49458aee55f5d33fdb02",
+  "components": [
+    {
+      "id": "C__Users_Janus_Documents_codensolar_codensolar_ecomerce_main_cotizador_react_src_components_CotizadorPanel_jsx",
+      "filename": "C:\\Users\\Janus\\Documents\\codensolar\\codensolar-ecomerce-main\\cotizador-react\\tests\\responsive\\CotizadorPanel.responsive.spec.jsx",
+      "importSource": "../../src/components/CotizadorPanel.jsx"
+    },
+    {
+      "id": "C__Users_Janus_Documents_codensolar_codensolar_ecomerce_main_cotizador_react_src_components_Footer_jsx",
+      "filename": "C:\\Users\\Janus\\Documents\\codensolar\\codensolar-ecomerce-main\\cotizador-react\\tests\\responsive\\Footer.responsive.spec.jsx",
+      "importSource": "../../src/components/Footer.jsx"
+    },
+    {
+      "id": "C__Users_Janus_Documents_codensolar_codensolar_ecomerce_main_cotizador_react_src_components_HeroCarousel_jsx",
+      "filename": "C:\\Users\\Janus\\Documents\\codensolar\\codensolar-ecomerce-main\\cotizador-react\\tests\\responsive\\HeroCarousel.responsive.spec.jsx",
+      "importSource": "../../src/components/HeroCarousel.jsx"
+    },
+    {
+      "id": "C__Users_Janus_Documents_codensolar_codensolar_ecomerce_main_cotizador_react_src_components_PdfDownloadButton_jsx",
+      "filename": "C:\\Users\\Janus\\Documents\\codensolar\\codensolar-ecomerce-main\\cotizador-react\\tests\\responsive\\PdfDownloadButton.responsive.spec.jsx",
+      "importSource": "../../src/components/PdfDownloadButton.jsx"
+    }
+  ],
+  "sources": {
+    "C:/Users/Janus/Documents/codensolar/codensolar-ecomerce-main/cotizador-react/playwright/index.html": {
+      "timestamp": 1780718260506.8203
+    },
+    "C:/Users/Janus/Documents/codensolar/codensolar-ecomerce-main/cotizador-react/playwright/index.jsx": {
+      "timestamp": 1780703571705.9412
+    },
+    "C:/Users/Janus/Documents/codensolar/codensolar-ecomerce-main/cotizador-react/node_modules/react/index.js": {
+      "timestamp": 1780372670083.2048
+    },
+    "C:/Users/Janus/Documents/codensolar/codensolar-ecomerce-main/cotizador-react/node_modules/react-dom/client.js": {
+      "timestamp": 1780372670047.527
+    },
+    "C:/Users/Janus/Documents/codensolar/codensolar-ecomerce-main/cotizador-react/src/components/CotizadorPanel.jsx": {
+      "timestamp": 1780696249039.2983
+    },
+    "C:/Users/Janus/Documents/codensolar/codensolar-ecomerce-main/cotizador-react/src/components/PdfDownloadButton.jsx": {
+      "timestamp": 1780697605392.048
+    },
+    "C:/Users/Janus/Documents/codensolar/codensolar-ecomerce-main/cotizador-react/src/components/Footer.jsx": {
+      "timestamp": 1780720260942.2231
+    },
+    "C:/Users/Janus/Documents/codensolar/codensolar-ecomerce-main/cotizador-react/src/components/HeroCarousel.jsx": {
+      "timestamp": 1780699708107.2627
+    },
+    "C:/Users/Janus/Documents/codensolar/codensolar-ecomerce-main/cotizador-react/node_modules/react/cjs/react.production.js": {
+      "timestamp": 1780372670469.3733
+    },
+    "C:/Users/Janus/Documents/codensolar/codensolar-ecomerce-main/cotizador-react/node_modules/prop-types/index.js": {
+      "timestamp": 1780372670231.4702
+    },
+    "C:/Users/Janus/Documents/codensolar/codensolar-ecomerce-main/cotizador-react/src/utils/formatCurrency.js": {
+      "timestamp": 1780371746927.7952
+    },
+    "C:/Users/Janus/Documents/codensolar/codensolar-ecomerce-main/cotizador-react/node_modules/react/jsx-runtime.js": {
+      "timestamp": 1780372670184.2136
+    },
+    "C:/Users/Janus/Documents/codensolar/codensolar-ecomerce-main/cotizador-react/src/components/QuoteItem.jsx": {
+      "timestamp": 1780690774565.7776
+    },
+    "C:/Users/Janus/Documents/codensolar/codensolar-ecomerce-main/cotizador-react/src/components/ui/Spinner.jsx": {
+      "timestamp": 1780375197924.322
+    },
+    "C:/Users/Janus/Documents/codensolar/codensolar-ecomerce-main/cotizador-react/src/components/RequirementsPanel.jsx": {
+      "timestamp": 1780530246162.6802
+    },
+    "C:/Users/Janus/Documents/codensolar/codensolar-ecomerce-main/cotizador-react/node_modules/react-dom/cjs/react-dom-client.production.js": {
+      "timestamp": 1780372670532.228
+    },
+    "C:/Users/Janus/Documents/codensolar/codensolar-ecomerce-main/cotizador-react/src/components/ResponsiveImage.jsx": {
+      "timestamp": 1780696515941.5261
+    },
+    "C:/Users/Janus/Documents/codensolar/codensolar-ecomerce-main/cotizador-react/node_modules/prop-types/factoryWithThrowingShims.js": {
+      "timestamp": 1780372670119.8486
+    },
+    "C:/Users/Janus/Documents/codensolar/codensolar-ecomerce-main/cotizador-react/node_modules/react/cjs/react-jsx-runtime.production.js": {
+      "timestamp": 1780372670403.9858
+    },
+    "C:/Users/Janus/Documents/codensolar/codensolar-ecomerce-main/cotizador-react/src/index.css": {
+      "timestamp": 1780688070198.6472
+    },
+    "C:/Users/Janus/Documents/codensolar/codensolar-ecomerce-main/cotizador-react/node_modules/scheduler/index.js": {
+      "timestamp": 1780372670036.5276
+    },
+    "C:/Users/Janus/Documents/codensolar/codensolar-ecomerce-main/cotizador-react/node_modules/react-dom/index.js": {
+      "timestamp": 1780372670120.848
+    },
+    "C:/Users/Janus/Documents/codensolar/codensolar-ecomerce-main/cotizador-react/node_modules/prop-types/lib/ReactPropTypesSecret.js": {
+      "timestamp": 1780372670308.4224
+    },
+    "C:/Users/Janus/Documents/codensolar/codensolar-ecomerce-main/cotizador-react/node_modules/react-dom/cjs/react-dom.production.js": {
+      "timestamp": 1780372670974.1733
+    },
+    "C:/Users/Janus/Documents/codensolar/codensolar-ecomerce-main/cotizador-react/node_modules/scheduler/cjs/scheduler.production.js": {
+      "timestamp": 1780372670322.523
+    }
+  },
+  "deps": {
+    "C:\\Users\\Janus\\Documents\\codensolar\\codensolar-ecomerce-main\\cotizador-react\\src\\components\\CotizadorPanel.jsx": [
+      "C:\\Users\\Janus\\Documents\\codensolar\\codensolar-ecomerce-main\\cotizador-react\\src\\components\\CotizadorPanel.jsx",
+      "C:\\Users\\Janus\\Documents\\codensolar\\codensolar-ecomerce-main\\cotizador-react\\src\\utils\\formatCurrency.js",
+      "C:\\Users\\Janus\\Documents\\codensolar\\codensolar-ecomerce-main\\cotizador-react\\src\\components\\QuoteItem.jsx",
+      "C:\\Users\\Janus\\Documents\\codensolar\\codensolar-ecomerce-main\\cotizador-react\\src\\components\\RequirementsPanel.jsx",
+      "C:\\Users\\Janus\\Documents\\codensolar\\codensolar-ecomerce-main\\cotizador-react\\src\\components\\PdfDownloadButton.jsx",
+      "C:\\Users\\Janus\\Documents\\codensolar\\codensolar-ecomerce-main\\cotizador-react\\src\\components\\ui\\Spinner.jsx"
+    ],
+    "C:\\Users\\Janus\\Documents\\codensolar\\codensolar-ecomerce-main\\cotizador-react\\src\\components\\Footer.jsx": [
+      "C:\\Users\\Janus\\Documents\\codensolar\\codensolar-ecomerce-main\\cotizador-react\\src\\components\\Footer.jsx"
+    ],
+    "C:\\Users\\Janus\\Documents\\codensolar\\codensolar-ecomerce-main\\cotizador-react\\src\\components\\HeroCarousel.jsx": [
+      "C:\\Users\\Janus\\Documents\\codensolar\\codensolar-ecomerce-main\\cotizador-react\\src\\components\\HeroCarousel.jsx",
+      "C:\\Users\\Janus\\Documents\\codensolar\\codensolar-ecomerce-main\\cotizador-react\\src\\components\\ResponsiveImage.jsx"
+    ],
+    "C:\\Users\\Janus\\Documents\\codensolar\\codensolar-ecomerce-main\\cotizador-react\\src\\components\\PdfDownloadButton.jsx": [
+      "C:\\Users\\Janus\\Documents\\codensolar\\codensolar-ecomerce-main\\cotizador-react\\src\\components\\PdfDownloadButton.jsx"
+    ]
+  }
+}

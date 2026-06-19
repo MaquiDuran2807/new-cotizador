@@ -1,0 +1,101 @@
+?{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<link rel="stylesheet" type="text/css" href=" {% static 'products/css/main.css' %} ">
+	<link rel="stylesheet" type="text/css" href="{% static 'products/css/vlogin-registro.css' %}">
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous"> -->
+    <title>registrate</title>
+    <style>
+        .alert-danger{
+            background-color: #f5404f;
+            color: #842029;
+            border-color: #f5c2c7;
+            padding: 10px;
+            border-radius: 5px;}
+    </style>
+</head>
+
+<body class="body" >
+    
+<div class=volver>
+    <div class="volver1">
+        <a href="{% url 'users_app:user-login' %}#">Volver</a>
+    </div>
+</div>
+
+
+<div class="login">
+<input type="checkbox" id="check">
+    <div class="container">
+        <div class="login page">
+            <div class="heading"> <a href="https://codensolar.com/" class="navbar-brand "> Coden<b style="color: rgb(4, 253, 4);">S</b>olar </a>  </div>
+            <form  method="post">
+                {% csrf_token %}
+                {% if form.errors %}
+                <div class="alert alert-danger"
+                    style="margin-top: 20px; margin-bottom: 20px; padding: 10px; border-radius: 5px; z-index: 35432132;">
+                    <ul>
+                        {% for field in form %}
+                        {% for error in field.errors %}
+                        <li 
+                        style="list-style-type: none;"
+                        ><strong>{{ field.label }}:</strong> {{ error }}</li>
+                        {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+                <script>
+                    setTimeout(function() {
+                        document.querySelector('.alert-danger').style.display = 'none';
+                    }, 10000);
+                </script>
+                {% endif %}
+                <div class="entryarea">
+                    {{form.username}}
+                    <div class="labelline">Nombre de usuario</div>
+                </div>
+                <div class="entryarea">
+                    {{form.name}}
+                    <div class="labelline">Nombres</div>
+                </div>
+                <div class="entryarea">
+                    {{form.lastname}}
+                    <div class="labelline">Apellidos</div>
+                </div>
+                <div class="entryarea">
+                    {{form.email}}
+                    <div class="labelline">Correo electronico</div>
+                </div>
+                <div class="entryarea">
+                    {{form.telephone}}
+                    <div class="labelline">Telefono</div>
+                </div>
+                <div class="entryarea">
+                    {{form.password1}}
+                    <div class="labelline">Contraseña</div>
+                </div>
+                <div class="entryarea">
+                    {{form.password2}}
+                    <div class="labelline">Repita su Contraseña</div>
+                
+                </div>
+                <input type="submit" value="ingresar" id="btn">
+  
+    
+            </form>
+        </div>
+
+    </div>
+
+</div>
+
+<script src="{% static 'products/js/Newjs/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'products/js/Newjs/NVProducts.js' %}"></script>
+
+
+</body>
+</html>

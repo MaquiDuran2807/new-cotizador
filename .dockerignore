@@ -1,0 +1,10 @@
+codensolar-ecomerce/
+__pycache__/
+*.pyc
+.git/
+.gitignore
+*.sqlite3
+dump.rdb
+.env
+README.md
+azure-pipelines.yml

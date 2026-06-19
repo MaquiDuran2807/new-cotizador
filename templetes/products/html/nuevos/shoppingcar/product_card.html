@@ -1,0 +1,17 @@
+?{% load static %}
+<div class="producto-card" id="product°{{product.id}}">
+    <img src="/media/{{product.image|cut:'media/'}}" alt="{{product.name}}" class="producto-img"
+         onerror="this.onerror=null;this.src='{% static 'products/img/panelsolar.jpg' %}'">
+    <div class="producto-body">
+        <div class="producto-titulo">{{product.name}}</div>
+        <div class="producto-precio">$ {{product.price}}</div>
+        <div class="producto-descripcion">{{product.description|truncatechars:80}}</div>
+        <div class="horas-sol-producto">
+            <label>Horas de uso diario: <strong class="hours-to-use">4</strong>h</label>
+            <input type="range" class="form-range input-range" min="1" max="24" value="4" id="range-{{product.category_id}}">
+        </div>
+        <button class="btn-agregar" onclick="addToQuote('{{product.id}}','{{product.name}}','{{product.price}}')">
+            <i class="bi bi-cart-plus"></i> Agregar a cotización
+        </button>
+    </div>
+</div>

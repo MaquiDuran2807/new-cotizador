@@ -1,0 +1,588 @@
+?{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codensolar · Cotizador Inteligente</title>
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    
+    <!-- Tu CSS personalizado (lo inyecto aquí para que sea autónomo, pero puedes extraerlo a NVProducts.css) -->
+    <style>
+        :root {
+            --codensolar-dark: #0F172A;
+            --codensolar-green: #40C92A;
+            --codensolar-green-hover: #36b823;
+            --codensolar-light: #f8fafc;
+            --codensolar-gray: #64748b;
+            --codensolar-card-bg: #ffffff;
+            --codensolar-border: #e2e8f0;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.06);
+            --shadow-lg: 0 10px 25px rgba(0,0,0,0.1), 0 4px 10px rgba(0,0,0,0.06);
+            --radius-sm: 0.5rem;
+            --radius-md: 0.75rem;
+            --radius-lg: 1rem;
+            --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            background: #f1f5f9;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            color: #1e293b;
+        }
+
+        /* ========== BARRA SUPERIOR DE ANUNCIOS ========== */
+        .anun1, .anun2 {
+            background: var(--codensolar-dark);
+            color: white;
+            font-size: 0.85rem;
+            padding: 0.5rem 0;
+            text-align: center;
+            letter-spacing: 0.02em;
+        }
+        .anun2 {
+            background: #1a2332;
+            font-weight: 300;
+        }
+
+        /* ========== NAVBAR ========== */
+        .navbar {
+            background: var(--codensolar-dark) !important;
+            padding: 0.75rem 0;
+            box-shadow: var(--shadow-md);
+        }
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: white !important;
+            letter-spacing: -0.02em;
+        }
+        .navbar-brand b {
+            color: var(--codensolar-green);
+        }
+        .nav-link {
+            color: rgba(255,255,255,0.85) !important;
+            font-weight: 500;
+            transition: color var(--transition);
+            margin: 0 0.3rem;
+        }
+        .nav-link:hover {
+            color: var(--codensolar-green) !important;
+        }
+        .btn-outline-success {
+            border-color: var(--codensolar-green);
+            color: var(--codensolar-green);
+            background: transparent;
+            font-weight: 600;
+            border-radius: 2rem;
+            padding: 0.4rem 1.5rem;
+            transition: all var(--transition);
+        }
+        .btn-outline-success:hover {
+            background: var(--codensolar-green);
+            color: var(--codensolar-dark);
+            border-color: var(--codensolar-green);
+        }
+        .btn-success {
+            background: var(--codensolar-green);
+            border-color: var(--codensolar-green);
+            font-weight: 600;
+            border-radius: 2rem;
+            padding: 0.5rem 1.5rem;
+            transition: all var(--transition);
+        }
+        .btn-success:hover {
+            background: var(--codensolar-green-hover);
+            border-color: var(--codensolar-green-hover);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* ========== CARRUSEL ========== */
+        .carousel-item img {
+            max-height: 28em;
+            border-radius: var(--radius-lg);
+            border: 2px solid var(--codensolar-green);
+            object-fit: cover;
+            filter: brightness(0.85);
+        }
+        .carousel-caption {
+            background: linear-gradient(to top, rgba(15,23,42,0.8), transparent);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+        .carousel-caption h5 {
+            color: var(--codensolar-green);
+            font-weight: 700;
+            font-size: 1.8rem;
+        }
+        .carousel-caption p {
+            color: rgba(255,255,255,0.9);
+        }
+
+        /* ========== CONTENEDOR PRINCIPAL ========== */
+        .main-layout {
+            display: flex;
+            gap: 1.5rem;
+            padding: 2rem 1.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        @media (max-width: 992px) {
+            .main-layout {
+                flex-direction: column;
+            }
+        }
+
+        /* ========== TARJETAS DE PRODUCTOS ========== */
+        .productos-grid {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+            align-content: start;
+        }
+        .producto-card {
+            background: var(--codensolar-card-bg);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--codensolar-border);
+            overflow: hidden;
+            transition: all var(--transition);
+            display: flex;
+            flex-direction: column;
+        }
+        .producto-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+            border-color: var(--codensolar-green);
+        }
+        .producto-img {
+            width: 100%;
+            height: 200px;
+            object-fit: contain;
+            background: #f8fafc;
+            padding: 1rem;
+            border-bottom: 1px solid var(--codensolar-border);
+        }
+        .producto-body {
+            padding: 1.25rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .producto-titulo {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--codensolar-dark);
+            margin-bottom: 0.25rem;
+        }
+        .producto-precio {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--codensolar-green);
+            margin-bottom: 0.75rem;
+        }
+        .producto-descripcion {
+            font-size: 0.85rem;
+            color: var(--codensolar-gray);
+            flex: 1;
+            margin-bottom: 1rem;
+        }
+        .horas-slider {
+            margin: 0.5rem 0 1rem;
+        }
+        .horas-slider label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--codensolar-dark);
+        }
+        .input-range {
+            width: 100%;
+            accent-color: var(--codensolar-green);
+        }
+        .btn-agregar {
+            background: var(--codensolar-green);
+            color: white;
+            border: none;
+            border-radius: 2rem;
+            padding: 0.6rem;
+            font-weight: 700;
+            width: 100%;
+            transition: all var(--transition);
+            cursor: pointer;
+        }
+        .btn-agregar:hover {
+            background: var(--codensolar-green-hover);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* ========== PANEL DE COTIZACI�?N ========== */
+        .cotizador-panel {
+            width: 420px;
+            background: white;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--codensolar-border);
+            display: flex;
+            flex-direction: column;
+            max-height: calc(100vh - 150px);
+            position: sticky;
+            top: 1rem;
+        }
+        @media (max-width: 992px) {
+            .cotizador-panel {
+                width: 100%;
+                position: static;
+                max-height: none;
+            }
+        }
+        .cotizador-header {
+            background: var(--codensolar-dark);
+            color: white;
+            padding: 1.25rem;
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+            font-weight: 700;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .cotizador-header i {
+            color: var(--codensolar-green);
+            font-size: 1.5rem;
+        }
+        .cotizador-lista {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+        .quote-item {
+            background: #f8fafc;
+            border-radius: var(--radius-md);
+            padding: 0.75rem;
+            margin-bottom: 0.75rem;
+            border: 1px solid var(--codensolar-border);
+            transition: all var(--transition);
+        }
+        .quote-item:hover {
+            border-color: var(--codensolar-green);
+        }
+        .quote-item .eliminar-item {
+            color: #ef4444;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+        .quote-item .eliminar-item:hover {
+            transform: scale(1.2);
+        }
+        .cotizador-footer {
+            border-top: 1px solid var(--codensolar-border);
+            padding: 1.25rem;
+            background: #f8fafc;
+            border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+        }
+        .total-acumulado {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--codensolar-dark);
+        }
+        .total-acumulado span {
+            color: var(--codensolar-green);
+        }
+
+        /* ========== ACORDE�?N DE REQUERIMIENTOS ========== */
+        .accordion-button:not(.collapsed) {
+            background: rgba(64, 201, 42, 0.08);
+            color: var(--codensolar-dark);
+            font-weight: 600;
+        }
+        .accordion-button:focus {
+            box-shadow: 0 0 0 0.2rem rgba(64, 201, 42, 0.25);
+            border-color: var(--codensolar-green);
+        }
+
+        /* ========== FOOTER ========== */
+        .footer {
+            background: var(--codensolar-dark);
+            color: white;
+            margin-top: 3rem;
+        }
+        .footer a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: color var(--transition);
+        }
+        .footer a:hover {
+            color: var(--codensolar-green);
+        }
+
+        /* ========== UTILIDADES ========== */
+        .badge-codensolar {
+            background: var(--codensolar-green);
+            color: var(--codensolar-dark);
+            font-weight: 700;
+            padding: 0.25rem 0.75rem;
+            border-radius: 2rem;
+            font-size: 0.75rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid p-0">
+        
+        <!-- ANUNCIOS -->
+        <div class="anun1">
+            <p class="mb-0">�?� Descuentos del 20% en Paneles solares | 15% en Neveras | 5% en Kits</p>
+        </div>
+        <div class="anun2">
+            <p class="mb-0">�??� Por registrarte obtienes un 5% adicional en Paneles Policristalinos</p>
+        </div>
+
+        <!-- NAVBAR -->
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+                <a href="#" class="navbar-brand">
+                    <i class="bi bi-sun-fill" style="color: var(--codensolar-green);"></i> Coden<b>S</b>olar
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="menu">
+                    <form class="d-flex mx-auto">
+                        <input type="search" class="form-control me-2 rounded-pill" placeholder="Buscar productos..." aria-label="Buscar">
+                        <button class="btn btn-outline-success" type="button"><i class="bi bi-search"></i></button>
+                    </form>
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center">
+                        <li class="nav-item"><a href="#" class="nav-link">Inicio</a></li>
+                        <li class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Servicios</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#" class="dropdown-item">Paneles</a></li>
+                                <li><a href="#" class="dropdown-item">Kits Solares</a></li>
+                                <li><a href="#" class="dropdown-item">Electrodomésticos</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item"><a href="#" class="nav-link">Blog</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link">Contacto</a></li>
+                        <li class="nav-item ms-2">
+                            <a href="{% url 'users_app:user-logout' %}" class="btn btn-outline-success btn-sm">Salir</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- CARRUSEL -->
+        <section class="container mt-4">
+            <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    <button data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"></button>
+                    <button data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1"></button>
+                    <button data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2"></button>
+                </div>
+                <div class="carousel-inner rounded-4 shadow">
+                    <div class="carousel-item active">
+                        <img src="{% static 'products/img/bg.jpg' %}" class="d-block w-100" alt="Paneles solares">
+                        <div class="carousel-caption d-none d-md-block text-start">
+                            <h5>Energía solar para tu hogar</h5>
+                            <p>Cotiza en tiempo real con datos de radiación solar de Colombia.</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{% static 'products/img/bg.jpg' %}" class="d-block w-100" alt="Kits solares">
+                        <div class="carousel-caption d-none d-md-block text-start">
+                            <h5>Kits completos</h5>
+                            <p>Todo lo que necesitas para empezar a ahorrar.</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{% static 'products/img/bg3.jpg' %}" class="d-block w-100" alt="Electrodomésticos">
+                        <div class="carousel-caption d-none d-md-block text-start">
+                            <h5>Electrodomésticos eficientes</h5>
+                            <p>Neveras, congeladores y más con energía limpia.</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+            </div>
+        </section>
+
+        <!-- CONTENIDO PRINCIPAL: PRODUCTOS + COTIZADOR -->
+        <div class="main-layout">
+            
+            <!-- GRILLA DE PRODUCTOS -->
+            <div class="productos-grid" id="productos-container">
+                {% for p in products %}
+                <div class="producto-card" id="product°{{p.id}}">
+                    <img src="../media/{{p.image}}" alt="{{p.name}}" class="producto-img">
+                    <div class="producto-body">
+                        <div class="producto-titulo">{{p.name}}</div>
+                        <div class="producto-precio">$ {{p.price}}</div>
+                        <div class="producto-descripcion">{{p.description|truncatechars:80}}</div>
+                        <div class="horas-slider">
+                            <label>Horas de uso diario: <strong class="hours-to-use">4</strong>h</label>
+                            <input type="range" class="input-range" min="1" max="24" value="4" oninput="this.previousElementSibling.querySelector('strong').textContent = this.value">
+                        </div>
+                        <button class="btn-agregar" onclick="addToQuote({{p}})">
+                            <i class="bi bi-cart-plus"></i> Agregar a cotización
+                        </button>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- PANEL DE COTIZACI�?N -->
+            <div class="cotizador-panel" id="cotizador-panel">
+                <div class="cotizador-header">
+                    <i class="bi bi-calculator"></i> Tu Cotización
+                </div>
+                <div class="cotizador-lista" id="cotizador-lista">
+                    <!-- Template para items -->
+                    <template id="quote-template">
+                        <div class="quote-item">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <strong class="titulo-producto-cotizador" style="flex:1;">Producto</strong>
+                                <i class="bi bi-x-circle eliminar-item" onclick="eliminarItem(this)" title="Eliminar"></i>
+                            </div>
+                            <div class="row small text-muted">
+                                <div class="col-6">Horas: <span class="horas-uso-cotizador fw-bold text-dark">0</span></div>
+                                <div class="col-6">Consumo/h: <span class="consumo-hora-cotizador fw-bold text-dark">0</span>W</div>
+                                <div class="col-6 mt-1">Consumo día: <span class="consumo-dia-cotizador fw-bold text-dark">0</span>W</div>
+                                <div class="col-6 mt-1">Pérdidas: <span class="porcentaje-perdidas-cotizador fw-bold text-dark">0</span>%</div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mt-2 pt-2 border-top">
+                                <span class="fw-bold">Total:</span>
+                                <span class="total-consumo-cotizador fw-bold" style="color: var(--codensolar-green);">$0</span>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+                <div class="cotizador-footer">
+                    <div class="mb-3">
+                        <select class="form-select rounded-pill" id="ubicacion-select">
+                            <option selected>�??� Selecciona tu ubicación</option>
+                            <option value="1">Cundinamarca</option>
+                            <option value="2">Boyacá</option>
+                            <option value="3">Resto del país</option>
+                        </select>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="fw-bold">Total acumulado:</span>
+                        <div class="total-acumulado">$ <span id="total-acumulado">0</span></div>
+                    </div>
+                    
+                    <!-- Acordeón de requerimientos -->
+                    <div class="accordion" id="requerimientos-accordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#req-reguladores">
+                                    �??? Reguladores
+                                </button>
+                            </h2>
+                            <div id="req-reguladores" class="accordion-collapse collapse" data-bs-parent="#requerimientos-accordion">
+                                <div class="accordion-body small" id="reguladores-content">--</div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#req-paneles">
+                                    �??️ Paneles
+                                </button>
+                            </h2>
+                            <div id="req-paneles" class="accordion-collapse collapse" data-bs-parent="#requerimientos-accordion">
+                                <div class="accordion-body small" id="paneles-content">--</div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#req-baterias">
+                                    �??? Baterías
+                                </button>
+                            </h2>
+                            <div id="req-baterias" class="accordion-collapse collapse" data-bs-parent="#requerimientos-accordion">
+                                <div class="accordion-body small" id="baterias-content">--</div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#req-otros">
+                                    �??�️ Otros requerimientos
+                                </button>
+                            </h2>
+                            <div id="req-otros" class="accordion-collapse collapse" data-bs-parent="#requerimientos-accordion">
+                                <div class="accordion-body small" id="otros-content">--</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {% if usuario %}
+                    <button class="btn btn-success w-100 mt-3" onclick="createandsendpdf('{{usuario.name}}','{{usuario.email}}')">
+                        <i class="bi bi-file-earmark-pdf"></i> Descargar PDF
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <div class="container py-5">
+                <div class="row gy-4">
+                    <div class="col-lg-4">
+                        <h5 class="text-white fw-bold"><i class="bi bi-sun-fill" style="color: var(--codensolar-green);"></i> CODENSOLAR</h5>
+                        <p class="small text-muted">Comprometidos con el medio ambiente y la innovación en energía solar.</p>
+                    </div>
+                    <div class="col-lg-2">
+                        <h6 class="text-white">Enlaces</h6>
+                        <ul class="list-unstyled small">
+                            <li><a href="#">Inicio</a></li>
+                            <li><a href="#">Servicios</a></li>
+                            <li><a href="#">Productos</a></li>
+                            <li><a href="#">Contacto</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-2">
+                        <h6 class="text-white">Redes</h6>
+                        <ul class="list-unstyled small">
+                            <li><a href="#">Facebook</a></li>
+                            <li><a href="#">YouTube</a></li>
+                            <li><a href="#">Instagram</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-4">
+                        <h6 class="text-white">Recibe ofertas</h6>
+                        <div class="input-group">
+                            <input type="email" class="form-control rounded-pill" placeholder="Tu correo">
+                            <button class="btn btn-success rounded-pill ms-2">Enviar</button>
+                        </div>
+                    </div>
+                </div>
+                <hr class="my-4" style="border-color: rgba(255,255,255,0.1);">
+                <p class="text-center small text-muted mb-0">&copy; 2025 Codensolar. Todos los derechos reservados.</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="{% static 'products/js/Newjs/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'products/js/Newjs/NVProducts1.js' %}"></script>
+</body>
+</html>

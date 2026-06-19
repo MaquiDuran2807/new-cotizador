@@ -1,0 +1,17 @@
+﻿{% extends "admin/login.html" %}
+{% load static %}
+
+{% block extrastyle %}
+<link rel="stylesheet" href="{% static 'admin/css/admin_custom.css' %}">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+{{ block.super }}
+{% endblock %}
+
+{% block branding %}
+<div id="branding" class="login-branding">
+    <a href="{% url 'admin:index' %}" id="site-name">
+        <img src="{% static 'products/img/LOGO PNG 1.png' %}" alt="CodenSolar" class="admin-logo" height="140">
+        <h1 class="admin-brand-text">Coden<span class="brand-solar">Solar</span></h1>
+    </a>
+</div>
+{% endblock %}

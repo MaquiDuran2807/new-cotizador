@@ -1,0 +1,59 @@
+*{
+    box-sizing: border-box;
+}
+
+
+.body{
+    padding: 0;
+    background-color: rgb(80, 99, 105);
+    color: black;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+}
+
+.card-footer .boton-actualizar-precio{
+    background: aqua;
+    justify-self: center;
+
+}
+
+
+.products-view{
+    text-align: center;
+}
+
+
+.panel-usuarios-primary{
+    margin: 4px 2px;
+}
+
+.panel-usuarios{
+    background-color: azure;
+    color: #0F172A;
+    font-weight: bold;
+    border: 1px solid  #0F172A;
+    border-radius: 2px;
+    margin: 0px 0px;
+    padding: 0%;
+}
+
+.boton-accion{
+    background-color: #40C92A;
+    color: #0F172A;
+    font-weight: bold;
+    border: 1px solid  #0F172A;
+    border-radius: 2px;
+}
+
+.boton-accion:hover{
+    background-color:rgb(80, 99, 105);
+
+}
+
+.card{
+    margin: 0px 10px;
+    border:3px solid  #0F172A;
+}
+
+
+
+

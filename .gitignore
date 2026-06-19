@@ -1,0 +1,51 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyc
+*.pyo
+*.so
+*.egg-info/
+*.egg
+dist/
+build/
+*.egg-info/
+.eggs/
+*.spec
+*.manifest
+
+# Virtual environment
+venv/
+.env
+.venv/
+env/
+codensolar-ecomerce/
+
+# Django
+db.sqlite3
+*.log
+local_settings.py
+media/
+statics/cotizador/.vite/
+
+# Node
+node_modules/
+cotizador-react/dist/
+cotizador-react/.vite/
+cotizador-react/playwright-report/
+cotizador-react/test-results/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Docker
+dump.rdb
+
+# OS
+Desktop.ini
+ehthumbs.db

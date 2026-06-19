@@ -1,0 +1,162 @@
+*{
+    box-sizing: border-box;
+}
+
+
+.body{
+    padding: 0;
+    background-color: rgb(80, 99, 105);
+    color: black;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+}
+
+.navbar a{
+    color: azure;
+}
+
+.navbar a:hover{
+    color: #40C92A;
+}
+
+
+
+.navbar-brand{
+    font-weight: bold;
+    font-size: 35px;
+    margin-left: 10px;
+}
+.btn2{
+    margin-left: 10px;
+}
+
+.form{
+    margin-left: 100px;
+    margin-right: 50px;
+}
+
+.footer{
+    background-color:#0F172A;
+}
+
+.anun1{
+    color: #0F172A;
+    background-color: #545554;
+    text-align: center;
+    font-weight: bold;
+    padding-bottom: 0%;
+    padding-bottom: 0px;
+    letter-spacing: 2px;
+}
+
+.anun2{
+    color: #0F172A;
+    text-align: center;
+    font-weight: bolder;
+    padding-bottom: 0px;
+    letter-spacing: 3px;
+}
+.navbar-toggler{
+    color: #40C92A;
+}
+
+
+
+.container-fluid{
+}
+
+
+
+.producto{
+    width: 450px;
+    border-radius: 5px;
+}
+
+.informacion-producto{
+    height: 100%;
+}
+
+.informacion-producto-caracteristicas{
+
+}
+
+
+.contenido-carrusel{
+    background-color: rgba(31, 211, 25, 0.514);
+    color: black;
+    border-radius: 10px;
+    border: 1px solid rgb(20, 32, 46);
+}
+
+
+
+.logic{
+    background:rgb(31, 211, 25) ;
+    /* margin: 10px; */
+    /* padding: 20px; */
+    border: 3px solid lightseagreen;
+    /* height: 100%;
+} */}
+
+
+
+    .producto{
+        background:rgb(20, 32, 46) ;
+        border: 3px solid rgb(9, 15, 15);
+        color: white;
+        text-align: center;
+        /* margin-right: 10px; */
+    }
+
+        .img{
+            background:rgb(114, 131, 151) ;
+            border: 3px solid rgb(51, 122, 122);
+            color: white;
+        }
+
+        .informacion-producto-caracteristicas{
+            background:rgb(37, 49, 61) ;
+            border: 3px solid rgb(48, 82, 41);
+            color: white;
+        }
+
+            .img-producto{
+                background:rgb(114, 131, 151) ;
+                border: 3px solid rgb(51, 122, 122);
+                color: white;
+
+            }
+
+            .titulo-producto{
+                background:rgb(114, 131, 151) ;
+                border: 3px solid rgb(51, 122, 122);
+                color: white;
+            }
+
+    .cotizador{
+        background:rgb(73, 114, 160) ;
+        border: 3px solid rgb(39, 209, 209);
+        color: white;
+        text-align: center;
+        padding-right: 0;
+    }     
+
+
+
+
+
+
+
+    .reguladores-precio-requeridos{
+        border:  2px solid #0F172A;
+    }
+    .reguladores-requeridos{
+        border:  2px solid #0F172A;
+    }
+
+    .precio-producto{
+        border:  2px solid #0F172A;
+    }
+
+    .precio-unitario{
+        border:  2px solid #0F172A;
+    }

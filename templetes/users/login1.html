@@ -1,0 +1,103 @@
+?{% load static %}
+{% load socialaccount %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+	<link rel="stylesheet" type="text/css" href=" {% static 'products/css/main.css' %} ">
+    <link rel="stylesheet" type="text/css" href="{% static 'products/css/Vlogin.css' %}">
+    <title>ingresar</title>
+</head>
+
+<body class="body" >
+    {% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<div class=volver>
+    <div class="volver1">
+        <a href="https://codensolar.com/">Volver</a>
+    </div>
+</div>
+
+<div class=version>
+    <div class="version1">
+        <p>Version 1.16</p>
+    </div>
+</div>
+
+
+<div class="login">
+<!-- <input type="checkbox" id="check"> -->
+    <div class="container">
+        <div class="login page ">
+            <div class="heading"> <a href="https://codensolar.com/" class="navbar-brand "> Coden<b style="color: rgb(4, 253, 4);">S</b>olar </a>   </div>
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ next_url }}">
+                <div class="entryarea">
+                    {{form.username}}
+                    <div class="labelline">Ingresa tu usuario o correo electronico </div>
+                </div>
+                <div class="entryarea">
+                    {{form.password}}
+                    
+                    <div class="labelline">Ingresa tu Contraseña</div>
+                    <span class="show-password" id="mostrar">Mostrar</span>
+                </div>
+                <a href="{% url 'users_app:user-forgotpassword' %}">¿Olvidaste tu Contraseña?</a>
+                <br>
+                 <input type="submit" value="Ingresar" id="btn">
+                
+                {% if google_login_enabled %}
+                <div class="google-login">
+                    <a href="{% provider_login_url 'google' next=next_url %}" class="google-btn">
+                        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" width="20" height="20">
+                        Iniciar sesión con Google
+                    </a>
+                </div>
+                {% endif %}
+
+                </div>
+                <div class="imagen">
+                    <img class="imagen1" src="{% static 'products/img/logo-coden1.png' %}" alt="">
+                </div>
+                <div class="switch">
+                    <span>¿No tienes una cuenta?</span>
+                    <label ><a href="{% url 'users_app:user-register' %}" >Registrarse AHORA</a></label>
+                </div>
+            </form>
+        </div>
+        
+
+</div>
+<script src="{% static 'products/js/register.js' %}"></script>
+<script src="{% static 'products/js/Newjs/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'products/js/Newjs/NVProducts.js' %}"></script>
+<script>
+    const password = document.getElementById('id_password');
+    const passwordInput = document.getElementById('id_password');
+    console.log(passwordInput);
+    passwordInput.addEventListener('click', e => {
+        
+        if (e.target.classList.contains('show')) {
+            e.target.classList.remove('show');
+            e.target.textContent = 'Ocultar';
+            passwordInput.type = 'text';
+        } else {
+            e.target.classList.add('show');
+            e.target.textContent = 'Mostrar';
+            passwordInput.type = 'password';
+        }
+});
+    
+
+</script>
+
+</body>
+</html>

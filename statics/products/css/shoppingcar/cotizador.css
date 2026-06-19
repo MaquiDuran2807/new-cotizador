@@ -1,0 +1,241 @@
+.cotizador-panel {
+    width: 420px;
+    background: white;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--codensolar-border);
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 150px);
+    position: sticky;
+    top: 1rem;
+}
+@media (max-width: 992px) {
+    .cotizador-panel {
+        width: 100%;
+        position: static;
+        max-height: none;
+    }
+}
+.cotizador-header {
+    background: var(--codensolar-dark);
+    color: white;
+    padding: 1.25rem;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    font-weight: 700;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.cotizador-header i {
+    color: var(--codensolar-green);
+    font-size: 1.5rem;
+}
+.cotizador-lista {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+}
+
+.acumulador-cotizador {
+    background-color: #1E293B;
+    color: azure;
+    font-weight: bold;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    padding: 5px 5px;
+    margin: 10px 2px;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.quote {
+    margin: 8px 0px;
+    border: 5px double #545554;
+    padding: 10px 10px;
+    border-radius: 5px;
+}
+
+.primary-cotizador {
+    border: 2px solid #545554;
+    border-radius: 10px;
+    text-align: center;
+    margin: 0px 1px;
+}
+
+.eliminar-cotizador {
+    border-radius: 10px;
+    text-align: center;
+    margin: 0px 0px;
+    cursor: pointer;
+}
+
+.eliminar-cotizador:hover {
+    background-color: #ffffff;
+    border-radius: 10px;
+}
+
+.titulo-producto-cotizador {
+    border-radius: 10px;
+    text-align: center;
+}
+
+.precio-unitario {
+    border-radius: 10px;
+    text-align: center;
+}
+
+.secundary-cotizador {
+    border: 2px solid #545554;
+    border-radius: 10px;
+    text-align: center;
+    margin: 0px 1px;
+}
+
+.horas-uso-cotizador {
+    border-radius: 10px;
+    text-align: center;
+}
+
+.tertiary-cotizador {
+    border: 2px solid #545554;
+    border-radius: 10px;
+    text-align: center;
+    margin: 0px 1px;
+}
+
+.consumo-dia-cotizador {
+    border-radius: 10px;
+    text-align: center;
+}
+
+.porcentaje-perdidas-cotizador {
+    border-radius: 10px;
+    text-align: center;
+}
+
+.total-consumo-cotizador {
+    border-radius: 10px;
+    text-align: center;
+}
+
+.cotizador-footer {
+    border-top: 1px solid var(--codensolar-border);
+    padding: 1.25rem;
+    background: #f8fafc;
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+
+.cotizador-footer .descargar-pdf-btn {
+    width: fit-content;
+    min-width: 180px;
+    align-self: flex-start;
+}
+
+.total-acumulado {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--codensolar-dark);
+}
+.total-acumulado span {
+    color: var(--codensolar-green);
+}
+
+.accordion-button:not(.collapsed) {
+    background: rgba(64, 201, 42, 0.08);
+    color: var(--codensolar-dark);
+    font-weight: 600;
+}
+.accordion-button:focus {
+    box-shadow: 0 0 0 0.2rem rgba(64, 201, 42, 0.25);
+    border-color: var(--codensolar-green);
+}
+
+.totales {
+    margin: 10px 10px;
+    padding: 10px 10px;
+    border: 1px solid #545554;
+    border-radius: 5px;
+    background-color: #1E293B;
+}
+.titulo-normal {
+    text-align: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 20px;
+    font-weight: bolder;
+    background: linear-gradient(to left, rgb(15, 23, 42), rgb(46, 221, 23), rgb(149, 156, 255));
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+}
+.titulo-premium {
+    text-align: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 20px;
+    font-weight: bolder;
+    background: linear-gradient(to left, rgb(236, 196, 64), rgb(255, 250, 138), rgb(221, 172, 23), rgb(255, 255, 149));
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+}
+.acumulador-precio-id {
+    background-color: azure;
+    color: #1E293B;
+    font-weight: bolder;
+    padding: 10px 10px;
+    margin: 5px 10px;
+    border-radius: 5px;
+}
+.consumo-total-id {
+    background-color: azure;
+    color: #1E293B;
+    font-weight: bolder;
+    padding: 10px 10px;
+    margin: 5px 5px;
+    border-radius: 5px;
+}
+.acumulador-precio, .consumo-total {
+    background-color: rgba(240, 255, 255, 0);
+    color: #1E293B;
+    font-weight: bolder;
+    padding: 10px 10px;
+    margin: 5px 10px;
+    border-radius: 5px;
+}
+
+.svg-interrogante {
+    width: 30px;
+    height: 30px;
+    fill: blue;
+}
+
+.requerimientos-productos {
+    max-width: max-content;
+    justify-content: center;
+    margin: 10px 5px;
+}
+
+.accordion-general {
+    justify-self: center;
+}
+
+.accordion-item {
+    padding: 10px;
+}
+
+.lugar-residencia {
+    font-weight: 500;
+}
+.reiniciar-cotizacion {
+    max-width: max-content;
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+    border: 1px solid #DDE0E5;
+    margin-top: 7px;
+    padding: 10px;
+    cursor: pointer;
+}
+.reiniciar-cotizacion:hover {
+    background-color: rgba(255, 0, 0, 0.719);
+}

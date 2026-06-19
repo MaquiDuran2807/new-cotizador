@@ -1,0 +1,444 @@
+?<!DOCTYPE html>
+{% load static %}
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Cotización Kit Solar - Codensolar</title>
+    <style>
+        /* RESET Y CONFIGURACI�?N PARA WEASYPRINT */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @page {
+            size: A4 portrait;
+            margin: 1.8cm;
+        }
+
+        body {
+            font-family: 'DejaVu Sans', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            font-size: 10.5px;
+            line-height: 1.4;
+            color: #1e2a3a;
+            background: white;
+        }
+
+        h1 {
+            font-size: 20px;
+            margin: 20px 0 10px 0;
+            color: #0f3b2c;
+        }
+        h2 {
+            font-size: 16px;
+            margin: 20px 0 12px 0;
+            color: #1e5631;
+            border-left: 4px solid #4caf50;
+            padding-left: 12px;
+            page-break-after: avoid;
+        }
+        .subtitulo {
+            font-size: 11px;
+            color: #5f6c80;
+            border-bottom: 1px solid #dce4ec;
+            padding-bottom: 6px;
+            margin-bottom: 20px;
+        }
+
+        /* CABECERA CON LOGO MÁS GRANDE */
+        .header-table {
+            width: 100%;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #4caf50;
+            padding-bottom: 15px;
+        }
+        .header-table td {
+            vertical-align: middle;
+        }
+        .logo-img {
+            max-width: 320px;
+            max-height: 180px;
+            width: auto;
+            height: auto;
+        }
+        .company-info {
+            text-align: right;
+            font-size: 9.5px;
+        }
+        .company-name {
+            font-size: 11px;
+            font-weight: bold;
+            color: #1e5631;
+        }
+
+        /* PRODUCTOS DE CONSUMO - formato lista */
+        .productos-lista {
+            margin: 15px 0;
+        }
+        .producto-item {
+            background: #f8fafc;
+            border-left: 4px solid #4caf50;
+            margin-bottom: 12px;
+            padding: 10px 12px;
+            page-break-inside: avoid;
+        }
+        .producto-titulo {
+            font-weight: bold;
+            font-size: 12px;
+            margin-bottom: 6px;
+            color: #0f3b2c;
+        }
+        .producto-detalle {
+            display: table;
+            width: 100%;
+        }
+        .producto-detalle > div {
+            display: table-cell;
+            width: 25%;
+            padding: 3px 0;
+        }
+
+        /* TABLA DE DOS COLUMNAS PARA COMPONENTES */
+        .grid-componentes {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        .grid-componentes td {
+            width: 50%;
+            vertical-align: top;
+            padding: 5px;
+        }
+        .tarjeta {
+            background: #f9fafb;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 10px 12px;
+            height: 100%;
+            page-break-inside: avoid;
+        }
+        .tarjeta h4 {
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #cbd5e1;
+            color: #0f3b2c;
+        }
+        .detalle-tabla {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9.5px;
+        }
+        .detalle-tabla td {
+            padding: 4px 2px;
+            border: none;
+        }
+        .detalle-tabla td:first-child {
+            font-weight: 600;
+            width: 40%;
+            color: #334155;
+        }
+
+        /* RESUMEN CONSUMOS */
+        .resumen-consumos {
+            background: #f0fdf4;
+            border-left: 6px solid #22c55e;
+            padding: 12px 16px;
+            margin: 20px 0;
+        }
+        .resumen-item {
+            display: inline-block;
+            width: 23%;
+            margin-right: 2%;
+            font-size: 10.5px;
+            font-weight: 500;
+        }
+        .resumen-item span {
+            font-weight: 700;
+            color: #166534;
+        }
+
+        /* TOTALES */
+        .totales {
+            margin: 25px 0;
+            text-align: right;
+        }
+        .caja-total {
+            display: inline-block;
+            width: 220px;
+            background: #1e293b;
+            color: white;
+            padding: 12px;
+            border-radius: 20px;
+            text-align: center;
+            margin-left: 20px;
+        }
+        .caja-total.premium {
+            background: #b45309;
+        }
+        .caja-total .valor {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        /* FOOTER */
+        .footer {
+            margin-top: 35px;
+            text-align: center;
+            font-size: 8.5px;
+            color: #5f6c80;
+            border-top: 1px solid #dce4ec;
+            padding-top: 12px;
+        }
+        .footer a {
+            color: #1e5631;
+            text-decoration: none;
+        }
+        hr {
+            margin: 15px 0;
+            border: none;
+            height: 1px;
+            background: #cbd5e1;
+        }
+        .clearfix::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+    </style>
+</head>
+<body>
+
+<!-- CABECERA -->
+<table class="header-table">
+    <tr>
+        <td style="width: 35%;">
+            <img class="logo-img" src="{{ direccion_ip }}media/pdf/logo-coden.png" alt="Codensolar">
+        </td>
+        <td style="width: 65%;" class="company-info">
+            <span class="company-name">CODENSOLAR SAS</span><br>
+            NIT: 900.586.332-1<br>
+            Carrera 64A # 3 - 49, Barrio Pradera<br>
+            Bogotá, Colombia<br>
+            Tel: 311 2235359 / 313 8851574<br>
+            comercial@codensolar.com
+        </td>
+    </tr>
+</table>
+
+<!-- TÍTULO PRINCIPAL -->
+<h1>Cotización de Kit de Energía Solar</h1>
+<div class="subtitulo">Detalle completo de tu sistema fotovoltaico �?? Precios en COP</div>
+
+<!-- ========== 1. PRODUCTOS DE CONSUMO ========== -->
+<h2>1. Equipos eléctricos a alimentar</h2>
+<div class="productos-lista">
+    {% for p in productos %}
+    <div class="producto-item">
+        <div class="producto-titulo">{{ p.name }}</div>
+        <div class="producto-detalle">
+            <div><strong>Cantidad:</strong> {{ p.amount }}</div>
+            <div><strong>Precio unitario:</strong> $ {{ p.price }}</div>
+            <div><strong>Precio total:</strong> $ {{ p.total }}</div>
+            <div><strong>Consumo/h:</strong> {{ p.consumo_h }} W</div>
+            <div><strong>Consumo día:</strong> {{ p.consumo_D }} Wh</div>
+            <div><strong>Pérdidas ({{ p.porcentaje }}%):</strong> {{ p.perdidas }} Wh</div>
+            <div><strong>Total + pérdidas:</strong> {{ p.total_MP }} Wh</div>
+        </div>
+        {% if p.imagen %}
+        <div style="margin-top: 5px;"><img src="{{ direccion_ip }}media/{{ p.imagen }}" style="max-height: 50px;"></div>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+
+<!-- ========== 2. COMPONENTES DEL SISTEMA FOTOVOLTAICO ========== -->
+<h2>2. Componentes del sistema fotovoltaico</h2>
+<table class="grid-componentes">
+    <tr>
+        <!-- COLUMNA 1 -->
+        <td>
+            <div class="tarjeta">
+                <h4>Panel Solar</h4>
+                <table class="detalle-tabla">
+                    <tr><td>Modelo</td><td>{{ p.panel }}</td></tr>
+                    <tr><td>Cantidad</td><td>{{ p.amount }}</td></tr>
+                    <tr><td>Potencia/h</td><td>{{ p.panel_potencia }} W/h</td></tr>
+                    <tr><td>Potencia dia</td><td>{{ p.panel_potencia_dia }} Wh</td></tr>
+                    <tr><td>Precio unitario</td><td>$ {{ p.panel_precio_u }}</td></tr>
+                    <tr><td>Precio total</td><td><strong>$ {{ p.panel_precio_t }}</strong></td></tr>
+                </table>
+            </div>
+        </td>
+        <!-- COLUMNA 2 -->
+        <td>
+            <div class="tarjeta">
+                <h4>Batería</h4>
+                <table class="detalle-tabla">
+                    <tr><td>Modelo</td><td>{{ b.bateria }}</td></tr>
+                    <tr><td>Cantidad</td><td>{{ b.amount }}</td></tr>
+                    <tr><td>Capacidad unitaria</td><td>{{ b.bateria_capacidad }} Ah</td></tr>
+                    <tr><td>Capacidad total</td><td>{{ b.bateria_capacidad_t }} Ah</td></tr>
+                    <tr><td>Precio unitario</td><td>$ {{ b.bateria_precio_u }}</td></tr>
+                    <tr><td>Precio total</td><td><strong>$ {{ b.bateria_precio_t }}</strong></td></tr>
+                </table>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <div class="tarjeta">
+                <h4>Regulador de carga</h4>
+                <table class="detalle-tabla">
+                    <tr><td>Modelo</td><td>{{ r.regulador }}</td></tr>
+                    <tr><td>Cantidad</td><td>{{ r.amount }}</td></tr>
+                    <tr><td>Precio unitario</td><td>$ {{ r.regulador_precio_u }}</td></tr>
+                    <tr><td>Precio total</td><td><strong>$ {{ r.regulador_precio_t }}</strong></td></tr>
+                </table>
+            </div>
+        </td>
+        <td>
+            <div class="tarjeta">
+                <h4>Breakers / Protecciones</h4>
+                <table class="detalle-tabla">
+                    <tr><td>Referencia</td><td>{{ br.breakers }}</td></tr>
+                    <tr><td>Cantidad</td><td>{{ br.amount }}</td></tr>
+                    <tr><td>Precio unitario</td><td>$ {{ br.breakers_precio_u }}</td></tr>
+                    <tr><td>Precio total</td><td><strong>$ {{ br.breakers_precio_t }}</strong></td></tr>
+                </table>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <div class="tarjeta">
+                <h4>Cable de caucho</h4>
+                <table class="detalle-tabla">
+                    <tr><td>Necesidad</td><td>{{ rc.rubberized_cable_needed }}</td></tr>
+                    <tr><td>Cantidad (m)</td><td>{{ rc.amount }}</td></tr>
+                    <tr><td>Precio unitario</td><td>$ {{ rc.rubberized_cable_needed_precio_u }}</td></tr>
+                    <tr><td>Precio total</td><td><strong>$ {{ rc.rubberized_cable_needed_precio_t }}</strong></td></tr>
+                </table>
+            </div>
+        </td>
+        <td>
+            <div class="tarjeta">
+                <h4>Soporte para panel</h4>
+                <table class="detalle-tabla">
+                    <tr><td>Modelo</td><td>{{ sp.soporte_panel }}</td></tr>
+                    <tr><td>Cantidad</td><td>{{ sp.amount }}</td></tr>
+                    <tr><td>Precio unitario</td><td>$ {{ sp.soporte_panel_precio_u }}</td></tr>
+                    <tr><td>Precio total</td><td><strong>$ {{ sp.soporte_panel_precio_t }}</strong></td></tr>
+                </table>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <div class="tarjeta">
+                <h4>Kit seguridad a tierra</h4>
+                <table class="detalle-tabla">
+                    <tr><td>Necesidad</td><td>{{ gsk.ground_security_kit_needed }}</td></tr>
+                    <tr><td>Cantidad</td><td>{{ gsk.amount }}</td></tr>
+                    <tr><td>Precio unitario</td><td>$ {{ gsk.ground_security_kit_needed_precio_u }}</td></tr>
+                    <tr><td>Precio total</td><td><strong>$ {{ gsk.ground_security_kit_needed_precio_t }}</strong></td></tr>
+                </table>
+            </div>
+        </td>
+        <td>
+            <div class="tarjeta">
+                <h4>Unidades de potencia</h4>
+                <table class="detalle-tabla">
+                    <tr><td>Necesidad</td><td>{{ pu.power_units_needed }}</td></tr>
+                    <tr><td>Cantidad</td><td>{{ pu.amount }}</td></tr>
+                    <tr><td>Precio unitario</td><td>$ {{ pu.power_units_needed_precio_u }}</td></tr>
+                    <tr><td>Precio total</td><td><strong>$ {{ pu.power_units_needed_precio_t }}</strong></td></tr>
+                </table>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <div class="tarjeta">
+                <h4>Terminales eléctricos</h4>
+                <table class="detalle-tabla">
+                    <tr><td>Necesidad</td><td>{{ tr.terminals_needed }}</td></tr>
+                    <tr><td>Cantidad</td><td>{{ tr.amount }}</td></tr>
+                    <tr><td>Precio unitario</td><td>$ {{ tr.terminals_needed_precio_u }}</td></tr>
+                    <tr><td>Precio total</td><td><strong>$ {{ tr.terminals_needed_precio_t }}</strong></td></tr>
+                </table>
+            </div>
+        </td>
+        <td>
+            <div class="tarjeta">
+                <h4>Conectores MC4</h4>
+                <table class="detalle-tabla">
+                    <tr><td>Necesidad</td><td>{{ co.connector_needed }}</td></tr>
+                    <tr><td>Cantidad</td><td>{{ co.amount }}</td></tr>
+                    <tr><td>Precio unitario</td><td>$ {{ co.connector_needed_precio_u }}</td></tr>
+                    <tr><td>Precio total</td><td><strong>$ {{ co.connector_needed_precio_t }}</strong></td></tr>
+                </table>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <div class="tarjeta">
+                <h4>Cable para vehículo</h4>
+                <table class="detalle-tabla">
+                    <tr><td>Necesidad</td><td>{{ vc.vehicle_cable_needed }}</td></tr>
+                    <tr><td>Cantidad</td><td>{{ vc.amount }}</td></tr>
+                    <tr><td>Precio unitario</td><td>$ {{ vc.vehicle_cable_needed_precio_u }}</td></tr>
+                    <tr><td>Precio total</td><td><strong>$ {{ vc.vehicle_cable_needed_precio_t }}</strong></td></tr>
+                </table>
+            </div>
+        </td>
+        <td>
+            <div class="tarjeta">
+                <h4>Módulos centralizados</h4>
+                <table class="detalle-tabla">
+                    <tr><td>Necesidad</td><td>{{ cm.centralized_modules_needed }}</td></tr>
+                    <tr><td>Cantidad</td><td>{{ cm.amount }}</td></tr>
+                    <tr><td>Precio unitario</td><td>$ {{ cm.centralized_modules_needed_precio_u }}</td></tr>
+                    <tr><td>Precio total</td><td><strong>$ {{ cm.centralized_modules_needed_precio_t }}</strong></td></tr>
+                </table>
+            </div>
+        </td>
+    </tr>
+</table>
+
+<!-- ========== 3. RESUMEN DE CONSUMOS ========== -->
+<h2>3. Balance energético total</h2>
+<div class="resumen-consumos">
+    <div class="resumen-item">Consumo por hora: <span>{{ consumos.total_consumo_hr }} W</span></div>
+    <div class="resumen-item">Consumo diario: <span>{{ consumos.total_consumo_day }} Wh</span></div>
+    <div class="resumen-item">Pérdidas: <span>{{ consumos.total_perdidas }} Wh</span></div>
+    <div class="resumen-item">Total + pérdidas: <span>{{ consumos.total_consumo }} Wh</span></div>
+</div>
+
+<!-- ========== 4. TOTALES ECON�?MICOS ========== -->
+<h2>4. Valor de la inversión</h2>
+<div class="totales">
+    <div class="caja-total">
+        <p>EST�NDAR</p>
+        <div class="valor">$ {{ total.basic }}</div>
+        <small>Iva incluido (si aplica)</small>
+    </div>
+    <div class="caja-total premium">
+        <p>LLAVE EN MANO</p>
+        <div class="valor">$ {{ total.llave_en_mano }}</div>
+        <small>Mejora en componentes</small>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+    <p>CODENSOLAR �?? Energía renovable para un futuro sostenible</p>
+    <p>Carrera 64A # 3 - 49, Barrio Pradera - Bogotá | <a href="www.codensolar.com">www.codensolar.com</a> | comercial@codensolar.com</p>
+    <p>311 2235359 / 313 8851574</p>
+    <p><em>Cotización válida por 30 días. Precios sujetos a cambios.</em></p>
+</div>
+</body>
+</html>

@@ -1,0 +1,139 @@
+# # consumo
+# paneles = paneles de mayor a menor*
+# por panel en paneles
+# 	producion = panel*horas_sol
+# 	si produccion >= consumo
+# 		panel ideal = panel
+
+
+def get(self,request):
+        system("cls")
+        #get the products and save them in a variable
+            #it's expected to get a request like this: 
+            # [
+                # {"product_id":3,"amount":1,"hours":2}
+                # {"product_id":4,"amount":2,"hours":24}
+                # {...}
+                # ...
+            # ] 
+            # you can left hours without specify and it will get the default value for that category
+            # you can left hours without specify and it will get 1
+        data = json.loads(request.body)
+        print(data)
+        products = []
+        for product in data:
+            # print(list(Products.objects.filter(id=product["product_id"]).values())[0]["category_id"])
+            products.append(
+                {
+                    "product_id":product["product_id"],
+                    "amount":product["amount"] if "amount" in product  else 1,
+                    "hours":product["hours"] if "hours" in product else CotizacionView.default_hours[(  (list(Products.objects.filter(id=product["product_id"]).values())[0])  )["category_id"]]
+                }
+            )
+            
+        # print(products)
+        # return JsonResponse(products,safe=False)
+        
+        # add the consumptions
+        total_consumption=0
+        for product_data in products:
+            try:
+                product=list(Products.objects.filter(id=product_data["product_id"]).values())[0]
+            except Exception as e:
+                return JsonResponse(
+                    {
+                        "message":"Couldn't find a product with the specified id",
+                        "server_msg":str(e)
+                    }
+                )
+            # get the consumption by they, by getting the product consumption per hour, multiplying it by the hours and multiplying it by the amount of products
+            consumption_day =  ( product["consume"] * product_data["hours"] )*product_data["amount"]
+            
+            
+            # check the experience for a real value
+            # it fixes the consumption for a category
+            consumption_experience =  0
+            if product["category_id"] == 3: consumption_experience = 715 #825
+            # if product["category_id"] == 4: consumption_experience = 1003.3199999999999
+            
+            # this is an other way to force the formula for some products to work
+            weird_changes={
+            # id_product : add to the consumption
+                # ---fridges---
+                1 : -1555.1999999999999,
+                6 : 1390,
+                4 : -300,
+                7 : 1290,
+                # ---freezers---
+                14 : 2150,
+                16 : 1350,
+                15 : 1357,
+                13 : 1278,
+                10 : 3459,
+                12 : 846,
+                11 : 845,
+                2 : 912,
+                
+            }
+            if product["id"] in weird_changes.keys(): consumption_experience += weird_changes[product["id"]]
+        
+            lost = consumption_day
+            if product["category_id"] == 3: lost *= (CotizacionView.list_losses[3]/100)
+            if product["category_id"] == 4: lost *= (CotizacionView.list_losses[4]/100)
+            
+            # in here, we force the formula to do what we want to, forcing a especific consume
+            # fixing that understanble formula
+            if product["id"] == 6: consumption_experience += -600.7200000000003
+            total_consumption += (
+                                consumption_day +\
+                                lost +\
+                                consumption_experience
+                                ) 
+            print(f"consumption_day:{consumption_day} lost:{lost} consumption_experience:{consumption_experience}\n result: {consumption_day + lost + consumption_experience}" )
+            
+        # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        # get the panels
+        # system("cls")
+        panels = list(SolarPanel.objects.order_by("-production","-price").values())
+        # panels = list(filter(lambda panel: any(voltage in panel['name'] for voltage in voltages_acepted), panels))
+        sun_hours = 4
+        difference=abs((panels[0]["production"]*sun_hours)-total_consumption)
+        ideal_panel = panels[0]
+        solar_ceils_needed = math.ceil(total_consumption/(panels[0]["production"]*sun_hours))
+        total_price = panels[0]["price"]*solar_ceils_needed
+        
+        # we decide wich is the ideal panel
+        for panel in panels:
+            print("~"*150)
+            production_day_for_current_panel = panel["production"]*sun_hours
+            amount_needed = math.ceil(total_consumption/production_day_for_current_panel)
+            if panel["voltage_id"] == 1: amount_needed = amount_needed+1 if amount_needed%2 != 0 else amount_needed
+            current_difference = round((production_day_for_current_panel * amount_needed)-total_consumption)
+            current_total_price = panel["price"]*amount_needed
+            
+            print(f"total_consumption: {total_consumption}")
+            print(f"production_day_for_current_panel: {production_day_for_current_panel}")
+            print(f"total production: {production_day_for_current_panel * amount_needed}")
+            print(f"amount_needed: {amount_needed}")
+            print(f"current_total_price: {current_total_price}")
+            print("~"*100)
+            print(f"the minimun diference is: {difference}")
+            print(f"the minimun price is: {total_price}")
+            print("~"*100)
+            print(f"to {total_consumption}, there are {amount_needed} panels needed '{panel['name']}'")
+            print(f"the difference is {current_difference}")
+            print(f"Prices: {current_total_price} <= {total_price}")
+            print(f"the diference is {(current_difference) <= (difference)} and the amount is {amount_needed <= solar_ceils_needed}")
+            if  (current_difference) <= (difference)\
+                and amount_needed <= solar_ceils_needed:
+                print(f"panel '{panel['name']}' is the new perfect panel. The energy difference is {current_difference} per day'")    
+                solar_ceils_needed = amount_needed
+                difference = current_difference
+                ideal_panel = panel
+                total_price = current_total_price
+            print("~"*150)
+        
+        return JsonResponse({
+            "panel_needed":ideal_panel,
+            "panel_amount":solar_ceils_needed,
+            },safe=False)

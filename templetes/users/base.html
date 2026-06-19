@@ -1,0 +1,38 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<link rel="stylesheet" type="text/css" href="{% static 'products/css/main.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'products/css/Vlogin.css' %}">
+	{% block extra_css %}{% endblock %}
+	<title>{% block title %}CodenSolar{% endblock %}</title>
+</head>
+<body class="body">
+
+<div class="volver">
+	<div class="volver1">
+		<a href="{% block back_url %}{% url 'users_app:user-login' %}{% endblock %}">{% block back_text %}Volver{% endblock %}</a>
+	</div>
+</div>
+
+{% if messages %}
+<ul class="messages">
+	{% for message in messages %}
+	<li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+	{% endfor %}
+</ul>
+{% endif %}
+
+<div class="login">
+	<div class="container">
+		<div class="login page">
+			<div class="heading"><a href="https://codensolar.com/" class="navbar-brand">Coden<b style="color: rgb(4, 253, 4);">S</b>olar</a></div>
+			{% block content %}{% endblock %}
+		</div>
+	</div>
+</div>
+
+<script src="{% static 'products/js/register.js' %}"></script>
+{% block extra_scripts %}{% endblock %}
+</body>
+</html>

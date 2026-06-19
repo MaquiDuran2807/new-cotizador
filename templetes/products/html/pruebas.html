@@ -1,0 +1,336 @@
+?{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <link rel="stylesheet" type="text/css" href="{% static 'products/css/main.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'products/css/pruebas.css' %}" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+
+    <title>pruebas</title>
+</head>
+<body>
+    <div class="container-fluid">
+    
+        <nav class="row">
+            <div class="row anun1">
+                <div class="col-12">
+                    <p>Descuentos  del 20% Paneles solares | Descuento del 15% en neveras  | descuento del 5% kits</p>
+                </div>
+            </div>
+            <div class="row anun2">
+                <div class="col-12 ">
+                    <p>Por registrarte e ingresar tendras un descuento del 5% en paneles Policristalinos</p>
+                </div>
+            </div>
+            <nav class="navbar navbar-expand-lg navbar-light fixed-10" style="background-color:#0F172A;">
+            <!-- <nav class="navbar navbar-expang-lg navbar-dark bg-primary fixed-top"> -->
+                <div class="container-fluid">
+                    <a href="#" class="navbar-brand "> Coden<b style="color: rgb(4, 253, 4);">S</b>olar </a>
+                    <!-- Boton para el menu movil -->
+                    <button 
+                        class="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#menu"
+                        aria-controls="menu"
+                        aria-expanded="false"
+                        aria-label="Mostrar / Ocultar Menu"
+                    >
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+        
+                    <!-- Menu de navegacion -->
+                    <div class="collapse navbar-collapse" id="menu">
+        
+                        <form action="" class="d-flex form">
+                            <input type="search" class="form-control me-2" placeholder="Buscar" aria-label="Buscar">
+                            <button class="btn btn-outline-success" type="button">Buscar</button>
+                        </form>
+        
+                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0  ml-5">
+                            <li class="nav-item"><a href="#" class="nav-link">Inicio</a></li>
+        
+                            <!-- Dropdown -->
+                            <li class="nav-item dropdown" >
+                                <a 
+                                    href="#" 
+                                    class="nav-link dropdown-toggle"
+                                    role="button"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false"
+                                    id="dropdown-menu"
+                                >
+                                    Categorias
+                                </a>
+        
+                                <ul class="dropdown-menu" aria-labelledby="dropdown-menu" style="background-color:#40C92A;">
+                                    <li><a href="#" class="dropdown-item">Elemento 1</a></li>
+                                    <li><a href="#" class="dropdown-item">Elemento 2</a></li>
+                                    <li><a href="#" class="dropdown-item">Elemento 3</a></li>
+                                </ul>
+                            </li>
+        
+                            <li class="nav-item"><a href="#" class="nav-link" >  Blog</a></li>
+                            <li class="nav-item"><a href="#" class="nav-link">Contacto</a></li>
+                        </ul>
+        
+                        <div class="btn btn-outline-success btn1">
+                            ingresar
+                            </div>
+                            <div class="btn btn-outline-success btn2">
+                            Registrarse
+                            </div>
+                    </div>
+                </div>
+            </nav>
+        </nav>
+
+                <label for="check" class="bar">
+                    <span class="fa fa-bars" id="bars"></span>
+                    <span class="fa fa-times" id="times"></span>
+                </label>
+            </nav>  
+    </div>
+
+
+        
+
+        {% if products %}
+        <section class="row logic d-flex flex-column justify-content-around">
+            <div class="col-md-6 producto align-self-center mb-2">
+        {% for p in products %}
+            {% comment %} missing fix just category we want {% endcomment %}
+            {% comment %} {% if p.category == 3 %} {% endcomment %}
+                <div class="row informacion-producto">
+                    <div class="col-md-5 img-producto">
+                        <img style="max-height: 15em;" class="img-fluid rounded-3 p-1 border-success border border-2 d-block mx-auto mb-2 my-md-0 " src="{{p.image.url}}" alt="">
+                    </div>
+                    <div class="col-md-7 informacion-producto-caracteristicas">
+                        <div class="row primary-inf">
+                                <div class="col-md-8 titulo-producto">
+                                    <p> <strong>{{ p.name }}</strong></p>
+                                </div>
+                                <div class="col-md-4 precio-producto">
+                                    <p> <strong> $ </strong><span class="producs-price">{{ p.price }}</span> cop</p>
+                                </div>
+                        </div>
+                        
+                        <div class="row secundary-inf">
+                            <div class="col-md-12 descripcion-producto">
+                                <p> <strong> Descripción: </strong>{{ p.description }}</p>
+                            </div>
+                        </div>
+
+                        <div class="row tertiary-inf">
+                            <div class="col-md-12 caracteristicas-producto">
+                                <p> <strong> Característica: </strong>{{ p.caracteristicas }}</p>
+                            </div>
+                        </div>
+
+                        <div class="row quaternary-inf">
+                            <div class="col-md-12 horas-sol-producto">
+                                <label for="customRange2" class="form-label">Example range</label>
+                                <input type="range" class="form-range" min="0" max="2" id="customRange2">
+                            </div>
+                        </div>
+                        <div class="row five-inf">
+                            <div class="col-md-12 agregar-producto">
+                                <a class="btn btn-success rounded-pill d-block mx-auto " onclick="addToQuote({{ p}})">Agregar</a>
+                            </div>
+                        </div>
+                    </div>
+            {% comment %} {% endif %} {% endcomment %}
+        {% endfor %}
+        
+                </div>
+            </div>
+        {% endif %}
+
+
+        {% if products %}
+            <div class="col-md-12 cotizador align-self-center">
+                <div id="cotizaciones">
+                </div>
+
+                    <div class="row acumulador-cotizador ">
+
+                            <div class="row primary-cotizador">
+
+                                <div class="col-md-2 eliminar-cotizador">eliminar</div>
+                                <div class="col-md-7 titulo-producto-cotizador"><div id="nombre"></div>titulo unitario</div>
+                                <div class="col-md-3 precio-unitario">precio uni</div>
+                            </div>
+                            <div class="row secundary-cotizador">
+                                <div class="col-md-12">
+                                    <div class="col-4 horas-uso-cotizador">
+                                        horas uso
+                                    </div>
+                                    <div class="col-4 horas-sol-cotizador">
+                                        horas sol nece
+                                    </div>
+                                    <div class="col-4 consumo-hora-cotizador">
+                                        consumo hora
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row tertiary-cotizador">
+                                <div class="col-4 consumo-dia-cotizador">
+                                    consumo dia
+                                </div>
+                                <div class="col-4 porcentaje-perdidas-cotizador">
+                                    % perdidas
+                                </div>
+                                <div class="col-4 total-consumo-cotizador">
+                                    total consumo
+                                </div>
+                            </div>
+                    </div>
+
+                    <div class="row requerimientos-productos">
+
+                        <div class="row titulo-requerimiento">
+                            <p class="col-md-12">titulo titulo-requerimiento</p>
+                        </div>
+                        <div class="row requerimiento-individualmente-productos">
+                            <div class="col-4 reguladores-requeridos">
+                                reguladores requereridos
+                            </div>
+                            <div class="col-4 reguladores-tipo-requeridos">
+                                reguladores tipo
+                            </div>
+                            <div class="col-4 reguladores-precio-requeridos">
+                                reguladores precio
+                            </div>
+                        </div>
+                        <div class="row requerimiento-individualmente-productos">
+                            <div class="col-4 paneles-requeridos">
+                                paneles requereridos
+                            </div>
+                            <div class="col-4 paneles-tipo-requeridos">
+                                paneles tipo
+                            </div>
+                            <div class="col-4 paneles-precio-requeridos">
+                                paneles precio
+                            </div>
+                        </div>
+                        <div class="row requerimiento-individualmente-productos">
+                            <div class="col-4 baterias-requeridos">
+                                baterias requereridos
+                            </div>
+                            <div class="col-4 baterias-tipo-requeridos">
+                                baterias tipo
+                            </div>
+                            <div class="col-4 baterias-precio-requeridos">
+                                baterias precio
+                            </div>
+                        </div>
+                        <div class="row requerimiento-individualmente-productos">
+                            <div class="col-4 brackers-requeridos">
+                                brackers requereridos
+                            </div>
+                            <div class="col-4 brackers-tipo-requeridos">
+                                brackers tipo
+                            </div>
+                            <div class="col-4 brackers-precio-requeridos">
+                                brackers precio
+                            </div>
+                        </div>
+                        <div class="row requerimiento-individualmente-productos">
+                            <div class="col-md-12 brackers-precio-requeridos">
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+                                    mas informacion
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton2">
+                                    <li><a class="dropdown-item active" >Action</a></li>
+                                    <li><a class="dropdown-item" >Another action</a></li>
+                                    <li><a class="dropdown-item" >Something else here</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" >Separated link</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row Descargar-pdf mt-2 mb-2">
+                            <div class="col-md-12 bnt bg-success" onclick="createandsendpdf('{{usuario.name}}','{{usuario.email}}')">Descargar-pdf</div>
+                        </div>
+                    </div>
+            </div>
+            {% else %}
+        <p style="
+        line-height:5em;
+        font-size:2em;
+        margin: 0px 2em;
+        ">No hay productos</p>
+    {% endif %}
+        </section>
+
+        <footer class="row">
+                <div class="col-12 mt-1 mb-5 footer">
+                    <div class="d-flex flex-column h-100">
+        
+                        <!-- FOR DEMO PURPOSE -->
+                        <!-- <section class="hero text-white py-5 flex-gr|ow-1">
+                            <div class="container py-4">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <h1 class="display-4">Bootstrap footer bottom</h1>
+                                        <p class="fst-italic text-muted">Using Bootstrap 5 flexbox utilities, create a footer that always sticks to the bottom of your viewport. Snippet by <a class="text-primary" href="https://bootstrapious.com/" target="_blank">Bootstrapious</a></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </section> -->
+                    
+                    
+                        <!-- FOOTER -->
+                        <footer class="w-100 py-4 flex-shrink-0">
+                            <div class="container py-4">
+                                <div class="row gy-4 gx-5">
+                                    <div class="col-lg-4 col-md-6">
+                                        <h5 class="h1 text-white">CODENSOLAR</h5>
+                                        <p class="small text-muted">Somos una empresa comprometida con el media ambiente.</p>
+                                        <p class="small text-muted mb-0">&copy; Copyrights. All rights reserved. <a class="text-primary" href="#">ELIT IT</a></p>
+                                    </div>
+                                    <div class="col-lg-2 col-md-6">
+                                        <h5 class="text-white mb-3">Enlaces</h5>
+                                        <ul class="list-unstyled text-muted">
+                                            <li><a href="#">Inicio</a></li>
+                                            <li><a href="#">Servicios</a></li>
+                                            <li><a href="#">Productos</a></li>
+                                            <li><a href="#">Contactar</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-lg-2 col-md-6">
+                                        <h5 class="text-white mb-3">Redes Sociales</h5>
+                                        <ul class="list-unstyled text-muted">
+                                            <li><a href="#">Facebook</a></li>
+                                            <li><a href="#">Youtube</a></li>
+                                            <li><a href="#">Instagram</a></li>
+                                            <li><a href="#">Otros</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-lg-4 col-md-6">
+                                        <h5 class="text-white mb-3">Cotizador</h5>
+                                        <p class="small text-muted">Recuerda que por Registrarte a nuestra web o correotienes un 10% de descuento </p>
+                                        <form action="#">
+                                            <div class="input-group mb-3">
+                                                <input class="form-control" type="text" placeholder="Correo" aria-label="Recipient's username" aria-describedby="button-addon2">
+                                                <button class="btn btn-success" id="button-addon2" type="button"><i class="fas fa-paper-plane"></i></button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </footer>
+                    </div>
+                </div>
+        </footer>
+
+<script src="js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

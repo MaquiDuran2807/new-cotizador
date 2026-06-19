@@ -1,0 +1,1078 @@
+?{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Codensolar · Cotizador Inteligente</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+
+    <style>
+        /* �?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?�
+           DESIGN TOKENS
+        �?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?� */
+        :root {
+            --ink:      #080C14;
+            --ink-2:    #101828;
+            --ink-3:    #1C2739;
+            --solar:    #F5C842;
+            --solar-2:  #FFD95A;
+            --solar-glow: rgba(245,200,66,0.18);
+            --solar-dim:  rgba(245,200,66,0.08);
+            --white:    #FFFFFF;
+            --mist:     #E8EDF5;
+            --slate:    #7A8BA8;
+            --border:   rgba(255,255,255,0.07);
+            --r-sm: 0.75rem;
+            --r-md: 1.25rem;
+            --r-lg: 2rem;
+            --shadow-glow: 0 0 40px rgba(245,200,66,0.15);
+            --shadow-card: 0 8px 32px rgba(0,0,0,0.35);
+            --t: 0.25s cubic-bezier(0.4,0,0.2,1);
+            --font-display: 'Syne', sans-serif;
+            --font-body:    'DM Sans', sans-serif;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--ink);
+            font-family: var(--font-body);
+            color: var(--mist);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* �?��?��?��?��?��?��?� NOISE TEXTURE OVERLAY �?��?��?��?��?��?��?� */
+        body::before {
+            content: '';
+            position: fixed; inset: 0; z-index: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        /* �?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?�
+           ANNOUNCEMENT BAR
+        �?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?� */
+        .announce-bar {
+            background: linear-gradient(90deg, #1A2235, #0F1827, #1A2235);
+            border-bottom: 1px solid var(--border);
+            font-size: 0.8rem;
+            font-weight: 300;
+            letter-spacing: 0.02em;
+            overflow: hidden;
+            position: relative;
+        }
+        .announce-track {
+            display: flex; gap: 4rem;
+            animation: marquee 28s linear infinite;
+            white-space: nowrap; padding: 0.55rem 0;
+        }
+        .announce-track span { color: var(--solar); font-weight: 600; }
+        @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+        /* �?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?�
+           NAVBAR
+        �?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?� */
+        .top-nav {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(8,12,20,0.82);
+            backdrop-filter: blur(20px) saturate(1.4);
+            -webkit-backdrop-filter: blur(20px) saturate(1.4);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            display: flex; align-items: center; gap: 2rem;
+            animation: slideDown 0.6s ease both;
+        }
+        @keyframes slideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        .brand {
+            font-family: var(--font-display);
+            font-size: 1.45rem; font-weight: 800;
+            color: var(--white); text-decoration: none;
+            letter-spacing: -0.03em; white-space: nowrap;
+            display: flex; align-items: center; gap: 0.5rem;
+        }
+        .brand .sun-icon {
+            width: 32px; height: 32px;
+            background: var(--solar);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.9rem; color: var(--ink);
+            box-shadow: 0 0 16px rgba(245,200,66,0.5);
+            animation: pulse-sun 3s ease-in-out infinite;
+        }
+        @keyframes pulse-sun {
+            0%,100% { box-shadow: 0 0 16px rgba(245,200,66,0.5); }
+            50%      { box-shadow: 0 0 28px rgba(245,200,66,0.8); }
+        }
+        .brand em { color: var(--solar); font-style: normal; }
+
+        .search-wrap {
+            flex: 1; max-width: 380px;
+            display: flex; align-items: center;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid var(--border);
+            border-radius: 3rem; padding: 0.45rem 1rem;
+            transition: all var(--t);
+        }
+        .search-wrap:focus-within {
+            background: rgba(245,200,66,0.08);
+            border-color: rgba(245,200,66,0.4);
+            box-shadow: 0 0 0 3px rgba(245,200,66,0.1);
+        }
+        .search-wrap input {
+            background: none; border: none; outline: none;
+            color: var(--white); font-family: var(--font-body);
+            font-size: 0.88rem; width: 100%; font-weight: 300;
+        }
+        .search-wrap input::placeholder { color: var(--slate); }
+        .search-wrap i { color: var(--slate); font-size: 0.9rem; }
+
+        .nav-links { display: flex; gap: 0.25rem; align-items: center; margin-left: auto; }
+        .nav-links a {
+            font-family: var(--font-body); font-size: 0.88rem; font-weight: 500;
+            color: var(--slate); text-decoration: none; padding: 0.4rem 0.85rem;
+            border-radius: 2rem; transition: all var(--t);
+        }
+        .nav-links a:hover { color: var(--white); background: rgba(255,255,255,0.06); }
+
+        .btn-solar {
+            font-family: var(--font-display); font-weight: 700; font-size: 0.82rem;
+            background: var(--solar); color: var(--ink);
+            border: none; border-radius: 2rem; padding: 0.45rem 1.2rem;
+            cursor: pointer; text-decoration: none; letter-spacing: 0.02em;
+            transition: all var(--t); white-space: nowrap;
+        }
+        .btn-solar:hover {
+            background: var(--solar-2); transform: translateY(-1px);
+            box-shadow: 0 4px 20px rgba(245,200,66,0.4);
+        }
+
+        /* �?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?�
+           HERO CAROUSEL
+        �?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?� */
+        .hero-section {
+            padding: 2.5rem 2rem 0;
+            position: relative; z-index: 1;
+        }
+        .carousel-wrap {
+            border-radius: var(--r-lg);
+            overflow: hidden;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-card), var(--shadow-glow);
+            position: relative;
+        }
+        .carousel-wrap::after {
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(135deg, transparent 55%, rgba(245,200,66,0.06) 100%);
+            pointer-events: none; z-index: 1;
+        }
+        .carousel-item img {
+            width: 100%; max-height: 380px; object-fit: cover;
+            filter: brightness(0.6) saturate(0.8);
+            display: block;
+        }
+        .carousel-caption {
+            position: absolute; left: 0; right: 0; bottom: 0;
+            padding: 2.5rem 3rem;
+            background: linear-gradient(to top, rgba(8,12,20,0.92) 0%, transparent 100%);
+            text-align: left; z-index: 2;
+        }
+        .carousel-caption .tag {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            background: var(--solar-dim); border: 1px solid rgba(245,200,66,0.3);
+            color: var(--solar); font-size: 0.75rem; font-weight: 600;
+            padding: 0.25rem 0.75rem; border-radius: 2rem; margin-bottom: 0.75rem;
+            letter-spacing: 0.06em; text-transform: uppercase;
+        }
+        .carousel-caption h2 {
+            font-family: var(--font-display); font-size: 2.2rem; font-weight: 800;
+            color: var(--white); line-height: 1.1; letter-spacing: -0.03em;
+        }
+        .carousel-caption h2 em { color: var(--solar); font-style: normal; }
+        .carousel-caption p { color: rgba(255,255,255,0.65); font-size: 0.95rem; font-weight: 300; margin-top: 0.5rem; }
+
+        .carousel-indicators [data-bs-target] {
+            width: 24px; height: 3px; border-radius: 2px;
+            background: rgba(255,255,255,0.3); border: none;
+            transition: all var(--t);
+        }
+        .carousel-indicators .active { background: var(--solar); width: 36px; }
+
+        .carousel-control-prev, .carousel-control-next {
+            width: 48px; height: 48px;
+            background: rgba(255,255,255,0.1); backdrop-filter: blur(8px);
+            border: 1px solid var(--border); border-radius: 50%;
+            top: 50%; transform: translateY(-50%); margin: 0 1rem;
+            transition: all var(--t);
+        }
+        .carousel-control-prev:hover, .carousel-control-next:hover {
+            background: var(--solar); border-color: var(--solar);
+        }
+        .carousel-control-prev-icon, .carousel-control-next-icon { width: 16px; height: 16px; }
+
+        /* �?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?�
+           STATS BAR
+        �?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?� */
+        .stats-bar {
+            display: flex; gap: 0; margin: 2rem 2rem 0;
+            background: var(--ink-3); border-radius: var(--r-md);
+            border: 1px solid var(--border); overflow: hidden;
+        }
+        .stat-item {
+            flex: 1; padding: 1.25rem 1.5rem; text-align: center;
+            border-right: 1px solid var(--border);
+            position: relative; transition: background var(--t);
+        }
+        .stat-item:last-child { border-right: none; }
+        .stat-item:hover { background: var(--solar-dim); }
+        .stat-value {
+            font-family: var(--font-display); font-size: 1.8rem; font-weight: 800;
+            color: var(--solar); line-height: 1;
+        }
+        .stat-label { font-size: 0.75rem; color: var(--slate); font-weight: 300; margin-top: 0.25rem; }
+
+        /* �?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?�
+           SECTION TITLE
+        �?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?� */
+        .section-head {
+            display: flex; align-items: baseline; gap: 1rem;
+            padding: 2.5rem 2rem 1.25rem;
+        }
+        .section-head h3 {
+            font-family: var(--font-display); font-size: 1.5rem; font-weight: 800;
+            color: var(--white); letter-spacing: -0.02em;
+        }
+        .section-head .count {
+            font-size: 0.8rem; color: var(--slate); font-weight: 400;
+            background: var(--ink-3); border: 1px solid var(--border);
+            padding: 0.2rem 0.7rem; border-radius: 2rem;
+        }
+        .filter-chips { display: flex; gap: 0.5rem; margin-left: auto; flex-wrap: wrap; }
+        .chip {
+            font-size: 0.78rem; font-weight: 500; padding: 0.3rem 0.9rem;
+            border-radius: 2rem; border: 1px solid var(--border);
+            background: transparent; color: var(--slate); cursor: pointer;
+            transition: all var(--t);
+        }
+        .chip:hover, .chip.active { background: var(--solar); border-color: var(--solar); color: var(--ink); }
+
+        /* �?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?�
+           MAIN LAYOUT
+        �?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?� */
+        .main-layout {
+            display: flex; gap: 1.5rem;
+            padding: 0 2rem 3rem;
+            position: relative; z-index: 1;
+            align-items: flex-start;
+        }
+        @media (max-width: 1024px) { .main-layout { flex-direction: column; } }
+
+        /* �?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?�
+           PRODUCT GRID
+        �?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?� */
+        .products-grid {
+            flex: 1; display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .product-card {
+            background: var(--ink-2);
+            border: 1px solid var(--border);
+            border-radius: var(--r-md);
+            overflow: hidden;
+            display: flex; flex-direction: column;
+            transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
+            position: relative;
+            animation: cardIn 0.5s ease both;
+        }
+        .product-card:nth-child(1) { animation-delay: 0.05s; }
+        .product-card:nth-child(2) { animation-delay: 0.10s; }
+        .product-card:nth-child(3) { animation-delay: 0.15s; }
+        .product-card:nth-child(4) { animation-delay: 0.20s; }
+        .product-card:nth-child(5) { animation-delay: 0.25s; }
+        .product-card:nth-child(6) { animation-delay: 0.30s; }
+
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--solar), transparent);
+            opacity: 0; transition: opacity var(--t);
+        }
+        .product-card:hover {
+            border-color: rgba(245,200,66,0.25);
+            box-shadow: 0 16px 48px rgba(0,0,0,0.5), 0 0 0 1px rgba(245,200,66,0.1);
+            transform: translateY(-4px);
+        }
+        .product-card:hover::before { opacity: 1; }
+
+        .product-img-wrap {
+            position: relative; overflow: hidden;
+            background: var(--ink-3); height: 190px;
+        }
+        .product-img-wrap img {
+            width: 100%; height: 100%; object-fit: contain;
+            padding: 1.5rem; transition: transform 0.45s ease;
+        }
+        .product-card:hover .product-img-wrap img { transform: scale(1.06); }
+
+        .product-badge {
+            position: absolute; top: 0.75rem; right: 0.75rem;
+            background: var(--solar); color: var(--ink);
+            font-size: 0.68rem; font-weight: 700; padding: 0.2rem 0.6rem;
+            border-radius: 2rem; letter-spacing: 0.04em; text-transform: uppercase;
+        }
+
+        .product-body { padding: 1.25rem; flex: 1; display: flex; flex-direction: column; gap: 0.6rem; }
+
+        .product-name {
+            font-family: var(--font-display); font-size: 1rem; font-weight: 700;
+            color: var(--white); line-height: 1.3;
+        }
+        .product-price {
+            font-family: var(--font-display); font-size: 1.6rem; font-weight: 800;
+            color: var(--solar); letter-spacing: -0.02em; line-height: 1;
+        }
+        .product-price small { font-size: 0.7rem; color: var(--slate); font-weight: 400; letter-spacing: 0; }
+        .product-desc { font-size: 0.82rem; color: var(--slate); font-weight: 300; line-height: 1.5; flex: 1; }
+
+        /* Range slider */
+        .slider-block { background: var(--ink-3); border-radius: var(--r-sm); padding: 0.85rem; }
+        .slider-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 0.6rem;
+        }
+        .slider-label { font-size: 0.75rem; color: var(--slate); font-weight: 400; }
+        .slider-value {
+            font-family: var(--font-display); font-size: 0.9rem; font-weight: 700;
+            color: var(--solar);
+        }
+        .custom-range {
+            -webkit-appearance: none; appearance: none;
+            width: 100%; height: 3px; border-radius: 2px;
+            background: linear-gradient(to right, var(--solar) var(--pct,4.2%), rgba(255,255,255,0.12) var(--pct,4.2%));
+            outline: none; cursor: pointer;
+        }
+        .custom-range::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px; height: 16px;
+            background: var(--solar); border-radius: 50%;
+            box-shadow: 0 0 10px rgba(245,200,66,0.6);
+            border: 2px solid var(--ink);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .custom-range::-webkit-slider-thumb:hover {
+            transform: scale(1.3);
+            box-shadow: 0 0 18px rgba(245,200,66,0.8);
+        }
+        .custom-range::-moz-range-thumb {
+            width: 16px; height: 16px;
+            background: var(--solar); border-radius: 50%;
+            border: 2px solid var(--ink); cursor: pointer;
+        }
+
+        /* Action buttons */
+        .card-actions { display: flex; gap: 0.5rem; margin-top: 0.25rem; }
+        .btn-del, .btn-add {
+            flex: 1; border: none; border-radius: var(--r-sm);
+            padding: 0.6rem 0.75rem; font-family: var(--font-display);
+            font-weight: 700; font-size: 0.82rem; cursor: pointer;
+            transition: all var(--t); display: flex; align-items: center; justify-content: center; gap: 0.3rem;
+        }
+        .btn-del {
+            background: rgba(239,68,68,0.1); color: #f87171;
+            border: 1px solid rgba(239,68,68,0.2);
+        }
+        .btn-del:hover { background: rgba(239,68,68,0.2); border-color: rgba(239,68,68,0.4); }
+        .btn-add {
+            background: var(--solar); color: var(--ink);
+            box-shadow: 0 4px 14px rgba(245,200,66,0.3);
+        }
+        .btn-add:hover {
+            background: var(--solar-2); transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(245,200,66,0.5);
+        }
+        .btn-add:active { transform: scale(0.97); }
+
+        /* �?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?�
+           QUOTE PANEL
+        �?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?� */
+        .quote-panel {
+            width: 400px; flex-shrink: 0;
+            position: sticky; top: 80px;
+            max-height: calc(100vh - 100px);
+            overflow-y: auto;
+            background: var(--ink-2);
+            border: 1px solid var(--border);
+            border-radius: var(--r-lg);
+            box-shadow: var(--shadow-card);
+        }
+        .quote-panel::-webkit-scrollbar { width: 4px; }
+        .quote-panel::-webkit-scrollbar-track { background: transparent; }
+        .quote-panel::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+        @media (max-width: 1024px) { .quote-panel { width: 100%; position: static; max-height: none; } }
+
+        .panel-header {
+            padding: 1.75rem 1.75rem 1.25rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .panel-header .label {
+            font-size: 0.7rem; font-weight: 600; color: var(--solar);
+            letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.3rem;
+        }
+        .panel-header h4 {
+            font-family: var(--font-display); font-size: 1.35rem; font-weight: 800;
+            color: var(--white); letter-spacing: -0.02em;
+        }
+        .panel-header p { font-size: 0.78rem; color: var(--slate); font-weight: 300; margin-top: 0.15rem; }
+
+        /* Totals */
+        .totals-grid {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 1px; background: var(--border);
+            margin: 0; border-top: 1px solid var(--border);
+        }
+        .total-cell {
+            background: var(--ink-2); padding: 1.25rem 1.5rem;
+            transition: background var(--t);
+        }
+        .total-cell:hover { background: var(--ink-3); }
+        .total-cell .cell-label {
+            font-size: 0.7rem; color: var(--slate); font-weight: 400;
+            text-transform: uppercase; letter-spacing: 0.06em;
+            display: flex; align-items: center; gap: 0.4rem; margin-bottom: 0.4rem;
+        }
+        .total-cell .cell-label i { font-size: 0.8rem; }
+        .total-cell .cell-value {
+            font-family: var(--font-display); font-size: 1.6rem; font-weight: 800;
+            letter-spacing: -0.03em; line-height: 1;
+        }
+        .total-normal .cell-value { color: var(--solar); }
+        .total-premium .cell-value { color: #A78BFA; }
+
+        /* Location + reset */
+        .panel-controls {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex; gap: 0.75rem;
+        }
+        .custom-select {
+            flex: 1; background: var(--ink-3); border: 1px solid var(--border);
+            color: var(--mist); font-family: var(--font-body); font-size: 0.83rem;
+            border-radius: var(--r-sm); padding: 0.55rem 0.9rem; outline: none;
+            cursor: pointer; transition: border-color var(--t);
+        }
+        .custom-select:focus { border-color: rgba(245,200,66,0.4); }
+        .custom-select option { background: var(--ink-3); }
+
+        .btn-reset {
+            background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2);
+            color: #f87171; font-family: var(--font-display); font-weight: 700;
+            font-size: 0.8rem; border-radius: var(--r-sm); padding: 0.55rem 1rem;
+            cursor: pointer; white-space: nowrap; transition: all var(--t);
+        }
+        .btn-reset:hover { background: rgba(239,68,68,0.18); }
+
+        /* �??�?? Botones de categoría generados dinámicamente por Show_category() �??�?? */
+        #filtro { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        #filtro .boton-filtro {
+            font-size: 0.78rem; font-weight: 600; padding: 0.3rem 0.9rem;
+            border-radius: 2rem; border: 1px solid var(--border);
+            background: transparent; color: var(--slate); cursor: pointer;
+            transition: all var(--t); line-height: 1.6;
+        }
+        #filtro .boton-filtro a { color: inherit; text-decoration: none; display: block; }
+        #filtro .boton-filtro:hover, #filtro .boton-filtro.active {
+            background: var(--solar); border-color: var(--solar); color: var(--ink);
+        }
+        #filtro .boton-filtro.active a, #filtro .boton-filtro:hover a { color: var(--ink); }
+
+        /* Quote items area */
+        .quote-items { padding: 1.25rem 1.5rem; display: flex; flex-direction: column; gap: 0.75rem; }
+        .quote-empty {
+            text-align: center; padding: 2.5rem 1rem;
+            color: var(--slate); font-size: 0.85rem; font-weight: 300;
+        }
+        .quote-empty i { font-size: 2.5rem; opacity: 0.2; display: block; margin-bottom: 0.5rem; }
+
+        /* Accordion requerimientos */
+        .req-accordion { padding: 0 1.5rem 1.5rem; }
+        .req-section {
+            background: var(--ink-3); border: 1px solid var(--border);
+            border-radius: var(--r-sm); overflow: hidden; margin-bottom: 0.5rem;
+        }
+        .req-toggle {
+            width: 100%; background: none; border: none; color: var(--mist);
+            font-family: var(--font-display); font-weight: 600; font-size: 0.88rem;
+            padding: 0.9rem 1.1rem;
+            display: flex; align-items: center; justify-content: space-between;
+            cursor: pointer; text-align: left; transition: color var(--t);
+        }
+        .req-toggle:hover { color: var(--solar); }
+        .req-toggle span { display: flex; align-items: center; gap: 0.5rem; }
+        .req-toggle i.chevron { font-size: 0.75rem; transition: transform var(--t); }
+        .req-toggle.open i.chevron { transform: rotate(180deg); }
+        .req-body {
+            display: none; padding: 0 1.1rem 1rem;
+        }
+        .req-body.open { display: block; animation: fadeIn 0.2s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .req-row {
+            display: grid; grid-template-columns: 2fr 2fr 2fr 1fr;
+            gap: 0.5rem; align-items: start; padding: 0.5rem 0;
+            border-top: 1px solid rgba(255,255,255,0.04); font-size: 0.78rem;
+        }
+        .req-row:first-child { border-top: none; }
+        .req-head { color: var(--slate); font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 0.2rem; }
+        .req-del { color: #f87171; cursor: pointer; font-size: 0.85rem; text-align: center; padding-top: 1.1rem; opacity: 0.7; transition: opacity var(--t); }
+        .req-del:hover { opacity: 1; }
+
+        /* Download PDF */
+        .panel-footer { padding: 1.25rem 1.5rem; border-top: 1px solid var(--border); }
+        .btn-pdf {
+            width: 100%; background: linear-gradient(135deg, var(--solar), #E8B800);
+            border: none; border-radius: var(--r-sm); padding: 0.8rem;
+            font-family: var(--font-display); font-weight: 800; font-size: 0.9rem;
+            color: var(--ink); cursor: pointer; letter-spacing: 0.02em;
+            transition: all var(--t); display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+        }
+        .btn-pdf:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(245,200,66,0.45);
+        }
+        .btn-pdf:active { transform: translateY(0); }
+
+        /* �?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?�
+           PAGINACI�?N
+        �?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?� */
+        .pagination-wrap {
+            display: flex; align-items: center; justify-content: center; gap: 0.4rem;
+            padding: 1.5rem 2rem 0;
+        }
+        .page-btn {
+            display: flex; align-items: center; justify-content: center;
+            width: 36px; height: 36px; border-radius: 50%;
+            font-family: var(--font-display); font-size: 0.82rem; font-weight: 700;
+            border: 1px solid var(--border); color: var(--slate); text-decoration: none;
+            transition: all var(--t); background: var(--ink-3);
+        }
+        .page-btn:hover { background: var(--solar-dim); border-color: rgba(245,200,66,0.3); color: var(--solar); }
+        .page-btn.active { background: var(--solar); border-color: var(--solar); color: var(--ink); }
+        .page-btn.disabled { opacity: 0.3; pointer-events: none; }
+
+        /* �?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?�
+           FOOTER
+        �?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?� */
+        .site-footer {
+            background: var(--ink-2);
+            border-top: 1px solid var(--border);
+            padding: 4rem 2rem 2rem;
+            position: relative; z-index: 1;
+        }
+        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 2fr; gap: 3rem; max-width: 1400px; margin: 0 auto; }
+        @media (max-width: 768px) { .footer-grid { grid-template-columns: 1fr 1fr; gap: 2rem; } }
+        .footer-brand { font-family: var(--font-display); font-size: 1.4rem; font-weight: 800; color: var(--white); margin-bottom: 0.75rem; }
+        .footer-brand em { color: var(--solar); font-style: normal; }
+        .footer-desc { font-size: 0.82rem; color: var(--slate); font-weight: 300; line-height: 1.6; }
+        .footer-col h6 { font-family: var(--font-display); font-size: 0.8rem; font-weight: 700; color: var(--white); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.85rem; }
+        .footer-col ul { list-style: none; }
+        .footer-col ul li { margin-bottom: 0.4rem; }
+        .footer-col ul li a { color: var(--slate); text-decoration: none; font-size: 0.83rem; font-weight: 300; transition: color var(--t); }
+        .footer-col ul li a:hover { color: var(--solar); }
+        .newsletter-form { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
+        .newsletter-input {
+            flex: 1; background: var(--ink-3); border: 1px solid var(--border);
+            color: var(--mist); font-size: 0.82rem; padding: 0.6rem 0.9rem;
+            border-radius: var(--r-sm); outline: none; font-family: var(--font-body);
+            transition: border-color var(--t);
+        }
+        .newsletter-input::placeholder { color: var(--slate); }
+        .newsletter-input:focus { border-color: rgba(245,200,66,0.4); }
+        .newsletter-btn {
+            background: var(--solar); border: none; border-radius: var(--r-sm);
+            color: var(--ink); font-family: var(--font-display); font-weight: 700;
+            font-size: 0.8rem; padding: 0.6rem 1rem; cursor: pointer; transition: all var(--t);
+        }
+        .newsletter-btn:hover { background: var(--solar-2); }
+        .footer-bottom {
+            text-align: center; margin-top: 3rem; padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+            font-size: 0.75rem; color: var(--slate); font-weight: 300;
+        }
+
+        /* �?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?�
+           FLOATING ADD NOTIFICATION
+        �?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?� */
+        .toast-add {
+            position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(80px);
+            background: var(--solar); color: var(--ink);
+            font-family: var(--font-display); font-weight: 700; font-size: 0.88rem;
+            padding: 0.7rem 1.5rem; border-radius: 3rem;
+            box-shadow: 0 8px 24px rgba(245,200,66,0.4);
+            z-index: 9999; transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+            pointer-events: none; display: flex; align-items: center; gap: 0.5rem;
+        }
+        .toast-add.show { transform: translateX(-50%) translateY(0); }
+
+        /* �?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?�
+           QUOTE ITEM TEMPLATE STYLES
+        �?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?��?� */
+        .quote-item {
+            background: var(--ink-3); border: 1px solid var(--border);
+            border-radius: var(--r-sm); padding: 1rem; font-size: 0.8rem;
+        }
+        .quote-item-name { font-weight: 600; color: var(--white); font-size: 0.88rem; margin-bottom: 0.5rem; }
+        .quote-meta { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.35rem; }
+        .meta-field { text-align: center; }
+        .meta-label { font-size: 0.65rem; color: var(--slate); text-transform: uppercase; letter-spacing: 0.04em; }
+        .meta-value { font-family: var(--font-display); font-weight: 700; color: var(--mist); font-size: 0.88rem; }
+        .quote-item-del { cursor: pointer; color: #f87171; font-size: 0.8rem; float: right; opacity: 0.6; transition: opacity var(--t); }
+        .quote-item-del:hover { opacity: 1; }
+    </style>
+</head>
+<body>
+
+    <!-- ANNOUNCE BAR -->
+    <div class="announce-bar">
+        <div class="announce-track">
+            <span>�?� 20% OFF</span> en Paneles Solares &nbsp;·&nbsp;
+            <span>�?�? 15% OFF</span> en Neveras Solares &nbsp;·&nbsp;
+            <span>�??� 5% OFF</span> en Kits Completos &nbsp;·&nbsp;
+            <span>�??� +5% EXTRA</span> por registro en Policristalinos &nbsp;·&nbsp;
+            <span>�?� 20% OFF</span> en Paneles Solares &nbsp;·&nbsp;
+            <span>�?�? 15% OFF</span> en Neveras Solares &nbsp;·&nbsp;
+            <span>�??� 5% OFF</span> en Kits Completos &nbsp;·&nbsp;
+            <span>�??� +5% EXTRA</span> por registro en Policristalinos
+        </div>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav class="top-nav">
+        <a href="#" class="brand">
+            <div class="sun-icon">�??</div>
+            Coden<em>Solar</em>
+        </a>
+        <div class="search-wrap">
+            <i class="bi bi-search me-2"></i>
+            <input type="search" placeholder="Buscar paneles, baterías, kits�?�">
+        </div>
+        <div class="nav-links">
+            <a href="#">Inicio</a>
+            <a href="#">Servicios</a>
+            <a href="#">Blog</a>
+            <a href="#">Contacto</a>
+            <a href="{% url 'users_app:user-logout' %}" class="btn-solar ms-2">Salir</a>
+        </div>
+    </nav>
+
+    <!-- HERO CAROUSEL -->
+    <section class="hero-section">
+        <div class="carousel-wrap">
+            <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    <button data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></button>
+                    <button data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
+                    <button data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
+                </div>
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="{% static 'products/img/bg.jpg' %}" alt="Energía Solar">
+                        <div class="carousel-caption">
+                            <div class="tag">�?� Cotizador Inteligente</div>
+                            <h2>Energía solar para<br>tu <em>hogar</em></h2>
+                            <p>Cotiza en tiempo real con datos de radiación solar de Colombia.</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{% static 'products/img/bg.jpg' %}" alt="Kits">
+                        <div class="carousel-caption">
+                            <div class="tag">�??? Soluciones Completas</div>
+                            <h2>Kits <em>todo incluido</em><br>para empezar</h2>
+                            <p>Todo lo que necesitas para empezar a ahorrar en un solo paquete.</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{% static 'products/img/bg3.jpg' %}" alt="Electrodomésticos">
+                        <div class="carousel-caption">
+                            <div class="tag">�? Alta Eficiencia</div>
+                            <h2>Electrodomésticos<br><em>eficientes</em></h2>
+                            <p>Neveras, congeladores y más con energía 100% limpia.</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- STATS BAR -->
+    <div class="stats-bar">
+        <div class="stat-item">
+            <div class="stat-value">+2.400</div>
+            <div class="stat-label">Instalaciones</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value">6.5h</div>
+            <div class="stat-label">HSP promedio CO</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value">25 años</div>
+            <div class="stat-label">Garantía paneles</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value">0%</div>
+            <div class="stat-label">Emisiones CO�??</div>
+        </div>
+    </div>
+
+    <!-- SECTION HEADER -->
+    <div class="section-head">
+        <h3>Productos disponibles</h3>
+        <span class="count">{{ products|length }} artículos</span>
+        <!-- id="filtro" requerido por Show_category() en NVProducts.js -->
+        <div class="filter-chips ms-auto" id="filtro"></div>
+    </div>
+
+    <!-- MAIN LAYOUT -->
+    <div class="main-layout">
+
+        <!-- PRODUCT GRID -->
+        <div class="products-grid">
+            {% for h6 in products %}
+            <div class="product-card" id="product°{{h6.id}}">
+                <div class="product-img-wrap">
+                    <img src="/media/{{h6.image}}" alt="{{h6.name}}">
+                    <div class="product-badge">Solar</div>
+                </div>
+                <div class="product-body">
+                    <div class="product-name">{{h6.name}}</div>
+                    <div class="product-price">$ {{h6.price}} <small>COP</small></div>
+                    <div class="product-desc">{{h6.description|truncatechars:85}}</div>
+
+                    <!-- .horas-sol-producto requerido por NVProducts.js (lines 1,19-24) -->
+                    <div class="slider-block horas-sol-producto">
+                        <div class="slider-header">
+                            <span class="slider-label">Horas de uso diario</span>
+                            <strong class="slider-value hours-to-use">24</strong>
+                        </div>
+                        <input type="range" class="custom-range input-range"
+                               min="1" max="24"
+                               id="range-{{h6.category_id}}"
+                               oninput="this.style.setProperty('--pct', (this.value-1)/23*100+'%'); this.closest('.horas-sol-producto').querySelector('strong').textContent=this.value">
+                    </div>
+
+                    <div class="card-actions">
+                        <button class="btn-del" onclick="delToQuote('{{h6.id}}','{{h6.name}}','{{h6.price}}')">
+                            <i class="bi bi-trash3"></i> Eliminar
+                        </button>
+                        <button class="btn-add" onclick="addToQuote('{{h6.id}}','{{h6.name}}','{{h6.price}}')">
+                            <i class="bi bi-plus-lg"></i> Agregar
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- PAGINACI�?N -->
+        {% if products.has_other_pages %}
+        <div class="pagination-wrap">
+            {% if products.has_previous %}
+                <a href="?page={{ products.previous_page_number }}" class="page-btn"><i class="bi bi-chevron-left"></i></a>
+            {% else %}
+                <span class="page-btn disabled"><i class="bi bi-chevron-left"></i></span>
+            {% endif %}
+
+            {% for num in products.paginator.page_range %}
+                {% if products.number == num %}
+                    <span class="page-btn active">{{ num }}</span>
+                {% elif num > products.number|add:'-3' and num < products.number|add:'3' %}
+                    <a href="?page={{ num }}" class="page-btn">{{ num }}</a>
+                {% endif %}
+            {% endfor %}
+
+            {% if products.has_next %}
+                <a href="?page={{ products.next_page_number }}" class="page-btn"><i class="bi bi-chevron-right"></i></a>
+            {% else %}
+                <span class="page-btn disabled"><i class="bi bi-chevron-right"></i></span>
+            {% endif %}
+        </div>
+        {% endif %}
+        <div class="quote-panel" id="cotizador1">
+
+            <div class="panel-header">
+                <div class="label">�?� Cotizador inteligente</div>
+                <h4>Tu presupuesto solar</h4>
+                <p>Agrega productos y obtén tu cotización al instante</p>
+            </div>
+
+            <div class="totals-grid">
+                <div class="total-cell total-normal">
+                    <div class="cell-label"><i class="bi bi-lightning-charge"></i> Precio total</div>
+                    <div class="cell-value acumulador-precio-id" id="totales">$0</div>
+                </div>
+                <div class="total-cell total-premium">
+                    <div class="cell-label"><i class="bi bi-stars"></i> Premium</div>
+                    <div class="cell-value consumo-total-id" id="premiun">$0</div>
+                </div>
+            </div>
+
+            <div class="panel-controls">
+                <select class="custom-select lugar-residencia">
+                    <option selected>¿Dónde te encuentras?</option>
+                    <option value="1">Cundinamarca</option>
+                    <option value="2">Boyacá</option>
+                    <option value="3">Resto del país</option>
+                </select>
+                <button class="btn-reset" onclick="borrar()">
+                    <i class="bi bi-arrow-counterclockwise"></i> Reiniciar
+                </button>
+            </div>
+
+            <!-- Quote items -->
+            <div class="quote-items acumulador-cotizador" id="quote-items">
+                <div class="quote-empty">
+                    <i class="bi bi-basket"></i>
+                    Aún no has agregado productos.<br>Selecciona uno para comenzar.
+                </div>
+                <template id="quote-template">
+                    <div class="quote d-grid gap-3">
+                        <div class="row primary-cotizador">
+                            <div class="col-md-1 eliminar-cotizador text-danger pt-1" title="Eliminar">�?</div>
+                            <div class="col-md-5"><h6>Producto</h6><div class="col-12 titulo-producto-cotizador"></div></div>
+                            <div class="col-md-4"><h6>Precio</h6><div class="col-12 precio-unitario"></div></div>
+                            <div class="col-md-2"><h6>Cantidad</h6><div class="col-12 cantidad-cotizador"></div></div>
+                        </div>
+                        <div class="row secundary-cotizador">
+                            <div class="col-6"><h6>horas uso</h6><div class="horas-uso-cotizador"></div></div>
+                            <div class="col-6"><h6>consumo hora</h6><div class="consumo-hora-cotizador"></div></div>
+                        </div>
+                        <div class="row tertiary-cotizador">
+                            <div class="col-4"><h6>consumo día</h6><div class="consumo-dia-cotizador"></div></div>
+                            <div class="col-4"><h6>% pérdidas</h6><div class="porcentaje-perdidas-cotizador"></div></div>
+                            <div class="col-4"><h6>consumo</h6><div class="total-consumo-cotizador"></div></div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <!-- Requerimientos accordion -->
+            <div class="req-accordion">
+
+                <div class="req-section">
+                    <button class="req-toggle" onclick="toggleReq(this)">
+                        <span>�??? Reguladores</span>
+                        <i class="bi bi-chevron-down chevron"></i>
+                    </button>
+                    <div class="req-body" id="panelsStayOpen-collapseOne" style="display:none;">
+                        <div class="req-row">
+                            <div><div class="req-head">Cantidad</div><div class="reguladores-requeridos reguladores-requeridos1"></div></div>
+                            <div><div class="req-head">Tipo</div><div class="reguladores-tipo-requeridos reguladores-tipo-requeridos1"></div></div>
+                            <div><div class="req-head">P/Total</div><div class="reguladores-precio-requeridos reguladores-precio-requeridos1"></div></div>
+                            <div class="req-del" onclick="eliminar_requerimientos('regulator_needed')"><i class="bi bi-x-circle-fill"></i></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="req-section">
+                    <button class="req-toggle" onclick="toggleReq(this)">
+                        <span>�??️ Paneles</span>
+                        <i class="bi bi-chevron-down chevron"></i>
+                    </button>
+                    <div class="req-body" style="display:none;">
+                        <div class="req-row">
+                            <div><div class="req-head">Cantidad</div><div class="paneles-requeridos1"></div></div>
+                            <div><div class="req-head">Tipo</div><div class="paneles-tipo-requeridos1"></div></div>
+                            <div><div class="req-head">P/Unit.</div><div class="paneles-precio-requeridos1"></div></div>
+                            <div class="req-del" onclick="eliminar_requerimientos('panel_needed')"><i class="bi bi-x-circle-fill"></i></div>
+                        </div>
+                        <div class="req-row">
+                            <div><div class="req-head">P/Total</div><div class="paneles-precio-requeridos2"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="req-section">
+                    <button class="req-toggle" onclick="toggleReq(this)">
+                        <span>�??? Baterías</span>
+                        <i class="bi bi-chevron-down chevron"></i>
+                    </button>
+                    <div class="req-body" style="display:none;">
+                        <div class="req-row">
+                            <div><div class="req-head">Cantidad</div><div class="baterias-requeridos1"></div></div>
+                            <div><div class="req-head">Tipo</div><div class="baterias-tipo-requeridos baterias-tipo-requeridos1"></div></div>
+                            <div><div class="req-head">P/Unit.</div><div class="baterias-precio-requeridos1"></div></div>
+                            <div class="req-del" onclick="eliminar_requerimientos('battery_needed')"><i class="bi bi-x-circle-fill"></i></div>
+                        </div>
+                        <div class="req-row">
+                            <div><div class="req-head">P/Total</div><div class="baterias-precio-requeridos2"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="req-section">
+                    <button class="req-toggle" onclick="toggleReq(this)">
+                        <span>�?� Breakers</span>
+                        <i class="bi bi-chevron-down chevron"></i>
+                    </button>
+                    <div class="req-body" style="display:none;">
+                        <div class="req-row">
+                            <div><div class="req-head">Cantidad</div><div class="breakers-requeridos breakers-requeridos1"></div></div>
+                            <div><div class="req-head">Tipo</div><div class="breakers-tipo-requeridos breakers-tipo-requeridos1"></div></div>
+                            <div><div class="req-head">U/Total</div><div class="breakers-precio-unitario-total-requeridos1"></div></div>
+                            <div class="req-del" onclick="eliminar_requerimientos('breaker_needed')"><i class="bi bi-x-circle-fill"></i></div>
+                        </div>
+                        <div class="req-row">
+                            <div><div class="req-head">P/Total</div><div class="breakers-precio-requeridos1"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="req-section">
+                    <button class="req-toggle" onclick="toggleReq(this)">
+                        <span>�??�️ Otros requerimientos</span>
+                        <i class="bi bi-chevron-down chevron"></i>
+                    </button>
+                    <div class="req-body" style="display:none;">
+                        <div class="req-row"><div><div class="req-head">Cables</div><div class="cables-requeridos1"></div></div><div><div class="req-head">Tipo</div><div class="cables-tipo-requeridos1"></div></div><div><div class="req-head">P/Unit</div><div class="cables-precio-requeridos1"></div></div><div class="req-del" onclick="eliminar_requerimientos('rubberized_cable_needed')"><i class="bi bi-x-circle-fill"></i></div></div>
+                        <div class="req-row"><div><div class="req-head">P/Total Cables</div><div class="cables-precio-total-requeridos1"></div></div></div>
+                        <div class="req-row"><div><div class="req-head">Soporte techo</div><div class="soportes-sobre-techo-requeridos1"></div></div><div><div class="req-head">Tipo</div><div class="soportes-sobre-techo-tipo-requeridos1"></div></div><div><div class="req-head">P/Unit</div><div class="soportes-sobre-techo-precio-requeridos1"></div></div><div class="req-del" onclick="eliminar_requerimientos('panel_support_needed')"><i class="bi bi-x-circle-fill"></i></div></div>
+                        <div class="req-row"><div><div class="req-head">P/Total Soporte</div><div class="soportes-sobre-techo-precio-total-requeridos1"></div></div></div>
+                        <div class="req-row"><div><div class="req-head">Módulo Central</div><div class="modulos-centralizados-requeridos1"></div></div><div><div class="req-head">Tipo</div><div class="modulos-centralizados-tipo-requeridos1"></div></div><div><div class="req-head">P/Unit</div><div class="modulos-centralizados-precio-requeridos1"></div></div><div class="req-del" onclick="eliminar_requerimientos('centralized_modules_needed')"><i class="bi bi-x-circle-fill"></i></div></div>
+                        <div class="req-row"><div><div class="req-head">Unidad Potencia</div><div class="unidad-de-potencia-requeridos1"></div></div><div><div class="req-head">Tipo</div><div class="unidad-de-potencia-tipo-requeridos1"></div></div><div><div class="req-head">P/Unit</div><div class="unidad-de-potencia-precio-requeridos1"></div></div><div class="req-del" onclick="eliminar_requerimientos('power_units_needed')"><i class="bi bi-x-circle-fill"></i></div></div>
+                        <div class="req-row"><div><div class="req-head">Terminales MC4</div><div class="terminales-MC4-requeridos1"></div></div><div><div class="req-head">Tipo</div><div class="terminales-MC4-tipo-requeridos1"></div></div><div><div class="req-head">P/Unit</div><div class="terminales-MC4-precio-requeridos1"></div></div><div class="req-del" onclick="eliminar_requerimientos('terminals_needed')"><i class="bi bi-x-circle-fill"></i></div></div>
+                        <div class="req-row"><div><div class="req-head">Conectores Y</div><div class="conectores-en-y-requeridos1"></div></div><div><div class="req-head">Tipo</div><div class="conectores-en-y-tipo-requeridos1"></div></div><div><div class="req-head">P/Unit</div><div class="conectores-en-y-precio-requeridos1"></div></div><div class="req-del" onclick="eliminar_requerimientos('connector_needed')"><i class="bi bi-x-circle-fill"></i></div></div>
+                        <div class="req-row"><div><div class="req-head">Cable Vehicular</div><div class="cable-vehicular-requeridos1"></div></div><div><div class="req-head">Tipo</div><div class="cable-vehicular-tipo-requeridos1"></div></div><div><div class="req-head">P/Unit</div><div class="cable-vehicular-precio-requeridos1"></div></div><div class="req-del" onclick="eliminar_requerimientos('vehicle_cable_needed')"><i class="bi bi-x-circle-fill"></i></div></div>
+                        <div class="req-row"><div><div class="req-head">Mat. Eléctricos</div><div class="materiales-electricos-requeridos1"></div></div><div><div class="req-head">Tipo</div><div class="materiales-electricos-tipo-requeridos1"></div></div><div><div class="req-head">P/Unit</div><div class="materiales-electricos-precio-requeridos1"></div></div><div class="req-del" onclick="eliminar_requerimientos('electric_materials_needed')"><i class="bi bi-x-circle-fill"></i></div></div>
+                        <div class="req-row"><div><div class="req-head">Kit Tierra</div><div class="kit-puesta-a-tierra-requeridos1"></div></div><div><div class="req-head">Tipo</div><div class="kit-puesta-a-tierra-tipo-requeridos1"></div></div><div><div class="req-head">P/Unit</div><div class="kit-puesta-a-tierra-precio-requeridos1"></div></div><div class="req-del" onclick="eliminar_requerimientos('ground_security_kit_needed')"><i class="bi bi-x-circle-fill"></i></div></div>
+                        <div class="req-row"><div><div class="req-head">Rack Baterías</div><div class="rack-soporte-baterias-requeridos1"></div></div><div><div class="req-head">Tipo</div><div class="rack-soporte-baterias-tipo-requeridos1"></div></div><div><div class="req-head">P/Unit</div><div class="rack-soporte-baterias-precio-requeridos1"></div></div><div class="req-del" onclick="eliminar_requerimientos('rack_bateria')"><i class="bi bi-x-circle-fill"></i></div></div>
+                        <div class="req-row"><div><div class="req-head">Inversores</div><div class="inversores-requeridos1 Inversor-requeridos1"></div></div><div><div class="req-head">Tipo</div><div class="inversores-tipo-requeridos1 Inversor-tipo-requeridos1"></div></div><div><div class="req-head">P/Unit</div><div class="inversores-precio-requeridos1 Inversor-precio-requeridos1"></div></div><div class="req-del" onclick="eliminar_requerimientos('inversor')"><i class="bi bi-x-circle-fill"></i></div></div>
+                        <div class="req-row"><div><div class="req-head">P/Total Inversores</div><div class="inversores-precio-total-requeridos1 Inversor-precio-total-requeridos1"></div></div></div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- PDF -->
+            {% if usuario %}
+            <div class="panel-footer">
+                <button class="btn-pdf" onclick="createandsendpdf('{{usuario.name}}','{{usuario.email}}','{{usuario.lastname}}')">
+                    <i class="bi bi-file-earmark-pdf-fill"></i>
+                    Descargar cotización en PDF
+                </button>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div class="toast-add" id="toastAdd">
+        <i class="bi bi-check-circle-fill"></i>
+        <span id="toastMsg">Producto agregado</span>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="footer-grid">
+            <div>
+                <div class="footer-brand">Coden<em>Solar</em></div>
+                <p class="footer-desc">Comprometidos con el medio ambiente y la innovación en energía solar limpia para Colombia.</p>
+            </div>
+            <div class="footer-col">
+                <h6>Empresa</h6>
+                <ul>
+                    <li><a href="#">Inicio</a></li>
+                    <li><a href="#">Servicios</a></li>
+                    <li><a href="#">Productos</a></li>
+                    <li><a href="#">Contacto</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h6>Redes</h6>
+                <ul>
+                    <li><a href="#"><i class="bi bi-facebook me-1"></i>Facebook</a></li>
+                    <li><a href="#"><i class="bi bi-youtube me-1"></i>YouTube</a></li>
+                    <li><a href="#"><i class="bi bi-instagram me-1"></i>Instagram</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h6>Recibe ofertas</h6>
+                <p style="font-size:0.78rem;color:var(--slate);font-weight:300;margin-bottom:0.75rem;">Suscríbete y obtén descuentos exclusivos en tu correo.</p>
+                <div class="newsletter-form">
+                    <input class="newsletter-input" type="email" placeholder="tu@correo.com">
+                    <button class="newsletter-btn">Enviar</button>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">&copy; 2025 Codensolar · Todos los derechos reservados.</div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script src="{% static 'products/js/Newjs/bootstrap.bundle.min.js' %}" onerror="this.remove();document.head.insertAdjacentHTML('beforeend','<scr'+'ipt src=https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js><\/scr'+'ipt>')"></script>
+    <script src="{% static 'products/js/Newjs/NVProducts.js' %}"></script>
+
+    <script>
+        /* �??�?? Custom accordion toggle �??�?? */
+        function toggleReq(btn) {
+            const body = btn.nextElementSibling;
+            const isOpen = body.style.display !== 'none';
+            body.style.display = isOpen ? 'none' : 'block';
+            btn.classList.toggle('open', !isOpen);
+        }
+
+        /* �??�?? Toast notification �??�?? */
+        function showToast(msg) {
+            const toast = document.getElementById('toastAdd');
+            document.getElementById('toastMsg').textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2500);
+        }
+
+        /* �??�?? Patch addToQuote para mostrar toast DESPU�?S de que NVProducts.js lo define �??�?? */
+        window.addEventListener('load', () => {
+            const _origAdd = window.addToQuote;
+            if (typeof _origAdd === 'function') {
+                window.addToQuote = async function(id, name, price) {
+                    await _origAdd(id, name, price);
+                    showToast(name + ' agregado �??');
+                };
+            }
+
+            /* �??�?? Estilo boton-filtro generado por Show_category �??�?? */
+            document.addEventListener('click', e => {
+                const chip = e.target.closest('.boton-filtro');
+                if (chip) {
+                    document.querySelectorAll('.boton-filtro').forEach(c => c.classList.remove('active'));
+                    chip.classList.add('active');
+                }
+            });
+
+            /* �??�?? Bootstrap popovers �??�?? */
+            document.querySelectorAll('[data-bs-toggle="popover"]').forEach(el =>
+                new bootstrap.Popover(el)
+            );
+        });
+    </script>
+</body>
+</html>

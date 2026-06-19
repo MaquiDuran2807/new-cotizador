@@ -1,0 +1,557 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>pdf</title>
+	<link rel="stylesheet" href="{% static 'products/css/nuevocss.css/css/bootstrap.min.css' %}">
+    <!--<link rel="stylesheet" href="css/NVProducts.css">
+    <link rel="stylesheet" href="css/NVCotizador.css">
+    <link rel="stylesheet" href="css/NVAdmin-Proved.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">-->
+    <link rel="stylesheet" href="{% static 'products/css/nuevocss.css/css/NVProducts.css' %}">
+    <link rel="stylesheet" href="{% static 'products/css/NVProducts.css' %}">
+    <link rel="stylesheet" href="{% static 'products/css/NVPdf-imprimir.css' %}">
+</head>
+</head>
+<body>
+
+    <div class="container-fluid">
+
+    
+        <section class="row container-fluid Cotizador-pdf justify-content-center">
+            <div class="row">
+                <div class="col-md-12 secundary-pdf"><a href="#" class="navbar-brand "> Coden<b style="color: rgb(4, 253, 4);">S</b>olar </a></div>
+                    <div class="row">
+                        <div class="col-4"><p>infoxxx</p></div>
+                        <div class="col-4"><p>infox</p></div>
+                        <div class="col-4"><p>infox</p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4"><p>infox</p></div>
+                        <div class="col-4"><p>infox</p></div>
+                        <div class="col-4"><p>infox</p></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6"><p>precio total</p></div>
+                        <div class="col-6"><p>ahorro</p></div>
+                    </div>
+            </div>
+            <div class="row justify-content-center mb-2 mt-2">
+                <div class="col-md-6 producto align-self-center mb-2">
+                    <div class="row informacion-producto">
+                        <div class="col-md-5 img-producto">
+                            img
+                            <!-- <img style="max-height: 15em" class="img-fluid rounded-3 p-1 border-success border border-2 d-block mx-auto mb-2 my-md-0 " src="img/bg.jpg" alt=""> -->
+                        </div>
+                        <div class="col-md-7 informacion-producto-caracteristicas">
+                            <div class="row primary-inf">
+                                    <div class="col-md-8 titulo-producto">
+                                        <p>titulo</p>
+                                    </div>
+                                    <div class="col-md-4 precio-producto">
+                                        <p>precio</p>
+                                    </div>
+                            </div>
+                            
+                            <div class="row secundary-inf">
+                                <div class="col-md-12 descripcion-producto">
+                                    <p>descripcion</p>
+                                </div>
+                            </div>
+    
+                            <div class="row tertiary-inf">
+                                <div class="col-md-12 caracteristicas-producto">
+                                    <p>caracteristicas</p>
+                                </div>
+                            </div>
+    
+                            <div class="row quaternary-inf">
+                                <div class="col-md-12 horas-sol-producto">
+                                    <!-- <p>horas de sol barra </p> -->
+                                    <label for="customRange2" class="form-label">Example range</label>
+                                    <input type="range" class="form-range" min="0" max="2" id="customRange2">
+                                </div>
+                            </div>
+                            <div class="row five-inf">
+                                <div class="col-md-12 agregar-producto">
+                                    <p>agregar</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 producto align-self-center mb-2">
+                    <div class="row informacion-producto">
+                        <div class="col-md-5 img-producto">
+                            img
+                            <!-- <img style="max-height: 15em" class="img-fluid rounded-3 p-1 border-success border border-2 d-block mx-auto mb-2 my-md-0 " src="img/bg.jpg" alt=""> -->
+                        </div>
+                        <div class="col-md-7 informacion-producto-caracteristicas">
+                            <div class="row primary-inf">
+                                    <div class="col-md-8 titulo-producto">
+                                        <p>titulo</p>
+                                    </div>
+                                    <div class="col-md-4 precio-producto">
+                                        <p>precio</p>
+                                    </div>
+                            </div>
+                            
+                            <div class="row secundary-inf">
+                                <div class="col-md-12 descripcion-producto">
+                                    <p>descripcion</p>
+                                </div>
+                            </div>
+    
+                            <div class="row tertiary-inf">
+                                <div class="col-md-12 caracteristicas-producto">
+                                    <p>caracteristicas</p>
+                                </div>
+                            </div>
+    
+                            <div class="row quaternary-inf">
+                                <div class="col-md-12 horas-sol-producto">
+                                    <!-- <p>horas de sol barra </p> -->
+                                    <label for="customRange2" class="form-label">Example range</label>
+                                    <input type="range" class="form-range" min="0" max="2" id="customRange2">
+                                </div>
+                            </div>
+                            <div class="row five-inf">
+                                <div class="col-md-12 agregar-producto">
+                                    <p>agregar</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-6">
+                    
+                    <div class="row">
+                        <div class="col-md-12 secundary-pdf"><a href="#" class="navbar-brand "> Coden<b style="color: rgb(4, 253, 4);">S</b>olar </a></div>
+                    </div>
+                    <div class="row primary-pdf">
+                        <div class="row justify-content-center">
+                            <div class="col-md-12 logo-pdf"><img src= "{% static 'products/img/pdf/controlador.svg' %}" alt=""></div>
+                        </div>
+                        <div class="col-md-4">reguladores requereridos</div>
+                        <div class="col-md-4">reguladores tipo</div>
+                        <div class="col-md-4">reguladores precio</div>
+                    </div>
+                    <div class="row secundary-pdf">
+                        <div class="row justify-content-center">
+                            <div class="col-md-12 logo-pdf"><img src= "{% static 'products/img/pdf/panel.svg' %}" alt=""></div>
+                        </div>
+                        <div class="col-md-4">Paneles requereridos</div>
+                        <div class="col-md-4">Paneles tipo</div>
+                        <div class="col-md-4">Paneles precio</div>
+                    </div>
+                    <div class="row primary-pdf">
+                        <div class="row justify-content-center">
+                            <div class="col-md-12 logo-pdf"><img src= "{% static 'products/img/pdf/battery.svg' %}" alt=""></div>
+                        </div>
+                        <div class="col-md-4">Baterias requereridos</div>
+                        <div class="col-md-4">Baterias tipo</div>
+                        <div class="col-md-4">Baterias precio</div>
+                    </div>
+                    <div class="row secundary-pdf">
+                        <div class="row justify-content-center">
+                            <div class="col-md-12 logo-pdf"><img src= "{% static 'products/img/pdf/breakers.svg' %}" alt=""></div>
+                        </div>
+                        <div class="col-md-4"> brackers requereridos</div>
+                        <div class="col-md-4"> brackers tipo</div>
+                        <div class="col-md-4"> brackers precio</div>
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    
+                    <div class="row">
+                        <div class="col-md-12 secundary-pdf"><a href="#" class="navbar-brand "> Coden<b style="color: rgb(4, 253, 4);">S</b>olar </a></div>
+                    </div>
+                    <div class="row primary-pdf">
+                        <div class="row justify-content-center">
+                            <div class="col-md-12 logo-pdf"><img src= "{% static 'products/img/pdf/controlador.svg' %}" alt=""></div>
+                        </div>
+                        <div class="col-md-4">reguladores requereridos</div>
+                        <div class="col-md-4">reguladores tipo</div>
+                        <div class="col-md-4">reguladores precio</div>
+                    </div>
+                    <div class="row secundary-pdf">
+                        <div class="row justify-content-center">
+                            <div class="col-md-12 logo-pdf"><img src= "{% static 'products/img/pdf/panel.svg' %}" alt=""></div>
+                        </div>
+                        <div class="col-md-4">Paneles requereridos</div>
+                        <div class="col-md-4">Paneles tipo</div>
+                        <div class="col-md-4">Paneles precio</div>
+                    </div>
+                    <div class="row primary-pdf">
+                        <div class="row justify-content-center">
+                            <div class="col-md-12 logo-pdf"><img src= "{% static 'products/img/pdf/battery.svg' %}" alt=""></div>
+                        </div>
+                        <div class="col-md-4">Baterias requereridos</div>
+                        <div class="col-md-4">Baterias tipo</div>
+                        <div class="col-md-4">Baterias precio</div>
+                    </div>
+                    <div class="row secundary-pdf">
+                        <div class="row justify-content-center">
+                            <div class="col-md-12 logo-pdf"><img src= "{% static 'products/img/pdf/breakers.svg' %}" alt=""></div>
+                        </div>
+                        <div class="col-md-4"> brackers requereridos</div>
+                        <div class="col-md-4"> brackers tipo</div>
+                        <div class="col-md-4"> brackers precio</div>
+                    </div>
+                </div>
+            </div>
+
+
+        <div class="accordion" id="accordionPanelsStayOpenExample">
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                    Reguladores
+                    </button>
+                </h2>
+                <div id="panelsStayOpen-collapseOne" class="" aria-labelledby="panelsStayOpen-headingOne">
+                    <div class="accordion-body">
+                    <div class="row requerimiento-individualmente-productos">
+                        <div class="col-3 reguladores-requeridos">
+                            <p>reguladores requereridos</p>
+                        </div>
+                        <div class="col-3 reguladores-tipo-requeridos">
+                            <p>reguladores tipo</p>
+                        </div>
+                        <div class="col-2 paneles-precio-unitario-requeridos">
+                            <p>paneles precio unitario</p>
+                        </div>
+                        <div class="col-2 reguladores-precio-requeridos">
+                            <p>reguladores precio total</p>
+                        </div>
+                        <div class="col-2 reguladores-eliminar-requeridos">
+                            <div class="col-md-2 reguladores-cotizador text-danger"> âŒ </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
+                    paneles
+                    </button>
+                </h2>
+                <div id="panelsStayOpen-collapseOne" class="" aria-labelledby="panelsStayOpen-headingOne">
+                    <div class="accordion-body">
+                        <div class="row requerimiento-individualmente-productos">
+                            <div class="col-3 paneles-requeridos">
+                                <p>paneles requereridos</p>
+                            </div>
+                            <div class="col-3 paneles-tipo-requeridos">
+                                <p>paneles tipo</p>
+                            </div>
+                            <div class="col-2 paneles-precio-unitario-requeridos">
+                                <p>paneles precio unitario</p>
+                            </div>
+                            <div class="col-2 paneles-precio-requeridos">
+                                <p>precio total</p>
+                            </div>
+                            <div class="col-2 paneles-eliminar-requeridos">
+                                <div class="col-md-2 eliminar-cotizador text-danger"> âŒ </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
+                    baterias
+                    </button>
+                </h2>
+                <div id="panelsStayOpen-collapseOne" class="" aria-labelledby="panelsStayOpen-headingOne">
+                    <div class="accordion-body">
+                        <div class="row requerimiento-individualmente-productos">
+                            <div class="col-3 baterias-requeridos">
+                                <p>baterias requereridos</p>
+                            </div>
+                            <div class="col-3 baterias-tipo-requeridos">
+                                <p>baterias tipo</p>
+                            </div>
+                            <div class="col-2 baterias-precio-unitario-requeridos">
+                                <p>baterias precio unitario</p>
+                            </div>
+                            <div class="col-2 baterias-precio-requeridos">
+                                <p>baterias total</p>
+                            </div>
+                            <div class="col-2 baterias-eliminar-requeridos">
+                                <div class="col-md-2 eliminar-cotizador text-danger"> âŒ </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- <div class="accordion-item">
+                <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
+                    Baterias
+                    </button>
+                </h2>
+                <div id="panelsStayOpen-collapsOne" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingOne">
+                    <div class="accordion-body">
+                        <div class="row requerimiento-individualmente-productos">
+                            <div class="col-3 baterias-requeridos">
+                                baterias requereridos
+                            </div>
+                            <div class="col-3 baterias-tipo-requeridos">
+                                baterias tipo
+                            </div>
+                            <div class="col-2 baterias-unitario-precio-requeridos">
+                                <p>baterias precio unitario</p>
+                            </div>
+                            <div class="col-2 baterias-precio-requeridos">
+                                <p> baterias precio total</p>
+                            </div>
+                            <div class="col-2 baterias-eliminar-requeridos">
+                                <div class="col-md-2 baterias-cotizador text-danger"> âŒ </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false" aria-controls="panelsStayOpen-collapseOne">
+                    breakers
+                    </button>
+                </h2>
+                <div id="panelsStayOpen-collapseOne" class="" aria-labelledby="panelsStayOpen-headingOne">
+                    <div class="accordion-body">
+                        <div class="row requerimiento-individualmente-productos">
+                            <div class="col-3 breakers-requeridos">
+                                <p>breakers requereridos</p>
+                            </div>
+                            <div class="col-3 breakers-tipo-requeridos">
+                                <p>breakers tipo</p>
+                            </div>
+                            <div class="col-2 breakers-precio-unitario-total-requeridos">
+                                <p>breakers precio total unitarios</p>
+                            </div>
+                            <div class="col-2 breakers-precio-requeridos">
+                                <p> breakers  precio total</p>
+                            </div>
+                            <div class="col-2 breakers-eliminar-requeridos">
+                                <div class="col-md-2 breakers-cotizador text-danger"> âŒ </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="false" aria-controls="panelsStayOpen-collapsefive">
+                    <p>otros requeremientos</p>
+                    </button>
+                </h2>
+                <div id="panelsStayOpen-collapseOne" class="" aria-labelledby="panelsStayOpen-headingOne">
+                    <div class="accordion-body">
+                        <!-- cables requeridos  -->
+                        <div class="row requerimiento-individualmente-productos">
+                            <div style="font-size:13px;" class="col-3 cables-requeridos">
+                                <p>cables requereridos</p>
+                            </div>
+                            <div style="font-size:13px;" class="col-3 cables-tipo-requeridos">
+                                <p>cables tipo</p>
+                            </div>
+                            <div style="font-size:13px;" class="col-2 cables-precio-requeridos">
+                                <p>cables precio</p>
+                            </div>
+                            <div style="font-size:13px;" class="col-2 cables-precio-total-requeridos">
+                                <p>cables precio total</p>
+                            </div>
+                            <div class="col-2 cables-eliminar-requeridos">
+                                <div class="col-md-2 cables-eliminar-cotizador text-danger text-center"> âŒ </div>
+                            </div>
+                        </div>
+                    <!-- soporte de techo     -->
+                        <div class="row requerimiento-individualmente-productos">
+                            <div style="font-size:13px;" class="col-3 soportes-sobre-techo-requeridos">
+                                <p>soporte sobre techo requereridos</p>
+                            </div>
+                            <div style="font-size:13px;" class="col-3 soportes-sobre-techo-tipo-requeridos">
+                                <p>soporte sobre techo tipo</p>
+                            </div>
+                            <div style="font-size:13px;" class="col-2 soportes-sobre-techo-precio-requeridos">
+                                <p>soporte sobre techo precio</p>
+                            </div>
+                            <div style="font-size:13px;" class="col-2 soportes-sobre-techo-precio-total-requeridos">
+                                <p>soporte sobre techo precio total</p>
+                            </div>
+                            <div class="col-2 soporte-eliminar-requeridos">
+                                <div class="col-md-2 soporte-eliminar-cotizador text-danger"> âŒ </div>
+                            </div>
+                        </div>
+
+                        <div class="row requerimiento-individualmente-productos">
+                            <div style="font-size:13px;" class="col-3 modulos-centralizados-requeridos">
+                                <p>modulo-centralizado requereridos</p>
+                            </div>
+                            <div style="font-size:13px;" class="col-3 modulos-centralizados-tipo-requeridos">
+                                <p>soporte sobre techo tipo</p>
+                            </div>
+                            <div style="font-size:13px;" class="col-2 modulos-centralizados-precio-requeridos">
+                                <p>modulo-centralizado precio</p>
+                            </div>
+                            <div style="font-size:13px;" class="col-2 modulos-centralizados-precio-total-requeridos">
+                                <p>modulo-centralizado precio total</p>
+                            </div>
+                            <div class="col-2 modulos-eliminar-requeridos">
+                                <div class="col-md-2 modulos-eliminar-cotizador text-danger"> âŒ </div>
+                            </div>
+                        </div>
+                        <div class="row requerimiento-individualmente-productos">
+                            <div style="font-size:13px;" class="col-3 unidad-de-potencia-requeridos">
+                                <p>unidad-de-potencia requereridos</p>
+                            </div>
+                            <div style="font-size:13px;" class="col-3 unidad-de-potencia-tipo-requeridos">
+                                <p>unidad-de-potencia tipo</p>
+                            </div>
+                            <div style="font-size:13px;" class="col-2 unidad-de-potencia-precio-requeridos">
+                                <p>unidad-de-potencia precio</p>
+                            </div>
+                            <div style="font-size:13px;" class="col-2 unidad-de-potencia-precio-total-requeridos">
+                                <p>unidad-de-potencia precio total</p>
+                            </div>
+                            <div class="col-2 unidad-de-potencia-eliminar-requeridos">
+                                <div class="col-md-2 unidad-de-potencia-eliminar-cotizador text-danger"> âŒ </div>
+                            </div>
+                        </div>
+                        <div class="row requerimiento-individualmente-productos">
+                            <div style="font-size:13px;" class="col-3 terminales-MC4-requeridos">
+                                <p>terminales-MC4 requereridos</p>
+                            </div>
+                            <div style="font-size:13px;" class="col-3 terminales-MC4-tipo-requeridos">
+                                <p>terminales-MC4 tipo</p>
+                            </div>
+                            <div style="font-size:13px;" class="col-2 terminales-MC4-precio-requeridos">
+                                <p>terminales-MC4 precio</p>
+                            </div>
+                            <div style="font-size:13px;" class="col-2 terminales-MC4-precio-total-requeridos">
+                                <p>terminales-MC4 precio total</p>
+                            </div>
+                            <div class="col-2 terminales-MC4-eliminar-requeridos">
+                                <div class="col-md-2 terminales-MC4-eliminar-cotizador text-danger"> âŒ </div>
+                            </div>
+                        </div>
+                        <div class="row requerimiento-individualmente-productos">
+                            <div style="font-size:13px;" class="col-3 conectores-en-y-requeridos">
+                                <p>conectores-en-y requereridos</p>
+                            </div>
+                            <div style="font-size:13px;" class="col-3 conectores-en-y-tipo-requeridos">
+                                <p>conectores-en-y tipo</p>
+                            </div>
+                            <div style="font-size:13px;" class="col-2 conectores-en-y-precio-requeridos">
+                                <p>conectores-en-y precio</p>
+                            </div>
+                            <div style="font-size:13px;" class="col-2 conectores-en-y-precio-total-requeridos">
+                                <p>conectores-en-y precio total</p>
+                            </div>
+                            <div class="col-2 conectores-en-y-eliminar-requeridos">
+                                <div class="col-md-2 conectores-en-y-eliminar-cotizador text-danger"> âŒ </div>
+                            </div>
+                        </div>
+                        <div class="row requerimiento-individualmente-productos">
+                            <div style="font-size:13px;" class="col-3 cable-vehicular-requeridos">
+                                <p>cable-vehicular requereridos</p>
+                            </div>
+                            <div style="font-size:13px;" class="col-3 cable-vehicular-tipo-requeridos">
+                                <p>cable-vehicular tipo</p>
+                            </div>
+                            <div style="font-size:13px;" class="col-2 cable-vehicular-precio-requeridos">
+                                <p>cable-vehicular precio</p>
+                            </div>
+                            <div style="font-size:13px;" class="col-2 cable-vehicular-precio-total-requeridos">
+                                <p>cable-vehicular precio total</p>
+                            </div>
+                            <div class="col-2 cable-vehicular-eliminar-requeridos">
+                                <div class="col-md-2 cable-vehicular-eliminar-cotizador text-danger"> âŒ </div>
+                            </div>
+                        </div>
+                        <div class="row requerimiento-individualmente-productos">
+                            <div style="font-size:13px;" class="col-3 materiales-electricos-requeridos">
+                                <p>materiales-electricos requereridos</p>
+                            </div>
+                            <div style="font-size:13px;" class="col-3 materiales-electricos-tipo-requeridos">
+                                <p>materiales-electricos tipo</p>
+                            </div>
+                            <div style="font-size:13px;" class="col-2 materiales-electricos-precio-requeridos">
+                            <p>materiales-electricos precio</p>
+                            </div>
+                            <div style="font-size:13px;" class="col-2 materiales-electricos-precio-total-requeridos">
+                                <p>materiales-electricos precio total</p>
+                            </div>
+                            <div class="col-2 materiales-electricos-eliminar-requeridos">
+                                <div class="col-md-2 materiales-electricos-eliminar-cotizador text-danger"> âŒ </div>
+                            </div>
+                        </div>
+                        <div class="row requerimiento-individualmente-productos">
+                            <div style="font-size:13px;" class="col-3 kit-puesta-a-tierra-requeridos">
+                                <p>kit-puesta-a-tierra requereridos</p>
+                            </div>
+                            <div style="font-size:13px;" class="col-3 kit-puesta-a-tierra-tipo-requeridos">
+                                <p>kit-puesta-a-tierra tipo</p>
+                            </div>
+                            <div style="font-size:13px;" class="col-2 kit-puesta-a-tierra-precio-requeridos">
+                            <p>mkit-puesta-a-tierra precio</p>
+                            </div>
+                            <div style="font-size:13px;" class="col-2 kit-puesta-a-tierra-precio-total-requeridos">
+                                <p>kit-puesta-a-tierra precio total</p>
+                            </div>
+                            <div class="col-2 kit-puesta-a-tierra-eliminar-requeridos">
+                                <div class="col-md-2 kit-puesta-a-tierra-eliminar-cotizador text-danger"> âŒ </div>
+                            </div>
+                        </div>
+                        <div class="row requerimiento-individualmente-productos">
+                            <div style="font-size:13px;" class="col-3 rack-soporte-baterias-requeridos">
+                                <p>rack-soporte-baterias requereridos</p>
+                            </div>
+                            <div style="font-size:13px;" class="col-3 rack-soporte-baterias-tipo-requeridos">
+                                <p>rack-soporte-baterias tipo</p>
+                            </div>
+                            <div style="font-size:13px;" class="col-2 rack-soporte-baterias-precio-requeridos">
+                            <p>rack-soporte-baterias precio</p>
+                            </div>
+                            <div style="font-size:13px;" class="col-2 rack-soporte-baterias-precio-total-requeridos">
+                                <p>rack-soporte-baterias precio total</p>
+                            </div>
+                            <div class="col-2 rack-soporte-baterias-eliminar-requeridos">
+                                <div class="col-md-2 rack-soporte-baterias-eliminar-cotizador text-danger"> âŒ </div>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <div class="col-md-12 descargar pdf">
+                <a class="btn btn-success rounded-pill d-block mx-auto">descargar pdf</a>
+            </div>
+        </div>
+
+
+    </div>
+
+    <script src="{% static 'products/js/Newjs/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'products/js/Newjs/NVProducts.js' %}"></script>
+</body>
+</html>

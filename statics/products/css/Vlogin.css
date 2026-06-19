@@ -1,0 +1,333 @@
+/* Given below is Google-Fonts CDN link */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;800;900&display=swap');
+*{
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+    color: #fff;
+}
+/* body{
+    display: flex;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+} */
+
+.body{
+    background: linear-gradient(#0f172ac7, #0a507169, #54555460),url(../img/panelsolar.jpg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+}
+
+.login{
+    width: 100%;
+}
+
+
+.imagen{
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 1000;
+}
+
+.imagen1{
+    max-width: 80px;
+    max-height: 80px;
+}
+
+
+    .container{
+        margin-top: 0px;
+        margin-bottom: 5px;
+        max-width: 680px;
+        max-height: 1040px;
+        transform-style: preserve-3d;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.7);
+        margin-left: auto;
+        margin-right: auto;
+        border-radius: 10px;
+    }
+
+
+    input[type="checkbox"]{
+        display: none;
+    }
+    #check:checked ~ .container{
+        transform: rotateY(-180deg);
+    }
+    .container .page{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        padding: 20px;
+        background-color: #0e1734;
+    }
+    .container .login{
+        transform: rotateY(0deg);
+    }
+    .container .signup{
+        transform: rotateY(-180deg);
+        backface-visibility: hidden;
+    }
+    .container .heading{
+        position: relative;
+        font-size: 3.5em;
+        font-weight: 600;
+        text-align: center;
+        margin: 0 auto;
+    }
+    .container .heading::before,
+    .container .heading::after{
+        position: absolute;
+        content: '';
+        height: 6px;
+        /* background: linear-gradient(97deg, #5f00ff 0%, #cd00ff 50%, #fb2091 100%); */
+        width: 25px;
+        background: linear-gradient(97deg, #0F172A 0%, #545554 50%, #40C92A 100%); 
+        transition: 0.3s ease;
+    }
+    .container .heading::before{
+        bottom: 0;
+        left: 30%;
+        transform: translateX(-50%);
+        animation: animate 2s linear infinite;
+    }
+    .container .heading::after{
+        top: 0;
+        right: 30%;
+        transform: translateX(50%);
+        animation: animate2 2s linear infinite;
+    }
+    @keyframes animate{
+        50%{
+            transform: translateX(50%);
+        }
+    }
+    @keyframes animate2{
+        50%{
+            transform: translateX(-50%);
+        }
+    }
+    .container .page form{
+        display: flex;
+        flex-direction: column;
+        margin: 30px;
+    }
+    .container .page form .entryarea{
+        position: relative;
+        margin: 15px 0;
+        height: 60px;
+        line-height: 60px;
+    }
+    .container .page form .entryarea input{
+        position: absolute;
+        width: 100%;
+        font-size: 1.5em;
+        padding: 0 20px;
+        border: 1.5px solid #888;
+        border-radius: 7px;
+        outline: none;
+        background-color: transparent;
+        line-height: 60px;
+        z-index: 1111;
+        transition: 0.1s ease;
+    }
+    
+    /*EFECTO TRANSICION */
+    .container .page form .entryarea .labelline{
+        position: absolute;
+        font-size: 1.2em;
+        margin: 0 20px;
+        padding: 0 5px;
+        color: #888;
+        background-color: #0e1734;
+        transition: 0.2s ease;
+    }
+    .container .page form .entryarea input:focus,
+    .container .page form .entryarea input:valid{
+        color: #40C92A;
+        border: 3px solid #40C92A;
+    }
+    .container .page form .entryarea input:focus + .labelline,
+    .container .page form .entryarea input:valid + .labelline{
+        color: #40C92A;
+        height: 30px;
+        line-height: 30px;
+        transform: translate(-15px,-15px) scale(0.88);
+        z-index: 1111;
+    }
+    .container .page form a{
+        text-decoration: none;
+        color: #40C92A;
+        text-align: center;
+        margin-top: 20px;
+    }
+    .container .page form a:hover{
+        text-decoration: underline;
+    }
+    .container .page form #btn{
+        margin: 20px 0;
+        font-size: 1.6em;
+        font-weight: 600;
+        letter-spacing: 1px;
+        border: none;
+        border-radius: 7px;
+        padding: 8px 0;
+        margin-top: 35px;
+        background: linear-gradient(97deg, #0F172A 0%,  #545554 50%, #40C92A 100%);
+        /* background: linear-gradient(97deg, #5f00ff 0%, #cd00ff 50%, #fb2091 100%);  */
+        color: #fff;
+        cursor: pointer;
+    }
+    
+    
+    section{
+        position: absolute;
+        min-height: 100vh;
+        width: 100%;
+        background: url(panelsolar.jpg);
+        background-position: center;
+        background-size: cover;
+        z-index: -1;
+    }
+    
+    
+    section::after{
+        position: absolute;
+        min-height: 100vh;
+        width: 100%;
+        content: '';
+        background: linear-gradient(97deg, #0F172A 0%,#40C92A, #545554 100% 100%);
+        /* background: linear-gradient(97deg, #5f00ff 0%, #cd00ff 50%, #fb2091 100%); */
+        opacity: 0.75;
+    }
+    
+    
+    /* 
+
+
+
+/* 
+.row {
+    margin-top: 900px;
+    width: 100%;
+    height: 150%;
+    background:red;
+    color:black;
+    border: 2px solid black;
+    margin-bottom: 40px;
+    padding: 100px;
+    text-align: center;
+    border: 2px solid black;
+}
+
+.col {
+    border: 2px solid black;
+} */
+
+
+.version {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    align-items: end;
+    justify-content: start;
+    padding: 0px;
+}
+
+
+/* .version1{
+    background-color: #0e1734;
+    padding:10px;
+    border-radius: 5px;
+    border:  2px solid #40C92A;
+    font-size: 10px;
+    font-weight: bolder;
+    text-decoration: none;
+} */
+
+.volver {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    padding: 10px;
+}
+
+.volver1{
+    background-color: #0e1734;
+    padding:10px;
+    border-radius: 5px;
+    border:  2px solid #40C92A;
+    font-size: 20px;
+    font-weight: bolder;
+    text-decoration: none;
+}
+.show-password {
+    position: absolute;
+    right: 5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    z-index: 2;
+}
+
+@media (min-width: 800px) {
+    
+    .container{
+        width:580px;
+        height: 820px;
+    }
+}
+
+.container   .switch{
+    position: absolute;
+    margin-left: 50px;
+    bottom: 40px;
+    width: 100%;
+    font-size: 1.1em;
+    font-weight: 400;
+
+    
+}
+.container .switch label a {
+    color: #40C92A !important;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+/* @media (min-width: 900px) {
+    .container {
+        max-width: 100%;
+    }
+} */
+.google-login {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+}
+
+.container .page form .google-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #ffffff;
+    color: #444444;
+    border: 1px solid #dadce0;
+    border-radius: 5px;
+    padding: 10px 24px;
+    font-size: 0.95em;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: box-shadow 0.2s ease;
+}
+
+.container .page form .google-btn:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    text-decoration: none;
+}
