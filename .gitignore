@@ -33,6 +33,11 @@ cotizador-react/dist/
 cotizador-react/.vite/
 cotizador-react/playwright-report/
 cotizador-react/test-results/
+cotizador-react/playwright/.cache/
+
+# Large generated assets
+statics/cotizador/LOGO\ PNG\ 1.png
+statics/bootstrap-5.0.2-dist/
 
 # IDE
 .idea/
