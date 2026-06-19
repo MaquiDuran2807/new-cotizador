@@ -1,24 +1,55 @@
 services:
+  db:
+    image: postgres:15-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${DB_NAME:-codensolar}
+      POSTGRES_USER: ${DB_USER:-codensolar}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-codensolar}
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
   redis:
     image: redis:7-alpine
     ports:
       - "6380:6379"
     volumes:
       - redis_data:/data
+    restart: unless-stopped
 
   web:
     build: .
-    ports:
-      - "8000:8000"
+    expose:
+      - "8000"
     env_file: .env
     environment:
+      - DJANGO_ENV=production
       - REDIS_HOST=redis
+      - DB_HOST=db
     depends_on:
+      - db
       - redis
     volumes:
       - .:/app
-      - media_data:/app/media
+      - static_volume:/app/staticfiles
+      - media_volume:/app/media
+    restart: unless-stopped
+
+  nginx:
+    build: ./nginx
+    ports:
+      - "80:80"
+    volumes:
+      - static_volume:/app/staticfiles:ro
+      - media_volume:/app/media:ro
+    depends_on:
+      - web
+    restart: unless-stopped
 
 volumes:
+  postgres_data:
   redis_data:
-  media_data:
+  static_volume:
+  media_volume:

@@ -3,6 +3,7 @@ from .models import Products, Category, ShowCategory, CarouselSlide
 
 class ProductSerializer(serializers.ModelSerializer):
     category_name = serializers.CharField(source='category.name', read_only=True)
+    tiempo_uso = serializers.IntegerField(source='category.tiempo_uso', read_only=True, default=6)
 
     class Meta:
         model = Products

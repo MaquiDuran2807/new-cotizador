@@ -15,7 +15,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=False)
     codregistro = models.CharField(max_length=6, blank=True)
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['name']
+    REQUIRED_FIELDS = ['username', 'name']
     objects = UserManager()
     
     def __str__(self):

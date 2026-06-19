@@ -8,6 +8,7 @@ import HeroCarousel from './components/HeroCarousel.jsx';
 import Navbar from './components/Navbar.jsx';
 import PdfDownloadButton from './components/PdfDownloadButton.jsx';
 import ProductGallery from './components/ProductGallery.jsx';
+import ScrollToTop from './components/ScrollToTop.jsx';
 import { calculateQuote, fetchCarouselSlides, fetchCurrentUser, fetchProducts, sendQuotePDF } from './services/api.js';
 
 export default function App() {
@@ -21,6 +22,7 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState('')
   const [cotizadorExpanded, setCotizadorExpanded] = useState(false)
   const [flyingSrc, setFlyingSrc] = useState(null)
+  const [cotizadorVisible, setCotizadorVisible] = useState(true)
   const pendingRequest = useRef(null)
   const cotizadorRef = useRef(null)
 
@@ -37,6 +39,17 @@ export default function App() {
     }
     fetchCurrentUser().then(setUser).catch(() => {})
     fetchCarouselSlides().then(setCarouselSlides).catch(console.error)
+  }, [])
+
+  useEffect(() => {
+    const el = cotizadorRef.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => setCotizadorVisible(entry.isIntersecting),
+      { threshold: 0 }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
   }, [])
 
   const fetchQuote = useCallback(async (items, removedReqs) => {
@@ -260,31 +273,56 @@ export default function App() {
           }}
         />
       )}
+      <ScrollToTop />
       <Footer />
 
       {quoteItems.length > 0 && (
         <>
           <button
             onClick={() => setCotizadorExpanded(true)}
-            className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 lg:hidden bg-surface border-[1.5px] border-border rounded-full shadow-[0_4px_24px_rgba(13,27,9,0.18)] flex items-center gap-3 px-5 py-3 cursor-pointer transition-all duration-[0.35s] ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:-translate-y-1 active:translate-y-0 animate-slideUp"
+            className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 lg:hidden bg-surface border-[1.5px] border-border rounded-full shadow-[0_4px_24px_rgba(13,27,9,0.18)] flex items-center gap-2.5 max-[400px]:gap-1.5 px-4 max-[400px]:px-2.5 py-2.5 max-[400px]:py-2 cursor-pointer transition-all duration-[0.35s] ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:-translate-y-1 active:translate-y-0 animate-slideUp max-w-[calc(100vw-2rem)]"
             title="Ver cotizador"
           >
-            <div className="w-7 h-7 rounded-full bg-green flex items-center justify-center">
-              <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="w-7 h-7 max-[400px]:w-6 max-[400px]:h-6 rounded-full bg-green flex items-center justify-center flex-shrink-0">
+              <svg className="w-3.5 h-3.5 max-[400px]:w-3 max-[400px]:h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
               </svg>
             </div>
-            <span className="font-display font-bold text-xs text-ink whitespace-nowrap">
+            <span className="font-display font-bold text-xs max-[400px]:text-[0.6rem] text-ink whitespace-nowrap truncate">
               {quoteItems.length} {quoteItems.length === 1 ? 'producto' : 'productos'}
             </span>
             {calculation && (
-              <span className="font-num font-extrabold text-sm text-green-dark">
+              <span className="font-num font-extrabold text-sm max-[400px]:text-[0.55rem] text-green-dark whitespace-nowrap truncate">
                 ${(
                   (calculation.total_final_basic || 0) + (calculation.total_precios || 0)
                 ).toLocaleString('es-CO', { maximumFractionDigits: 0 })}
               </span>
             )}
           </button>
+
+          {!cotizadorVisible && (
+            <button
+              onClick={() => setCotizadorExpanded(true)}
+              className="fixed bottom-20 right-6 z-40 max-lg:hidden bg-surface border-[1.5px] border-border rounded-full shadow-[0_4px_24px_rgba(13,27,9,0.18)] flex items-center gap-2.5 px-4 py-2.5 cursor-pointer transition-all duration-[0.35s] ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:-translate-y-1 active:translate-y-0 animate-slideUp"
+              title="Ver cotizador"
+            >
+              <div className="w-7 h-7 rounded-full bg-green flex items-center justify-center flex-shrink-0">
+                <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
+                </svg>
+              </div>
+              <span className="font-display font-bold text-xs text-ink whitespace-nowrap">
+                {quoteItems.length} {quoteItems.length === 1 ? 'producto' : 'productos'}
+              </span>
+              {calculation && (
+                <span className="font-num font-extrabold text-sm text-green-dark whitespace-nowrap">
+                  ${(
+                    (calculation.total_final_basic || 0) + (calculation.total_precios || 0)
+                  ).toLocaleString('es-CO', { maximumFractionDigits: 0 })}
+                </span>
+              )}
+            </button>
+          )}
 
           <PdfDownloadButton
             onClick={() => handleSendPDF(user)}

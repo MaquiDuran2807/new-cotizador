@@ -4,7 +4,8 @@ from django.contrib.auth.models import BaseUserManager
 
 class UserManager(BaseUserManager, models.Manager):
 
-    def _create_user(self, username, email, password, is_staff, is_superuser, is_active, **extra_fields):
+    def _create_user(self, email, password, is_staff, is_superuser, is_active, **extra_fields):
+        username = extra_fields.pop('username', email.split('@')[0])
         user = self.model(
             username=username,
             email=email,
@@ -17,15 +18,12 @@ class UserManager(BaseUserManager, models.Manager):
         user.save(using=self.db)
         return user
     
-    def create_user(self, username, email, password=None, **extra_fields):
+    def create_user(self, email, password=None, **extra_fields):
         is_active = extra_fields.pop('is_active', True)
-        return self._create_user(username, email, password, False, False, is_active, **extra_fields)
-    
-    # def create_user_google(self, username, email, password=None, **extra_fields):
-    #     return self._create_user(username, email, password, True, False, False, **extra_fields)
+        return self._create_user(email, password, False, False, is_active, **extra_fields)
 
-    def create_superuser(self, username, email, password=None, **extra_fields):
-        return self._create_user(username, email, password, True, True, True, **extra_fields)
+    def create_superuser(self, email, password=None, **extra_fields):
+        return self._create_user(email, password, True, True, True, **extra_fields)
     
     def cod_validation(self, id_user, cod_registro):
         if self.filter(id=id_user, codregistro=cod_registro).exists():

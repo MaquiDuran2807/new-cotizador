@@ -62,7 +62,8 @@ class CodensolarSocialAccountAdapter(DefaultSocialAccountAdapter):
         if not user.username:
             user.username = username_from_email(email, user_model)
 
-        given_name, family_name, telephone = social_profile_names(data, user.username)
+        extra = sociallogin.account.extra_data or {}
+        given_name, family_name, telephone = social_profile_names(extra, user.username)
         if not user.name:
             user.name = given_name
         if not user.lastname:

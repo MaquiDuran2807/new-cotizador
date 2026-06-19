@@ -195,3 +195,36 @@ class SocialSignupPasswordResetTest(TestCase):
         is_valid = default_token_generator.check_token(user, token)
         self.assertFalse(is_valid,
                          "Token generated before login should be invalid")
+
+
+class SocialProfileNamesTest(TestCase):
+    """Test that social_profile_names correctly extracts names from Google data."""
+
+    def test_uses_given_family_name_from_extra_data(self):
+        from .utils import social_profile_names
+        extra_data = {
+            'email': 'miguel@gmail.com',
+            'given_name': 'miguel angel',
+            'family_name': 'quiroga duran',
+            'name': 'miguel angel quiroga duran',
+        }
+        given, family, phone = social_profile_names(extra_data, 'miguel')
+        self.assertEqual(given, 'miguel angel')
+        self.assertEqual(family, 'quiroga duran')
+
+    def test_falls_back_to_full_name_when_parts_missing(self):
+        from .utils import social_profile_names
+        extra_data = {
+            'email': 'john@gmail.com',
+            'name': 'John Smith',
+        }
+        given, family, phone = social_profile_names(extra_data, 'john')
+        self.assertEqual(given, 'John')
+        self.assertEqual(family, 'Smith')
+
+    def test_falls_back_to_username_when_no_name_data(self):
+        from .utils import social_profile_names
+        extra_data = {'email': 'user@example.com'}
+        given, family, phone = social_profile_names(extra_data, 'user')
+        self.assertEqual(given, 'User')
+        self.assertEqual(family, 'User')

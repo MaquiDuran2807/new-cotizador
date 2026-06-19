@@ -53,9 +53,9 @@ class UserRegisterView(FormView):
         raw_password = form.cleaned_data['password1']
         #
         usuario = User.objects.create_user(
-            username,
-            email,
-            raw_password,
+            email=email,
+            password=raw_password,
+            username=username,
             name=form.cleaned_data['name'],
             lastname=form.cleaned_data['lastname'],
             telephone=form.cleaned_data['telephone'],

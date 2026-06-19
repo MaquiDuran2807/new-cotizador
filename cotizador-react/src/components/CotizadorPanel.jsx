@@ -37,7 +37,8 @@ export default function CotizadorPanel({
   const panelProd = calculation?.panel_needed?.production
 
   return (
-    <div className="w-full lg:w-[440px] flex-shrink-0 sticky top-[74px] max-h-[calc(100vh-90px)] overflow-y-auto bg-surface border-[1.5px] border-border rounded-2xl shadow-[0_4px_20px_rgba(13,27,9,0.10)] overflow-x-hidden">
+    <div className="w-full lg:w-[440px] flex-shrink-0">
+      <div className="bg-surface border-[1.5px] border-border rounded-2xl shadow-[0_4px_20px_rgba(13,27,9,0.10)] overflow-x-hidden">
       <div className="p-2 lg:p-6 border-b-[1.5px] border-border-2">
         <div className="flex items-center justify-between">
           <div className="text-[0.6rem] lg:text-[0.68rem] font-bold text-green-dark tracking-widest uppercase flex items-center gap-1.5 mb-1">
@@ -176,6 +177,7 @@ export default function CotizadorPanel({
           <PdfDownloadButton onClick={() => onSendPDF(user)} compact={true} />
       </div>
       )}
+    </div>
     </div>
   )
 }
