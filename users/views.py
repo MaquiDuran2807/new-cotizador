@@ -106,7 +106,13 @@ class LoginUser(FormView):
         next_url = self.request.GET.get('next') or self.request.POST.get('next')
         if next_url:
             return next_url
-        return reverse('Products_app:cotizador-react')
+        return reverse('Products_app:cotizador-solar')
+
+    def form_invalid(self, form):
+        for field, errors in form.errors.items():
+            for error in errors:
+                messages.error(self.request, error)
+        return super().form_invalid(form)
 
     def form_valid(self, form):
         user = getattr(form, 'user', None)

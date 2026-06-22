@@ -8,8 +8,10 @@ import HeroCarousel from './components/HeroCarousel.jsx';
 import Navbar from './components/Navbar.jsx';
 import PdfDownloadButton from './components/PdfDownloadButton.jsx';
 import ProductGallery from './components/ProductGallery.jsx';
+import ProfileFormModal from './components/ProfileFormModal.jsx';
 import ScrollToTop from './components/ScrollToTop.jsx';
 import { calculateQuote, fetchCarouselSlides, fetchCurrentUser, fetchProducts, sendQuotePDF } from './services/api.js';
+import toast, { Toaster } from 'react-hot-toast';
 
 export default function App() {
   const [products, setProducts] = useState([])
@@ -23,6 +25,7 @@ export default function App() {
   const [cotizadorExpanded, setCotizadorExpanded] = useState(false)
   const [flyingSrc, setFlyingSrc] = useState(null)
   const [cotizadorVisible, setCotizadorVisible] = useState(true)
+  const [pendingProfileUser, setPendingProfileUser] = useState(null)
   const pendingRequest = useRef(null)
   const cotizadorRef = useRef(null)
 
@@ -132,10 +135,19 @@ export default function App() {
     if (user) { window.location.href = '/user/logout' }
   }, [user])
 
-  const handleSendPDF = useCallback(async (userData) => {
-    if (!userData || !userData.email) {
-      alert('Debes iniciar sesión para descargar la cotización en PDF.')
-      return
+  const doDownloadPDF = useCallback(async (userData) => {
+    try {
+      const payload = quoteItems.map((item) => ({
+        product_id: item.product_id,
+        amount: item.amount,
+        hours: item.hours,
+        borrar: false,
+        eliminar_requeimientos: removedRequirements,
+      }))
+      if (payload.length > 0) {
+        await calculateQuote(payload)
+      }
+    } catch {
     }
     try {
       const [pdfRes, emailResult] = await Promise.all([
@@ -145,13 +157,12 @@ export default function App() {
           .catch((e) => ({ ok: false, msg: e.message })),
       ])
       if (emailResult.ok) {
-        alert('Cotización enviada a tu correo exitosamente')
+        toast.success('Cotización enviada a tu correo exitosamente')
       } else {
         console.warn('Error enviando por correo:', emailResult.msg)
       }
       if (!pdfRes.ok) {
-        const text = await pdfRes.text()
-        alert(text || 'Error al generar el PDF')
+        toast.error('Error al generar el PDF. Intenta de nuevo.')
         return
       }
       const blob = await pdfRes.blob()
@@ -165,9 +176,23 @@ export default function App() {
       URL.revokeObjectURL(url)
     } catch (err) {
       console.error('Error descargando PDF:', err)
-      alert('Error al descargar la cotización. Intenta de nuevo.')
+      toast.error('Error al descargar la cotización. Intenta de nuevo.')
     }
+  }, [quoteItems, removedRequirements])
+
+  const handleSendPDF = useCallback(async (userData) => {
+    if (!userData || !userData.email) {
+      toast.error('Debes iniciar sesión para descargar la cotización en PDF.')
+      return
+    }
+    setPendingProfileUser(userData)
   }, [])
+
+  const handleProfileDownload = useCallback((updatedUser) => {
+    setUser(updatedUser)
+    setPendingProfileUser(null)
+    doDownloadPDF(updatedUser)
+  }, [doDownloadPDF])
 
   const filteredProducts = products.filter((p) => {
     const matchCat = activeCategory === null || Number(p.category) === activeCategory
@@ -182,6 +207,30 @@ export default function App() {
 
   return (
     <div>
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 4000,
+          style: {
+            background: 'var(--color-surface)',
+            color: 'var(--color-ink)',
+            border: '1.5px solid var(--color-border)',
+            borderRadius: '12px',
+            fontSize: '0.85rem',
+            fontWeight: 600,
+            padding: '12px 16px',
+            boxShadow: '0 8px 32px rgba(13,27,9,0.12)',
+          },
+          success: {
+            iconTheme: { primary: 'var(--color-green)', secondary: '#fff' },
+            style: { borderColor: 'var(--color-green-mid)', background: 'var(--color-green-light)' },
+          },
+          error: {
+            iconTheme: { primary: '#ef4444', secondary: '#fff' },
+            style: { borderColor: '#fecaca', background: '#fef2f2' },
+          },
+        }}
+      />
       <Navbar onLogout={handleLogout} onSearch={setSearchQuery} />
       {carouselSlides.length > 0 && <HeroCarousel slides={carouselSlides} />}
 
@@ -274,6 +323,13 @@ export default function App() {
         />
       )}
       <ScrollToTop />
+      {pendingProfileUser && (
+        <ProfileFormModal
+          user={pendingProfileUser}
+          onDownload={handleProfileDownload}
+          onClose={() => setPendingProfileUser(null)}
+        />
+      )}
       <Footer />
 
       {quoteItems.length > 0 && (

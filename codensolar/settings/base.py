@@ -129,11 +129,13 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "statics")]
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+DATA_UPLOAD_MAX_MEMORY_SIZE = 20971520  # 20 MB - allows individual large file uploads via iframe
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = '/user/login'
 
-LOGIN_REDIRECT_URL = '/products/cotizador-react'
-ACCOUNT_LOGIN_REDIRECT_URL = '/products/cotizador-react'
+LOGIN_REDIRECT_URL = '/products/cotizador-solar'
+ACCOUNT_LOGIN_REDIRECT_URL = '/products/cotizador-solar'
 ACCOUNT_LOGOUT_REDIRECT_URL = '/'
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_EMAIL_REQUIRED = True

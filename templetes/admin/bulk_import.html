@@ -1,0 +1,336 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  <style>
+    .drop-zone {
+      border: 2px dashed #ccc;
+      border-radius: 8px;
+      padding: 48px 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: background .2s, border-color .2s;
+      background: #fafafa;
+      margin-bottom: 20px;
+    }
+    .drop-zone.dragover { border-color: #417690; background: #f0f7ff; }
+    .drop-zone-icon { font-size: 48px; color: #999; display: block; margin-bottom: 12px; }
+    .drop-zone-text { font-size: 16px; color: #666; }
+    .drop-zone-hint { font-size: 13px; color: #999; margin-top: 8px; }
+    .file-list { margin-bottom: 20px; font-size: 13px; }
+    .summary-cards { display: flex; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+    .summary-card { flex: 1; min-width: 140px; background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 6px; padding: 16px; text-align: center; }
+    .summary-card .number { font-size: 28px; font-weight: 700; color: #417690; }
+    .summary-card .label { font-size: 12px; color: #666; margin-top: 4px; }
+    .product-table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+    .product-table th { background: #417690; color: #fff; padding: 8px 10px; font-size: 12px; white-space: nowrap; }
+    .product-table td { padding: 8px 10px; border-bottom: 1px solid #eee; font-size: 13px; vertical-align: top; }
+    .product-table tr:hover td { background: #f5f8fa; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+    .badge.ok { background: #e8f5e9; color: #2e7d32; }
+    .badge.missing { background: #fce4ec; color: #c62828; }
+    .badge.warn { background: #fff3e0; color: #e65100; }
+    .result-box { padding: 24px; border-radius: 6px; margin-top: 20px; }
+    .result-box.success { background: #e8f5e9; border: 1px solid #2e7d32; }
+    .result-box.error { background: #fce4ec; border: 1px solid #c62828; }
+  </style>
+{% endblock %}
+
+{% block breadcrumbs %}
+  <div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
+    &rsaquo; Carga Masiva de Productos
+  </div>
+{% endblock %}
+
+{% block content %}
+  <div id="content-main">
+    <h1>Carga Masiva de Productos</h1>
+
+    {% if show_result %}
+
+      <div class="result-box success">
+        <h2 style="margin:0 0 12px;color:#2e7d32;">&#10003; Importación Completada</h2>
+        <p style="font-size:15px;">Se importaron <strong>{{ import_created }}</strong> productos exitosamente.</p>
+        {% if import_errors %}
+          <div style="margin-top:12px;padding:12px;background:#fff3e0;border-radius:4px;">
+            <strong>Advertencias:</strong>
+            <ul style="margin:4px 0 0;">{% for e in import_errors %}<li>{{ e }}</li>{% endfor %}</ul>
+          </div>
+        {% endif %}
+        <a href="." style="display:inline-block;margin-top:16px;padding:10px 24px;background:#417690;color:#fff;text-decoration:none;border-radius:4px;">Volver a Carga Masiva</a>
+      </div>
+
+    {% elif show_preview %}
+
+      <div class="summary-cards">
+        <div class="summary-card"><div class="number">{{ summary.total }}</div><div class="label">Total Productos</div></div>
+        <div class="summary-card"><div class="number">{{ summary.with_price }}</div><div class="label">Con Precio</div></div>
+        <div class="summary-card"><div class="number">{{ summary.with_voltage }}</div><div class="label">Con Voltaje</div></div>
+        <div class="summary-card"><div class="number">{{ summary.with_consume }}</div><div class="label">Con Consumo</div></div>
+        <div class="summary-card"><div class="number">{{ summary.with_image }}</div><div class="label">Con Imagen</div></div>
+      </div>
+
+      <div style="overflow-x:auto;">
+        <table class="product-table">
+          <thead>
+            <tr>
+              <th>ID</th><th>Nombre</th><th>Precio</th><th>Voltaje</th><th>Consumo (W)</th><th>Imagen</th><th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for p in preview_products %}
+            <tr>
+              <td>{{ p.external_id|default:'—' }}</td>
+              <td>{{ p.name|default:'—' }}</td>
+              <td>{% if p.price %}${{ p.price }}{% else %}—{% endif %}</td>
+              <td>{% if p.voltage_list %}{{ p.voltage_list|join:' / ' }} V{% else %}—{% endif %}</td>
+              <td>{% if p.consume != None %}{{ p.consume }} W{% else %}—{% endif %}</td>
+              <td>{% if p.has_image %}&#10003;{% else %}—{% endif %}</td>
+              <td>
+                {% if p.price and p.consume %}<span class="badge ok">Completo</span>
+                {% elif p.price or p.consume %}<span class="badge warn">Parcial</span>
+                {% else %}<span class="badge missing">Incompleto</span>{% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <form method="post" action="" style="margin-top:24px;">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="import">
+        <button type="submit" class="default" style="padding:12px 36px;background:#417690;color:white;border:none;border-radius:4px;font-size:15px;cursor:pointer;">
+          &#10003; Importar {{ summary.total }} Productos
+        </button>
+        <a href="." style="display:inline-block;padding:12px 24px;background:#bbb;color:white;border-radius:4px;font-size:15px;margin-left:8px;text-decoration:none;">Cancelar</a>
+      </form>
+
+    {% else %}
+
+      <form method="post" action="">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="process">
+        <input type="hidden" name="json_files" id="hidden-json-files">
+        <input type="hidden" name="image_files" id="hidden-image-files">
+
+        <div style="display:flex; gap:20px; flex-wrap:wrap; margin-bottom:20px;">
+
+          <div style="flex:1; min-width:280px;">
+            <div style="font-weight:600; margin-bottom:8px; color:#417690;">&#128196; Archivo JSON</div>
+            <div class="drop-zone" id="dz-json" style="padding:32px 16px;">
+              <div style="font-size:32px; color:#999; margin-bottom:8px;">&#128196;</div>
+              <div style="font-size:14px; color:#666;">
+                Arrastrá <strong>products.json</strong> aquí<br>
+                <small>o hacé clic para seleccionarlo</small>
+              </div>
+              <div id="upload-progress-json" style="margin-top:10px;font-size:13px;color:#417690;display:none;">&#8635; Subiendo…</div>
+            </div>
+            <input type="file" id="fi-json" accept=".json" style="display:none">
+            <div id="list-json" style="margin-top:8px; font-size:13px;"></div>
+          </div>
+
+          <div style="flex:1; min-width:280px;">
+            <div style="font-weight:600; margin-bottom:8px; color:#e65100;">&#128247; Imágenes</div>
+            <div class="drop-zone" id="dz-images" style="padding:32px 16px;">
+              <div style="font-size:32px; color:#999; margin-bottom:8px;">&#128247;</div>
+              <div style="font-size:14px; color:#666;">
+                Arrastrá las imágenes aquí<br>
+                <small>o hacé clic para seleccionarlas</small>
+              </div>
+              <div id="upload-progress-images" style="margin-top:10px;font-size:13px;color:#e65100;display:none;">&#8635; Subiendo…</div>
+            </div>
+            <input type="file" id="fi-images" multiple accept=".jpg,.jpeg,.png,.webp" style="display:none">
+            <div id="list-images" style="margin-top:8px; font-size:13px;"></div>
+          </div>
+
+        </div>
+
+        <div style="margin-top:16px;">
+          <button type="button" id="btn-process" class="default"
+                  style="padding:10px 28px;background:#417690;color:white;border:none;border-radius:4px;cursor:pointer;font-size:14px;">
+            Procesar Archivos
+          </button>
+        </div>
+      </form>
+    {% endif %}
+  </div>
+
+  <script>
+    (function() {
+      var uploadedJson = null;
+      var uploadedImages = [];
+
+      function setupDrop(zoneId, inputId, listId, isJson) {
+        var zone = document.getElementById(zoneId);
+        var input = document.getElementById(inputId);
+        var list = document.getElementById(listId);
+
+        zone.addEventListener('click', function() { input.click(); });
+
+        zone.addEventListener('dragover', function(e) { e.preventDefault(); zone.classList.add('dragover'); });
+        zone.addEventListener('dragleave', function() { zone.classList.remove('dragover'); });
+        zone.addEventListener('drop', function(e) {
+          e.preventDefault();
+          zone.classList.remove('dragover');
+          handleFiles(e.dataTransfer.files, isJson, list);
+        });
+
+        input.addEventListener('change', function() {
+          handleFiles(input.files, isJson, list);
+        });
+      }
+
+      function handleFiles(fileList, isJson, listEl) {
+        var files = Array.prototype.slice.call(fileList);
+        if (files.length === 0) return;
+
+        if (isJson) {
+          var jsonFile = null;
+          for (var i = 0; i < files.length; i++) {
+            if (files[i].name.toLowerCase().endsWith('.json')) {
+              jsonFile = files[i];
+              break;
+            }
+          }
+          if (!jsonFile) { alert('El archivo debe tener extensión .json'); return; }
+
+          showProgress('upload-progress-json', true);
+          readAndUpload(jsonFile, function(err, result) {
+            showProgress('upload-progress-json', false);
+            if (err) { alert('Error al subir ' + jsonFile.name); return; }
+            uploadedJson = result;
+            listEl.innerHTML = '<span style="display:inline-block;background:#e8f5e9;border-radius:4px;padding:4px 10px;margin:3px;font-size:12px;">' + result.name + '</span>';
+          });
+        } else {
+          showProgress('upload-progress-images', true);
+          var index = 0;
+          function uploadNext() {
+            if (index >= files.length) {
+              showProgress('upload-progress-images', false);
+              updateBtnState();
+              return;
+            }
+            var f = files[index++];
+            readAndUpload(f, function(err, result) {
+              if (err) {
+                // Skip failed file, continue with next
+              } else {
+                uploadedImages.push(result);
+                updateImageList(listEl, uploadedImages);
+              }
+              uploadNext();
+            });
+          }
+          uploadNext();
+        }
+      }
+
+      function readAndUpload(file, callback) {
+        var reader = new FileReader();
+        reader.onload = function() {
+          var base64 = reader.result.split(',')[1];
+          uploadViaIframe(base64, file.name, callback);
+        };
+        reader.readAsDataURL(file);
+      }
+
+      function uploadViaIframe(base64, filename, callback) {
+        var frameName = 'upload-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8);
+        var iframe = document.createElement('iframe');
+        iframe.name = frameName;
+        iframe.style.display = 'none';
+        document.body.appendChild(iframe);
+
+        var loadTimer = setTimeout(function() {
+          if (iframe.parentNode) document.body.removeChild(iframe);
+          callback(new Error('Timeout'));
+        }, 30000);
+
+        iframe.onload = function() {
+          clearTimeout(loadTimer);
+          try {
+            var text = iframe.contentDocument.body.textContent || '';
+            text = text.replace(/^\s*[\s\S]*?(\{[\s\S]*\})[\s\S]*$/, '$1');
+            var resp = JSON.parse(text);
+            if (resp.error) {
+              callback(new Error(resp.error));
+            } else {
+              callback(null, { name: filename, cachedName: resp.filename });
+            }
+          } catch(e) {
+            callback(e);
+          }
+          setTimeout(function() {
+            if (iframe.parentNode) document.body.removeChild(iframe);
+          }, 200);
+        };
+
+        var form = document.createElement('form');
+        form.method = 'POST';
+        form.action = './upload-file/';
+        form.target = frameName;
+        form.enctype = 'application/x-www-form-urlencoded';
+
+        var csrf = document.createElement('input');
+        csrf.type = 'hidden';
+        csrf.name = 'csrfmiddlewaretoken';
+        var csrfEl = document.querySelector('[name=csrfmiddlewaretoken]');
+        csrf.value = csrfEl ? csrfEl.value : '';
+        form.appendChild(csrf);
+
+        var data = document.createElement('input');
+        data.type = 'hidden';
+        data.name = 'file_data';
+        data.value = base64;
+        form.appendChild(data);
+
+        var name = document.createElement('input');
+        name.type = 'hidden';
+        name.name = 'filename';
+        name.value = filename;
+        form.appendChild(name);
+
+        document.body.appendChild(form);
+        form.submit();
+        document.body.removeChild(form);
+      }
+
+      function updateImageList(listEl, files) {
+        var h = '<strong>' + files.length + ' imágenes:</strong><br>';
+        for (var i = 0; i < files.length; i++) {
+          h += '<span style="display:inline-block;background:#fff3e0;border-radius:4px;padding:4px 10px;margin:3px;font-size:12px;">' + files[i].name + '</span> ';
+        }
+        listEl.innerHTML = h;
+      }
+
+      function showProgress(id, show) {
+        var el = document.getElementById(id);
+        if (el) el.style.display = show ? 'block' : 'none';
+      }
+
+      function updateBtnState() {
+        var btn = document.getElementById('btn-process');
+        btn.disabled = !(uploadedJson && uploadedImages.length > 0);
+      }
+
+      setupDrop('dz-json', 'fi-json', 'list-json', true);
+      setupDrop('dz-images', 'fi-images', 'list-images', false);
+      updateBtnState();
+
+      document.getElementById('btn-process').addEventListener('click', function() {
+        if (!uploadedJson) { alert('Arrastrá o seleccioná el archivo products.json primero.'); return; }
+        if (uploadedImages.length === 0) { alert('Arrastrá o seleccioná al menos una imagen.'); return; }
+
+        document.getElementById('hidden-json-files').value = JSON.stringify([uploadedJson.cachedName]);
+        document.getElementById('hidden-image-files').value = JSON.stringify(
+          uploadedImages.map(function(f) { return f.cachedName; })
+        );
+
+        this.form.submit();
+      });
+    })();
+  </script>
+{% endblock %}

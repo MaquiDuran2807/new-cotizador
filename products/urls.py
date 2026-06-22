@@ -21,4 +21,6 @@ urlpatterns = [
     path('api/show-categories', ShowCategoryAPI.as_view(), name='show-categories-api'),
     path('api/me', CurrentUserAPI.as_view(), name='current-user-api'),
     path('api/carousel-slides', CarouselSlideAPI.as_view(), name='carousel-slides-api'),
+    path('api/departments', DepartmentListAPI.as_view(), name='departments-api'),
+    path('api/municipalities', MunicipalityListAPI.as_view(), name='municipalities-api'),
 ]

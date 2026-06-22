@@ -8,9 +8,9 @@ from .models import CarouselSlide
 
 class ReactCotizadorLoginRedirectTests(TestCase):
     def test_anonymous_user_redirects_to_custom_login(self):
-        response = self.client.get(reverse('Products_app:cotizador-react'))
+        response = self.client.get(reverse('Products_app:cotizador-solar'))
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.url, '/user/login?next=/products/cotizador-react')
+        self.assertEqual(response.url, '/user/login?next=/products/cotizador-solar')
 
 
 class CarouselSlideImageProcessingTests(TestCase):

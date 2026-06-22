@@ -7,18 +7,11 @@
 
 	<link rel="stylesheet" type="text/css" href=" {% static 'products/css/main.css' %} ">
     <link rel="stylesheet" type="text/css" href="{% static 'products/css/Vlogin.css' %}">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <title>ingresar</title>
 </head>
 
 <body class="body" >
-    {% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-    {% endfor %}
-</ul>
-{% endif %}
-
 <div class=volver>
     <div class="volver1">
         <a href="https://codensolar.com/">Volver</a>
@@ -76,6 +69,20 @@
         
 
 </div>
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script>
+{% if messages %}
+    {% for message in messages %}
+    Toastify({
+        text: '{{ message|escapejs }}',
+        duration: 4000,
+        gravity: 'top',
+        position: 'right',
+        style: { background: '{% if message.tags == "error" %}#dc2626{% else %}#16a34a{% endif %}' }
+    }).showToast();
+    {% endfor %}
+{% endif %}
+</script>
 <script src="{% static 'products/js/register.js' %}"></script>
 <script src="{% static 'products/js/Newjs/bootstrap.bundle.min.js' %}"></script>
 <script src="{% static 'products/js/Newjs/NVProducts.js' %}"></script>

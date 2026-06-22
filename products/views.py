@@ -21,7 +21,7 @@ from django.http import HttpResponseRedirect
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .serializers import ProductSerializer, CategorySerializer, ShowCategorySerializer, CarouselSlideSerializer
+from .serializers import ProductSerializer, CategorySerializer, ShowCategorySerializer, CarouselSlideSerializer, DepartmentSerializer, MunicipalitySerializer
 from .models import CarouselSlide
 from django.core.cache import cache
 from django.conf import settings
@@ -293,16 +293,18 @@ class PdfViewPage(View):
         if data is None:
             return HttpResponse("No hay datos en cache. Primero agregue productos a la cotización.", content_type='text/plain', status=404)
         site_url = request.build_absolute_uri('/')
-        try:
-            if settings.PDF_GENERATOR == 'weasyprint':
+        if settings.PDF_GENERATOR == 'weasyprint':
+            try:
                 pdf = generate_pdf_view_weasyprint('products/html/nuevos/pdfgpt.html',data,site_url)
-            else:
-                pdf = generate_pdf_view('products/html/nuevos/pdfgpt.html',data,site_url)
-            return HttpResponse(pdf, content_type='application/pdf')
-        except Exception:
-            print("Falló weasyprint, usando xhtml2pdf como respaldo")
+                return HttpResponse(pdf, content_type='application/pdf')
+            except:
+                print("Falló weasyprint, usando xhtml2pdf como respaldo")
+        try:
             pdf = generate_pdf_view('products/html/nuevos/pdfgpt.html',data,site_url)
             return HttpResponse(pdf, content_type='application/pdf')
+        except Exception as e:
+            print(f"Error generando PDF: {e}")
+            return HttpResponse("Error al generar el PDF. Intenta de nuevo.", content_type='text/plain', status=500)
 
         
 
@@ -393,6 +395,21 @@ class CarouselSlideAPI(generics.ListAPIView):
     queryset = CarouselSlide.objects.filter(is_active=True)
     serializer_class = CarouselSlideSerializer
 
+class DepartmentListAPI(generics.ListAPIView):
+    queryset = Department.objects.all()
+    serializer_class = DepartmentSerializer
+
+class MunicipalityListAPI(generics.ListAPIView):
+    queryset = Municipality.objects.all()
+    serializer_class = MunicipalitySerializer
+
+    def get_queryset(self):
+        qs = Municipality.objects.all()
+        dept_id = self.request.query_params.get('department_id')
+        if dept_id:
+            qs = qs.filter(department_id=dept_id)
+        return qs
+
 class CurrentUserAPI(APIView):
     def get(self, request):
         user = request.user
@@ -400,8 +417,46 @@ class CurrentUserAPI(APIView):
             return Response({"error": "No autenticado"}, status=401)
         return Response({
             "name": user.name,
-            "email": user.email,
             "lastname": user.lastname,
+            "email": user.email,
+            "telephone": user.telephone,
+            "department_id": user.department_id,
+            "department_name": user.department.name if user.department else None,
+            "city_id": user.city_id,
+            "city_name": user.city.name if user.city else None,
+        })
+
+    def put(self, request):
+        user = request.user
+        if not user.is_authenticated:
+            return Response({"error": "No autenticado"}, status=401)
+        data = request.data
+        if "name" in data:
+            user.name = data["name"]
+        if "lastname" in data:
+            user.lastname = data["lastname"]
+        if "telephone" in data:
+            telephone_value = data["telephone"]
+            if telephone_value == "" or telephone_value is None:
+                user.telephone = None
+            else:
+                user.telephone = int(telephone_value)
+        if "department_id" in data:
+            from products.models import Department
+            user.department = Department.objects.filter(id=data["department_id"]).first()
+        if "city_id" in data:
+            from products.models import Municipality
+            user.city = Municipality.objects.filter(id=data["city_id"]).first()
+        user.save()
+        return Response({
+            "name": user.name,
+            "lastname": user.lastname,
+            "email": user.email,
+            "telephone": user.telephone,
+            "department_id": user.department_id,
+            "department_name": user.department.name if user.department else None,
+            "city_id": user.city_id,
+            "city_name": user.city.name if user.city else None,
         })
 
 class PdfView(View):
@@ -545,7 +600,8 @@ class ReactCotizadorView(LoginRequiredMixin, TemplateView):
         user = self.request.user
         context['user_json'] = json.dumps({
             "name": user.name,
-            "email": user.email,
             "lastname": user.lastname,
+            "email": user.email,
+            "telephone": user.telephone,
         })
         return context

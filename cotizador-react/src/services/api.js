@@ -47,6 +47,32 @@ export async function fetchCarouselSlides() {
   return response.json()
 }
 
+export async function updateCurrentUser(data) {
+    const response = await fetch(`${API_URL}api/me`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCSRFToken(),
+        },
+        body: JSON.stringify(data),
+    })
+    if (!response.ok) throw new Error('Error actualizando perfil')
+    return response.json()
+}
+
+export async function fetchDepartments() {
+    const response = await fetch(`${API_URL}api/departments`)
+    if (!response.ok) throw new Error('Error fetching departments')
+    return response.json()
+}
+
+export async function fetchMunicipalities(departmentId) {
+    const params = departmentId ? `?department_id=${departmentId}` : ''
+    const response = await fetch(`${API_URL}api/municipalities${params}`)
+    if (!response.ok) throw new Error('Error fetching municipalities')
+    return response.json()
+}
+
 export async function sendQuotePDF(nombre, email, apellido) {
   const response = await fetch(`${API_URL}sendQuote`, {
     method: 'POST',

@@ -3,6 +3,31 @@ from django.db import models
 from django.core.files.base import ContentFile
 from PIL import Image, ImageOps
 
+
+class Department(models.Model):
+    code = models.CharField(max_length=2, unique=True)
+    name = models.CharField(max_length=100)
+
+    class Meta:
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
+
+class Municipality(models.Model):
+    code = models.CharField(max_length=7, unique=True)
+    name = models.CharField(max_length=100)
+    department = models.ForeignKey(Department, on_delete=models.CASCADE, related_name='municipalities')
+    latitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
+
+    class Meta:
+        ordering = ['name']
+
+    def __str__(self):
+        return f"{self.name} ({self.department.name})"
+
 class Category(models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField()

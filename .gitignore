@@ -54,3 +54,7 @@ dump.rdb
 # OS
 Desktop.ini
 ehthumbs.db
+
+# Data files
+*.csv
+*rendimiento*.json

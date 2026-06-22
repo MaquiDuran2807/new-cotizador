@@ -10,6 +10,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     lastname = models.CharField(max_length=50)
     email = models.EmailField(max_length=100, unique=True)
     telephone = models.IntegerField(blank=True, null=True)
+    department = models.ForeignKey('products.Department', on_delete=models.SET_NULL, null=True, blank=True)
+    city = models.ForeignKey('products.Municipality', on_delete=models.SET_NULL, null=True, blank=True)
     password = models.CharField(max_length=128)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)

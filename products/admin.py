@@ -1,134 +1,148 @@
 from django.contrib import admin
 from codensolar.admin import admin_site
 from .models import *
+from .admin_utils import ExportExcelMixin
 
 
-class CategoryAdmin(admin.ModelAdmin):
+class CategoryAdmin(ExportExcelMixin, admin.ModelAdmin):
     list_display = ['id', 'name', 'perdida', 'tiempo_uso']
     search_fields = ['name']
     list_filter = ['perdida']
 
 
-class ShowCategoryAdmin(admin.ModelAdmin):
+class ShowCategoryAdmin(ExportExcelMixin, admin.ModelAdmin):
     list_display = ['id', 'category', 'name']
     search_fields = ['name', 'category__name']
 
 
-class ProductsAdmin(admin.ModelAdmin):
+class ProductsAdmin(ExportExcelMixin, admin.ModelAdmin):
     list_display = ['id', 'name', 'category', 'price', 'consume']
     search_fields = ['name', 'category__name']
     list_filter = ['category']
 
 
-class SolarPanelAdmin(admin.ModelAdmin):
+class SolarPanelAdmin(ExportExcelMixin, admin.ModelAdmin):
     list_display = ['id', 'name', 'category', 'price', 'production', 'voltage']
     search_fields = ['name']
     list_filter = ['category', 'voltage']
 
 
-class BatteryAdmin(admin.ModelAdmin):
+class BatteryAdmin(ExportExcelMixin, admin.ModelAdmin):
     list_display = ['id', 'name', 'category', 'price', 'capacity', 'voltage']
     search_fields = ['name']
     list_filter = ['category', 'voltage']
 
 
-class ReguladoresAdmin(admin.ModelAdmin):
+class ReguladoresAdmin(ExportExcelMixin, admin.ModelAdmin):
     list_display = ['id', 'name', 'category', 'price', 'amperios']
     search_fields = ['name']
     list_filter = ['category']
 
 
-class InversoresAdmin(admin.ModelAdmin):
+class InversoresAdmin(ExportExcelMixin, admin.ModelAdmin):
     list_display = ['id', 'name', 'category', 'price', 'vatios']
     search_fields = ['name']
     list_filter = ['category']
 
 
-class OtrosAdmin(admin.ModelAdmin):
+class OtrosAdmin(ExportExcelMixin, admin.ModelAdmin):
     list_display = ['id', 'name', 'category', 'price']
     search_fields = ['name']
     list_filter = ['category']
 
 
-class VoltageAdmin(admin.ModelAdmin):
+class VoltageAdmin(ExportExcelMixin, admin.ModelAdmin):
     list_display = ['id', 'voltage']
 
 
-class BreakersAdmin(admin.ModelAdmin):
+class BreakersAdmin(ExportExcelMixin, admin.ModelAdmin):
     list_display = ['id', 'name', 'category', 'price', 'amps']
     search_fields = ['name']
     list_filter = ['category']
 
 
-class RubberizedCablesAdmin(admin.ModelAdmin):
+class RubberizedCablesAdmin(ExportExcelMixin, admin.ModelAdmin):
     list_display = ['id', 'name', 'category', 'price', 'supported_amperage']
     search_fields = ['name']
     list_filter = ['category']
 
 
-class VehicleCablesAdmin(admin.ModelAdmin):
+class VehicleCablesAdmin(ExportExcelMixin, admin.ModelAdmin):
     list_display = ['id', 'name', 'category', 'price', 'supported_amperage']
     search_fields = ['name']
     list_filter = ['category']
 
 
-class PanelSupportsAdmin(admin.ModelAdmin):
+class PanelSupportsAdmin(ExportExcelMixin, admin.ModelAdmin):
     list_display = ['id', 'name', 'category', 'price']
     search_fields = ['name']
     list_filter = ['category']
 
 
-class BatterySupportsAdmin(admin.ModelAdmin):
+class BatterySupportsAdmin(ExportExcelMixin, admin.ModelAdmin):
     list_display = ['id', 'name', 'category', 'price']
     search_fields = ['name']
     list_filter = ['category']
 
 
-class GroundSecurityKitsAdmin(admin.ModelAdmin):
+class GroundSecurityKitsAdmin(ExportExcelMixin, admin.ModelAdmin):
     list_display = ['id', 'name', 'category', 'price']
     search_fields = ['name']
     list_filter = ['category']
 
 
-class ConnectorsAdmin(admin.ModelAdmin):
+class ConnectorsAdmin(ExportExcelMixin, admin.ModelAdmin):
     list_display = ['id', 'name', 'category', 'price']
     search_fields = ['name']
     list_filter = ['category']
 
 
-class TerminalsAdmin(admin.ModelAdmin):
+class TerminalsAdmin(ExportExcelMixin, admin.ModelAdmin):
     list_display = ['id', 'name', 'category', 'price']
     search_fields = ['name']
     list_filter = ['category']
 
 
-class CentralizedModuleAdmin(admin.ModelAdmin):
+class CentralizedModuleAdmin(ExportExcelMixin, admin.ModelAdmin):
     list_display = ['id', 'name', 'category', 'price']
     search_fields = ['name']
     list_filter = ['category']
 
 
-class UnityPowerAdmin(admin.ModelAdmin):
+class UnityPowerAdmin(ExportExcelMixin, admin.ModelAdmin):
     list_display = ['id', 'name', 'category', 'price', 'max_ampers_supported', 'min_ampers_supported']
     search_fields = ['name']
     list_filter = ['category']
 
 
-class ElectricMaterialsAdmin(admin.ModelAdmin):
+class ElectricMaterialsAdmin(ExportExcelMixin, admin.ModelAdmin):
     list_display = ['id', 'name', 'category', 'price']
     search_fields = ['name']
     list_filter = ['category']
 
 
-class KitHogarAdmin(admin.ModelAdmin):
+class KitHogarAdmin(ExportExcelMixin, admin.ModelAdmin):
     list_display = ['id', 'name', 'price']
     search_fields = ['name']
     list_filter = ['price']
 
-class CarouselSlideAdmin(admin.ModelAdmin):
+class CarouselSlideAdmin(ExportExcelMixin, admin.ModelAdmin):
     list_display = ['id', 'title', 'order', 'is_active', 'uploaded_at']
     list_editable = ['order', 'is_active']
     list_filter = ['is_active']
+
+
+class DepartmentAdmin(ExportExcelMixin, admin.ModelAdmin):
+    list_display = ['code', 'name']
+    search_fields = ['name', 'code']
+    ordering = ['name']
+
+
+class MunicipalityAdmin(ExportExcelMixin, admin.ModelAdmin):
+    list_display = ['code', 'name', 'department', 'latitude', 'longitude']
+    search_fields = ['name', 'department__name']
+    list_filter = ['department']
+    ordering = ['department__name', 'name']
 
 
 admin_site.register(Category, CategoryAdmin)
@@ -153,3 +167,5 @@ admin_site.register(Terminals, TerminalsAdmin)
 admin_site.register(GroundSecurityKits, GroundSecurityKitsAdmin)
 admin_site.register(ShowCategory, ShowCategoryAdmin)
 admin_site.register(CarouselSlide, CarouselSlideAdmin)
+admin_site.register(Department, DepartmentAdmin)
+admin_site.register(Municipality, MunicipalityAdmin)
