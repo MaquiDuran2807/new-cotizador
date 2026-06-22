@@ -1,4 +1,4 @@
-from django.db import migrations, models
+from django.db import migrations
 
 
 class Migration(migrations.Migration):
@@ -8,29 +8,8 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.SeparateDatabaseAndState(
-            state_operations=[
-                migrations.AlterField(
-                    model_name="products",
-                    name="name",
-                    field=models.CharField(max_length=100),
-                ),
-                migrations.AlterField(
-                    model_name="products",
-                    name="category",
-                    field=models.ForeignKey(
-                        blank=True,
-                        null=True,
-                        on_delete=models.deletion.CASCADE,
-                        to="products.category",
-                    ),
-                ),
-                migrations.AlterField(
-                    model_name="products",
-                    name="caracteristicas",
-                    field=models.CharField(blank=True, max_length=200, null=True),
-                ),
-            ],
-            database_operations=[],
+        migrations.RunSQL(
+            sql="SELECT 1;",
+            reverse_sql=migrations.RunSQL.noop,
         ),
     ]
