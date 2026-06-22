@@ -1,0 +1,59 @@
+---
+- name: Ensure app directory exists
+  file:
+    path: "{{ app_dir }}"
+    state: directory
+
+- name: Clone or pull latest code
+  git:
+    repo: "{{ github_repo }}"
+    dest: "{{ app_dir }}"
+    version: "{{ github_branch }}"
+    force: yes
+  register: git_result
+
+- name: Copy .env from template
+  template:
+    src: .env.j2
+    dest: "{{ app_dir }}/.env"
+    mode: "0600"
+
+- name: Tune PostgreSQL for low memory
+  lineinfile:
+    path: "{{ app_dir }}/docker-compose.yml"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  loop:
+    - regexp: "^      POSTGRES_DB:"
+      line: "      POSTGRES_DB: codensolar"
+    - regexp: "^      POSTGRES_USER:"
+      line: "      POSTGRES_USER: codensolar"
+    - regexp: "^      POSTGRES_PASSWORD:"
+      line: "      POSTGRES_PASSWORD: {{ db_password }}"
+
+- name: Create docker-compose override for production
+  template:
+    src: docker-compose.override.yml.j2
+    dest: "{{ app_dir }}/docker-compose.override.yml"
+
+- name: Pull and restart containers
+  community.docker.docker_compose_v2:
+    project_src: "{{ app_dir }}"
+    build: always
+    state: restarted
+  environment:
+    DJANGO_ENV: production
+
+- name: Run database migrations
+  command: docker compose run --rm web python manage.py migrate
+  args:
+    chdir: "{{ app_dir }}"
+  environment:
+    DJANGO_ENV: production
+
+- name: Collect static files
+  command: docker compose run --rm web python manage.py collectstatic --noinput
+  args:
+    chdir: "{{ app_dir }}"
+  environment:
+    DJANGO_ENV: production

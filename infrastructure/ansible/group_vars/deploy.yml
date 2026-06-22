@@ -1,0 +1,11 @@
+﻿# Generado automaticamente por generate_vars.ps1 desde .env
+# NO editar manualmente - se sobreescribe en cada deploy
+secret_key: "django-insecure-08bxeiejtkzl$0^b_-wuir*duf8@p+k0g%n7x5mk%xv2s_$_fr"
+db_password: "codensolar"
+email_user: "marketingcodensolar@gmail.com"
+email_password: "tvrp hcyh fexq jnul"
+email_host: "smtp.gmail.com"
+email_port: "587"
+google_client_id: "853210536664-uu2olnthcj1s5uvb8cr8a83b86ak3cku.apps.googleusercontent.com"
+google_secret: "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"
+domain_name: codensolar.com

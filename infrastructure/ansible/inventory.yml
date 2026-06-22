@@ -1,0 +1,7 @@
+all:
+  hosts:
+    codensolar:
+      ansible_host: 3.229.56.214
+      ansible_user: ubuntu
+      ansible_ssh_private_key_file: ~/.ssh/codensolar.pem
+      ansible_ssh_common_args: -o StrictHostKeyChecking=no

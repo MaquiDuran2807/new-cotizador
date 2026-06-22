@@ -1,0 +1,15 @@
+---
+- name: Install Docker (idempotent, ya instalado por user_data)
+  apt:
+    name:
+      - docker.io
+      - docker-compose-v2
+      - git
+    state: present
+  when: ansible_facts.packages['docker.io'] is not defined
+
+- name: Add ubuntu user to docker group
+  user:
+    name: ubuntu
+    groups: docker
+    append: yes

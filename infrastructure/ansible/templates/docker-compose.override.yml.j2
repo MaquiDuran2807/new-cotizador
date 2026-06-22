@@ -1,0 +1,33 @@
+version: "3.8"
+
+services:
+  db:
+    environment:
+      POSTGRES_DB: codensolar
+      POSTGRES_USER: codensolar
+      POSTGRES_PASSWORD: {{ db_password }}
+    # Low-memory tuning for 512MB Lightsail
+    command:
+      - "postgres"
+      - "-c"
+      - "shared_buffers={{ postgres_shared_buffers }}"
+      - "-c"
+      - "effective_cache_size={{ postgres_effective_cache_size }}"
+      - "-c"
+      - "maintenance_work_mem={{ postgres_maintenance_work_mem }}"
+      - "-c"
+      - "work_mem={{ postgres_work_mem }}"
+      - "-c"
+      - "max_connections=20"
+
+  web:
+    environment:
+      - GUNICORN_WORKERS={{ gunicorn_workers }}
+      - GUNICORN_TIMEOUT={{ gunicorn_timeout }}
+    # Override CMD for low-memory workers
+    command: ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "{{ gunicorn_workers }}", "--timeout", "{{ gunicorn_timeout }}", "codensolar.wsgi:application"]
+
+  nginx:
+    ports:
+      - "80:80"
+      - "443:443"

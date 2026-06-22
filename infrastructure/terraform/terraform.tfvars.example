@@ -1,0 +1,5 @@
+aws_region    = "us-east-1"
+project_name  = "codensolar"
+blueprint_id  = "ubuntu_24_04"
+bundle_id     = "micro_3_0"
+ssh_key_name  = "terraform_ssh"

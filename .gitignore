@@ -58,3 +58,12 @@ ehthumbs.db
 # Data files
 *.csv
 *rendimiento*.json
+
+# Terraform
+*.tfvars
+.terraform/
+*.tfstate*
+
+# Ansible vault
+*_vault.yml
+!group_vars/example_vault.yml

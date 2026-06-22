@@ -1,0 +1,22 @@
+---
+# App
+project_name: codensolar
+github_repo: "https://github.com/MaquiDuran2807/new-cotizador.git"
+github_branch: master
+app_dir: /app/codensolar
+
+# Swap (512MB RAM instance needs swap)
+swap_file_size_mb: 1024
+
+# PostgreSQL (low-memory tuning)
+postgres_shared_buffers: "64MB"
+postgres_effective_cache_size: "192MB"
+postgres_maintenance_work_mem: "32MB"
+postgres_work_mem: "4MB"
+
+# Gunicorn
+gunicorn_workers: 2
+gunicorn_timeout: 120
+
+# Domain
+domain_name: codensolar.com

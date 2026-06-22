@@ -1,0 +1,20 @@
+---
+- name: Provision Codensolar on Lightsail
+  hosts: all
+  become: true
+  vars_files:
+    - group_vars/all.yml
+    - group_vars/deploy.yml
+
+  tasks:
+    - name: Create swap file
+      import_tasks: tasks/swap.yml
+
+    - name: Install Docker
+      import_tasks: tasks/docker.yml
+
+    - name: Deploy application
+      import_tasks: tasks/deploy.yml
+
+    - name: Setup systemd service
+      import_tasks: tasks/systemd.yml

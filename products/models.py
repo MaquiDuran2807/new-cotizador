@@ -46,13 +46,13 @@ class ShowCategory (models.Model):
         return str(self.id) +") "+self.category.name
 
 class Products (models.Model):
-    name = models.CharField(max_length=50)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    name = models.CharField(max_length=150)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
     price = models.IntegerField()
     voltage = models.ManyToManyField("products.Voltage")
     description = models.TextField()
     consume = models.IntegerField()
-    caracteristicas = models.CharField(max_length=50)
+    caracteristicas = models.CharField(max_length=200, blank=True, null=True)
     image = models.ImageField(upload_to='media/Otros')
 
     def __str__(self):
