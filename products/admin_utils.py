@@ -129,8 +129,13 @@ class BulkActionsMixin:
                         except Exception as e:
                             errors.append(f"Error con ID {pk}: {e}")
 
+                total_files = sum(1 for n in zf.namelist() if n.lower().endswith((".jpg", ".jpeg", ".png", ".webp")))
                 if success:
                     messages.success(request, f"{success} imágenes subidas correctamente")
+                elif total_files == 0:
+                    messages.warning(request, "El ZIP no contiene imágenes .jpg, .png o .webp")
+                elif not errors:
+                    messages.info(request, f"Se encontraron {total_files} imágenes en el ZIP pero ninguna coincidió con los IDs seleccionados. Revisá que los nombres sean prod_0060_01.jpg, prod_0061_01.jpg, etc.")
                 if errors:
                     messages.warning(request, f"Ocurrieron {len(errors)} errores: {'; '.join(errors[:5])}")
             except zipfile.BadZipFile:
