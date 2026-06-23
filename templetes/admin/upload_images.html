@@ -1,0 +1,11 @@
+{% extends "admin/base_site.html" %}
+{% block content %}
+<p><strong>{{ total }}</strong> producto(s) seleccionados. Solo se procesarán imágenes cuyos nombres coincidan con los IDs de estos productos.</p>
+<p>El ZIP debe contener imágenes nombradas como <code>ID.jpg</code>, <code>ID.png</code> o <code>ID.webp</code> (ej: <code>42.jpg</code>).</p>
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <input type="file" name="zip_file" accept=".zip" required style="padding:8px;">
+  <br><br>
+  <input type="submit" value="Subir imágenes" class="default" style="padding:10px 20px;">
+</form>
+{% endblock %}

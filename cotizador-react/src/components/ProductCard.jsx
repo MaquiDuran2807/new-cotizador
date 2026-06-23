@@ -45,8 +45,12 @@ export default function ProductCard({ product, onAdd, onRemove, quoteItem }) {
         </div>
 
         <div className="p-5 lg:p-6 flex-1 flex flex-col gap-3">
-          <h3 className="font-num text-sm lg:text-base font-bold text-ink leading-tight">{product.name}</h3>
-          <div className="font-num text-xl lg:text-2xl font-extrabold text-green-dark tracking-tight leading-none">
+          <h3 className="font-num text-sm lg:text-base font-bold text-ink leading-tight min-h-[2.5em]">
+            {product.name.length > 25
+              ? product.name.slice(0, 25) + '…'
+              : product.name}
+          </h3>
+          <div className="font-num text-xl lg:text-2xl font-extrabold text-green-dark tracking-tight leading-none min-h-[2.5rem] flex items-end">
             $ {product.price?.toLocaleString('es-CO')}{' '}
             <small className="text-[0.68rem] font-medium text-text-3">COP</small>
           </div>

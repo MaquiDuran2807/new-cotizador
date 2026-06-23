@@ -1,14 +1,142 @@
 import openpyxl
 from openpyxl.styles import Font
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib import messages
+from django.contrib.admin.helpers import ACTION_CHECKBOX_NAME
 from django.db import transaction
 from django.urls import path
 
 
-class ExportExcelMixin:
-    actions = ["download_excel_action"]
+class BulkActionsMixin:
+    actions = ["assign_category_action", "upload_images_action"]
+
+    def assign_category_action(self, request, queryset):
+        selected = queryset.values_list("pk", flat=True)
+        selected_str = ",".join(str(pk) for pk in selected)
+        return HttpResponseRedirect(
+            f"assign-category/?ids={selected_str}"
+        )
+
+    assign_category_action.short_description = "Asignar categoría a seleccionados"
+
+    def upload_images_action(self, request, queryset):
+        selected = queryset.values_list("pk", flat=True)
+        selected_str = ",".join(str(pk) for pk in selected)
+        return HttpResponseRedirect(
+            f"upload-images/?ids={selected_str}"
+        )
+
+    upload_images_action.short_description = "Subir imágenes para seleccionados"
+
+    def get_urls(self):
+        urls = super().get_urls()
+        info = self.model._meta.app_label, self.model._meta.model_name
+        my_urls = [
+            path(
+                "assign-category/",
+                self.admin_site.admin_view(self.assign_category_view),
+                name="%s_%s_assign_category" % info,
+            ),
+            path(
+                "upload-images/",
+                self.admin_site.admin_view(self.upload_images_view),
+                name="%s_%s_upload_images" % info,
+            ),
+        ]
+        return my_urls + urls
+
+    def assign_category_view(self, request):
+        context = {
+            **self.admin_site.each_context(request),
+            "title": "Asignar categoría",
+            "opts": self.model._meta,
+            "media": self.media,
+        }
+        ids = request.GET.get("ids", "")
+        pk_list = [pk for pk in ids.split(",") if pk]
+        context["total"] = len(pk_list)
+
+        if request.method == "POST":
+            category_id = request.POST.get("category_id")
+            if category_id and pk_list:
+                from .models import Category
+                try:
+                    cat = Category.objects.get(pk=int(category_id))
+                    updated = self.model.objects.filter(pk__in=pk_list).update(category=cat)
+                    messages.success(request, f"{updated} productos actualizados a categoría '{cat.name}'")
+                except (Category.DoesNotExist, ValueError):
+                    messages.error(request, "Categoría inválida")
+            return HttpResponseRedirect("../")
+
+        categories = self._get_category_model().objects.all().values("id", "name")
+        context["categories"] = categories
+        return render(request, "admin/assign_category.html", context)
+
+    def upload_images_view(self, request):
+        context = {
+            **self.admin_site.each_context(request),
+            "title": "Subir imágenes para productos",
+            "opts": self.model._meta,
+            "media": self.media,
+        }
+        ids = request.GET.get("ids", "")
+        pk_list = [pk for pk in ids.split(",") if pk]
+        context["total"] = len(pk_list)
+
+        if request.method == "POST":
+            import zipfile, io, os
+            from django.core.files.base import ContentFile
+
+            zip_file = request.FILES.get("zip_file")
+            if not zip_file:
+                messages.error(request, "Debe seleccionar un archivo ZIP")
+                return render(request, "admin/upload_images.html", context)
+
+            success = 0
+            errors = []
+            try:
+                with zipfile.ZipFile(zip_file) as zf:
+                    for name in zf.namelist():
+                        base = os.path.splitext(os.path.basename(name))[0]
+                        if not base or not name.lower().endswith((".jpg", ".jpeg", ".png", ".webp")):
+                            continue
+                        try:
+                            pk = int(base)
+                        except ValueError:
+                            errors.append(f"'{base}' no es un ID numérico válido")
+                            continue
+                        if pk_list and pk not in [int(x) for x in pk_list]:
+                            continue
+                        try:
+                            obj = self.model.objects.get(pk=pk)
+                            img_data = zf.read(name)
+                            ext = os.path.splitext(name)[1]
+                            obj.image.save(f"{pk}{ext}", ContentFile(img_data), save=True)
+                            success += 1
+                        except self.model.DoesNotExist:
+                            errors.append(f"Producto ID {pk} no encontrado")
+                        except Exception as e:
+                            errors.append(f"Error con ID {pk}: {e}")
+
+                if success:
+                    messages.success(request, f"{success} imágenes subidas correctamente")
+                if errors:
+                    messages.warning(request, f"Ocurrieron {len(errors)} errores: {'; '.join(errors[:5])}")
+            except zipfile.BadZipFile:
+                messages.error(request, "Archivo ZIP inválido")
+
+            return HttpResponseRedirect("../")
+
+        return render(request, "admin/upload_images.html", context)
+
+    def _get_category_model(self):
+        from .models import Category
+        return Category
+
+
+class ExportExcelMixin(BulkActionsMixin):
+    actions = ["download_excel_action", "assign_category_action", "upload_images_action"]
     change_list_template = "admin/change_list_with_import.html"
 
     def get_urls(self):
@@ -163,18 +291,33 @@ class ExportExcelMixin:
         for col_idx, header in enumerate(headers):
             hl = header.lower()
             match = None
+
+            # 1) Match exact field name
             for fname, field in model_fields.items():
                 if hl == fname.lower():
                     match = fname
                     break
+
+            # 2) Match by verbose_name
             if not match:
                 for fname, field in model_fields.items():
                     vn = str(field.verbose_name).lower() if field.verbose_name else ""
                     if hl == vn:
                         match = fname
                         break
+
+            # 3) Match "category_id" → FK field "category"
+            if not match and hl.endswith("_id"):
+                base = hl[:-3]
+                for fname, field in model_fields.items():
+                    if field.is_relation and fname.lower() == base:
+                        match = fname
+                        break
+
+            # 4) Explicit "id"
             if not match and hl == "id":
                 match = "id"
+
             col_map[col_idx] = match
 
         for row_idx, row in enumerate(data_rows, 2):
@@ -253,13 +396,25 @@ class ExportExcelMixin:
 
     def _resolve_fk(self, value, field):
         related = field.remote_field.model
+        # Try numeric ID first
         try:
-            return related.objects.get(pk=int(value))
-        except (ValueError, TypeError):
+            return related.objects.get(pk=int(float(str(value))))
+        except (ValueError, TypeError, OverflowError):
             pass
-        for str_field in ("name", "title", "code"):
+        except related.DoesNotExist:
+            # ID exists but not found — fall through to name match
+            pass
+        # Try by common string fields
+        for str_field in ("name", "title", "code", "nombre"):
             if hasattr(related, str_field):
-                kwargs = {f"{str_field}__iexact": str(value)}
+                kwargs = {f"{str_field}__iexact": str(value).strip()}
+                obj = related.objects.filter(**kwargs).first()
+                if obj:
+                    return obj
+        # Try partial match on name
+        for str_field in ("name", "title", "nombre"):
+            if hasattr(related, str_field):
+                kwargs = {f"{str_field}__icontains": str(value).strip()}
                 obj = related.objects.filter(**kwargs).first()
                 if obj:
                     return obj

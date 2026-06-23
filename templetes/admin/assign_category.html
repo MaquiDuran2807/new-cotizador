@@ -1,0 +1,15 @@
+{% extends "admin/base_site.html" %}
+{% block content %}
+<form method="post">
+  {% csrf_token %}
+  <p>Se asignará una categoría a <strong>{{ total }}</strong> producto(s).</p>
+  <select name="category_id" required style="width:100%;max-width:400px;padding:8px;border:1px solid #ccc;border-radius:4px;">
+    <option value="">— Seleccionar categoría —</option>
+    {% for cat in categories %}
+    <option value="{{ cat.id }}">{{ cat.name }}</option>
+    {% endfor %}
+  </select>
+  <br><br>
+  <input type="submit" value="Asignar categoría" class="default" style="padding:10px 20px;">
+</form>
+{% endblock %}
