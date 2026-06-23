@@ -16,7 +16,7 @@ class ShowCategoryAdmin(ExportExcelMixin, admin.ModelAdmin):
 
 
 class ProductsAdmin(ExportExcelMixin, admin.ModelAdmin):
-    list_display = ['id', 'name', 'category', 'price', 'consume']
+    list_display = ['id', 'show_image', 'name', 'category', 'price', 'consume']
     search_fields = ['name', 'category__name']
     list_filter = ['category']
 

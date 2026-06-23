@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.contrib.admin.helpers import ACTION_CHECKBOX_NAME
 from django.db import transaction
 from django.urls import path
+from django.utils.html import format_html
 
 
 class BulkActionsMixin:
@@ -152,7 +153,19 @@ class BulkActionsMixin:
         return Category
 
 
-class ExportExcelMixin(BulkActionsMixin):
+class ThumbnailMixin:
+    def show_image(self, obj):
+        img_field = getattr(obj, 'image', None)
+        if img_field and hasattr(img_field, 'url') and img_field.url:
+            return format_html(
+                '<img src="{}" style="width:50px;height:50px;object-fit:cover;border-radius:4px;border:1px solid #ddd;" />',
+                img_field.url
+            )
+        return "—"
+    show_image.short_description = "Imagen"
+
+
+class ExportExcelMixin(ThumbnailMixin, BulkActionsMixin):
     actions = ["download_excel_action", "assign_category_action", "upload_images_action"]
     change_list_template = "admin/change_list_with_import.html"
 
