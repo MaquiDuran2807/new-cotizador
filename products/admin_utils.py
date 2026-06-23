@@ -93,6 +93,7 @@ class BulkActionsMixin:
                 messages.error(request, "Debe seleccionar un archivo ZIP")
                 return render(request, "admin/upload_images.html", context)
 
+            import re
             success = 0
             errors = []
             try:
@@ -101,9 +102,18 @@ class BulkActionsMixin:
                         base = os.path.splitext(os.path.basename(name))[0]
                         if not base or not name.lower().endswith((".jpg", ".jpeg", ".png", ".webp")):
                             continue
+                        pk = None
+                        # Try direct numeric ID
                         try:
                             pk = int(base)
                         except ValueError:
+                            pass
+                        # Try prod_XXXX_YY format
+                        if pk is None:
+                            m = re.match(r'prod_0*(\d+)_\d+', base, re.IGNORECASE)
+                            if m:
+                                pk = int(m.group(1))
+                        if pk is None:
                             errors.append(f"'{base}' no es un ID numérico válido")
                             continue
                         if pk_list and pk not in [int(x) for x in pk_list]:
