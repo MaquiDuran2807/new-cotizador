@@ -96,6 +96,7 @@ class BulkActionsMixin:
             import re
             success = 0
             errors = []
+            zip_ids_found = set()
             try:
                 with zipfile.ZipFile(zip_file) as zf:
                     for name in zf.namelist():
@@ -116,6 +117,7 @@ class BulkActionsMixin:
                         if pk is None:
                             errors.append(f"'{base}' no es un ID numérico válido")
                             continue
+                        zip_ids_found.add(pk)
                         if pk_list and pk not in [int(x) for x in pk_list]:
                             continue
                         try:
@@ -129,13 +131,13 @@ class BulkActionsMixin:
                         except Exception as e:
                             errors.append(f"Error con ID {pk}: {e}")
 
-                total_files = sum(1 for n in zf.namelist() if n.lower().endswith((".jpg", ".jpeg", ".png", ".webp")))
                 if success:
                     messages.success(request, f"{success} imágenes subidas correctamente")
-                elif total_files == 0:
-                    messages.warning(request, "El ZIP no contiene imágenes .jpg, .png o .webp")
                 elif not errors:
-                    messages.info(request, f"Se encontraron {total_files} imágenes en el ZIP pero ninguna coincidió con los IDs seleccionados. Revisá que los nombres sean prod_0060_01.jpg, prod_0061_01.jpg, etc.")
+                    sel_ids = sorted(int(x) for x in pk_list) if pk_list else []
+                    zip_ids = sorted(zip_ids_found)
+                    messages.info(request, f"IDs seleccionados: {sel_ids}. IDs encontrados en ZIP: {zip_ids}. "
+                                         "Ninguno coincide. Revisá que los nombres de imagen correspondan a los IDs de tus productos.")
                 if errors:
                     messages.warning(request, f"Ocurrieron {len(errors)} errores: {'; '.join(errors[:5])}")
             except zipfile.BadZipFile:
