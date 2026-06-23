@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <title>Cotización Kit Solar - Codensolar</title>
     <style>
-        /* RESET Y CONFIGURACI�?N PARA WEASYPRINT */
+        /* RESET Y CONFIGURACIÓN PARA WEASYPRINT */
         * {
             margin: 0;
             padding: 0;
@@ -215,7 +215,7 @@
 <table class="header-table">
     <tr>
         <td style="width: 35%;">
-            <img class="logo-img" src="{{ direccion_ip }}media/pdf/logo-coden.png" alt="Codensolar">
+            <img class="logo-img" src="{% static 'products/img/logo-coden1.png' %}" alt="Codensolar">
         </td>
         <td style="width: 65%;" class="company-info">
             <span class="company-name">CODENSOLAR SAS</span><br>
@@ -230,7 +230,7 @@
 
 <!-- TÍTULO PRINCIPAL -->
 <h1>Cotización de Kit de Energía Solar</h1>
-<div class="subtitulo">Detalle completo de tu sistema fotovoltaico �?? Precios en COP</div>
+<div class="subtitulo">Detalle completo de tu sistema fotovoltaico — Precios en COP</div>
 
 <!-- ========== 1. PRODUCTOS DE CONSUMO ========== -->
 <h2>1. Equipos eléctricos a alimentar</h2>
@@ -418,11 +418,11 @@
     <div class="resumen-item">Total + pérdidas: <span>{{ consumos.total_consumo }} Wh</span></div>
 </div>
 
-<!-- ========== 4. TOTALES ECON�?MICOS ========== -->
+<!-- ========== 4. TOTALES ECONÓMICOS ========== -->
 <h2>4. Valor de la inversión</h2>
 <div class="totales">
     <div class="caja-total">
-        <p>EST�NDAR</p>
+        <p>ESTÁNDAR</p>
         <div class="valor">$ {{ total.basic }}</div>
         <small>Iva incluido (si aplica)</small>
     </div>
@@ -435,7 +435,7 @@
 
 <!-- FOOTER -->
 <div class="footer">
-    <p>CODENSOLAR �?? Energía renovable para un futuro sostenible</p>
+    <p>CODENSOLAR  — Energía renovable para un futuro sostenible</p>
     <p>Carrera 64A # 3 - 49, Barrio Pradera - Bogotá | <a href="www.codensolar.com">www.codensolar.com</a> | comercial@codensolar.com</p>
     <p>311 2235359 / 313 8851574</p>
     <p><em>Cotización válida por 30 días. Precios sujetos a cambios.</em></p>
